@@ -9,8 +9,8 @@ export interface Word {
 export const wordsMock: Word[] = [
   {
     id: 1,
-    english: 'zello',
-    russia: 'привет',
+    english: 'relevant',
+    russia: 'актуальный',
     createdAt: '22.02.2022',
     updatedAt: '23.08.2022',
   },
@@ -84,4 +84,67 @@ export const wordsMock: Word[] = [
     createdAt: '22.02.2022',
     updatedAt: '23.08.2022',
   },
+  {
+    id: 12,
+    english: 'evaluate',
+    russia: 'оценить',
+    createdAt: '22.02.2022',
+    updatedAt: '23.08.2022',
+  },
+  {
+    id: 13,
+    english: 'allocate',
+    russia: 'распределить',
+    createdAt: '22.02.2022',
+    updatedAt: '23.08.2022',
+  },
+  {
+    id: 14,
+    english: 'require',
+    russia: 'требовать',
+    createdAt: '22.02.2022',
+    updatedAt: '23.08.2022',
+  },
+  {
+    id: 15,
+    english: 'appointment',
+    russia: 'запись к врачу',
+    createdAt: '22.02.2022',
+    updatedAt: '23.08.2022',
+  },
+  {
+    id: 16,
+    english: 'arrange',
+    russia: 'организовать',
+    createdAt: '22.02.2022',
+    updatedAt: '23.08.2022',
+  },
+  {
+    id: 17,
+    english: 'deal with',
+    russia: 'иметь дело с',
+    createdAt: '22.02.2022',
+    updatedAt: '23.08.2022',
+  },
+  {
+    id: 18,
+    english: 'in the event',
+    russia: 'в случае',
+    createdAt: '22.02.2022',
+    updatedAt: '23.08.2022',
+  },
+  {
+    id: 19,
+    english: 'replacement',
+    russia: 'замена',
+    createdAt: '22.02.2022',
+    updatedAt: '23.08.2022',
+  },
+  {
+    id: 20,
+    english: 'supply',
+    russia: 'поставлять',
+    createdAt: '22.02.2022',
+    updatedAt: '23.08.2022',
+  }
 ]
