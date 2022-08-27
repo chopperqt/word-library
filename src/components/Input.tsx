@@ -8,7 +8,6 @@ const Input = ({
         px-2
         py-1
         outline-transparent
-        mt-1 
         text-lg
         focus:ring-indigo-500 
         focus:border-indigo-500 
