@@ -11,6 +11,8 @@ const ModalStyles = {
   },
 };
 
+Modal.setAppElement('body')
+
 export interface ModalContainerProps {
   isOpened: boolean,
   onClose: () => void
