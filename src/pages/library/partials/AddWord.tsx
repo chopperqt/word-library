@@ -3,6 +3,7 @@ import type { ModalContainerProps } from 'components/ModalContainer'
 import InputMulti from "components/InputMulti/InputMulti"
 import { useForm } from "react-hook-form"
 import Button from "components/Button"
+import Toggle from "components/Toggle"
 
 const ENGLISH_PLACEHOLDER_TEXT = 'Example'
 const RUSSIA_PLACEHOLDER_TEXT = 'Пример'
@@ -39,6 +40,10 @@ const AddWord = ({
           name="russia"
           control={control}
           placeholder={RUSSIA_PLACEHOLDER_TEXT}
+        />
+        <Toggle
+          text="Добавить в закладки"
+          checked={false}
         />
         <Button>
           Добавить
