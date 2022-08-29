@@ -28,9 +28,11 @@ const ModalContainer = ({
       isOpen={isOpened}
       onRequestClose={onClose}
       style={ModalStyles}
-      overlayClassName="bg-black/90 fixed inset-0"
+      overlayClassName="bg-black/90 fixed inset-0 flex justify-center items-center"
     >
-      {children}
+      <div className='modal'>
+        {children}
+      </div>
     </Modal>
 
   </div>

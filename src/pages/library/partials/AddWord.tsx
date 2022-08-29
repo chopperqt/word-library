@@ -35,6 +35,7 @@ const AddWord = ({
           name="english"
           control={control}
           placeholder={ENGLISH_PLACEHOLDER_TEXT}
+          isRequired={true}
         />
         <InputMulti
           name="russia"
@@ -43,7 +44,9 @@ const AddWord = ({
         />
         <Toggle
           text="Добавить в закладки"
+          name="isPined"
           checked={false}
+          control={control}
         />
         <Button>
           Добавить

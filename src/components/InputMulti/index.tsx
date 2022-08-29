@@ -15,6 +15,7 @@ export interface InputMultiProps {
   name: string
   defaultValue?: unknown
   control: any
+  isRequired?: boolean
 }
 
 export default InputMulti

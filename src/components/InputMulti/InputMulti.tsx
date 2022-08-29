@@ -12,16 +12,26 @@ const InputMulti = ({
   control,
   name,
   defaultValue = [],
+  isRequired = false,
 }: InputMultiProps) => {
   const {
     field: {
       value: fieldValue,
       onChange,
+    },
+    fieldState: {
+      error,
     }
   } = useController({
     control,
     name,
     defaultValue,
+    rules: {
+      required: {
+        value: isRequired,
+        message: 'Поле обязталельное'
+      }
+    }
   })
 
   const {
@@ -45,20 +55,25 @@ const InputMulti = ({
   }
 
   return (
-    <CreatableSelect
-      className='w-full'
-      styles={customStyles}
-      components={Components}
-      isClearable={true}
-      isMulti={true}
-      menuIsOpen={false}
-      onChange={handleChange}
-      onInputChange={handleInputChange}
-      onKeyDown={handleKeyDown}
-      placeholder={placeholder}
-      inputValue={inputValue}
-      value={fieldValue}
-    />
+    <div>
+      <CreatableSelect
+        className='w-full'
+        styles={customStyles}
+        components={Components}
+        isClearable={true}
+        isMulti={true}
+        menuIsOpen={false}
+        onChange={handleChange}
+        onInputChange={handleInputChange}
+        onKeyDown={handleKeyDown}
+        placeholder={placeholder}
+        inputValue={inputValue}
+        value={fieldValue}
+      />
+      {error?.message && (
+        <div>{error.message}</div>
+      )}
+    </div>
   )
 }
 
