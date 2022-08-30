@@ -5,6 +5,7 @@ import useLibrary from "./useLibrary"
 const Library = () => {
   const {
     words,
+    pinedWords,
     value,
     handleChangeValue,
   } = useLibrary()
@@ -16,7 +17,10 @@ const Library = () => {
         onChange={handleChangeValue}
       />
       {!!words?.length && (
-        <Words words={words} />
+        <Words
+          pinedWords={pinedWords}
+          words={words}
+        />
       )}
     </div>
   )

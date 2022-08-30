@@ -6,8 +6,6 @@ import {
   useMemo,
 } from 'react'
 
-const DEFAULT_DELAY = 300
-
 const useLibrary = () => {
   const wordsState = wordsMock
   const [value, setValue] = useState<string>('')
@@ -29,7 +27,7 @@ const useLibrary = () => {
       english,
       russia,
     }) => {
-      const formattedWord = (english + russia).toLowerCase().replaceAll(' ', '')
+      const formattedWord = (english.join() + russia.join()).toLowerCase().replaceAll(' ', '')
       const formattedValue = value.toLowerCase().replaceAll(' ', '')
 
       return formattedWord.includes(formattedValue)
@@ -39,10 +37,13 @@ const useLibrary = () => {
     wordsState,
   ])
 
+  const pinedWords = wordsState.filter((word) => word.pined)
+
   return {
     value,
     handleChangeValue,
     words,
+    pinedWords,
   }
 }
 

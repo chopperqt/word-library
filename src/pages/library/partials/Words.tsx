@@ -1,49 +1,66 @@
+import WordsContainer from "components/words-container/WordsContainer";
 import normalizeWords from "../../../helpers/normalizeWords";
 import type { Word } from "../../../mockData";
 
 interface WordsProps {
   words: Word[]
+  pinedWords: Word[]
 }
 const Words = ({
-  words
+  words,
+  pinedWords = [],
 }: WordsProps) => {
   const normalizedWords = normalizeWords(words)
+  const normalizedPinedWords = normalizeWords(pinedWords)
+  const formattedPined = pinedWords.length
+    ? `Закреплённые(${pinedWords.length})`
+    : 'Закреплённые'
+  const formattedLibrary = `Библиотека(${words.length})`
+
+  console.log(normalizeWords)
+
 
   return (
-    <div className="flex justify-start items-start gap-3 flex-wrap">
-      {Object.entries(normalizedWords).map(([key, words]: [key: string, words: Word[]]) => {
-        const amountOfWords = words.length
+    <div className="flex flex-col items-start gap-3 flex-wrap">
+      <div className="text-2xl">{formattedPined}</div>
+      <div className="flex justify-start items-start gap-3 flex-wrap">
+        {Object.entries(normalizedPinedWords).map(([key, words]: [key: string, words: any]) => {
+          const amountOfWords = words.length
 
-        if (!amountOfWords) {
-          return null
-        }
+          if (!amountOfWords) {
+            return null
+          }
 
-        return (
-          <div
-            key={key}
-            className="flex flex-col bg-white"
-          >
-            <div className="text-lg px-5 py-1 bg-sky-700 rounded-t-md">
-              <div className="flex gap-1 justify-center color text-white">
-                <div>{key.toUpperCase()}</div>
-                <div>({amountOfWords})</div>
-              </div>
-            </div>
-            <div className="h-0.5 w-full bg-gray-50" />
-            <div className="px-5 py-1 rounded-b-md">
-              {words.map(({
-                english,
-                russia,
-                id,
-              }) => (
-                <div key={id}>
-                  {english} — {russia}
-                </div>
-              ))}
-            </div>
-          </div>
-        )
-      })}
+          return (
+            <WordsContainer
+              key={key}
+              letter={key}
+              amountOfWords={amountOfWords}
+              words={words}
+              color="bg-indigo-700"
+            />
+          )
+        })}
+      </div>
+      <div className="text-2xl mt-5">{formattedLibrary}</div>
+      <div className="flex justify-start items-start gap-3 flex-wrap">
+        {Object.entries(normalizedWords).map(([key, words]: [key: string, words: Word[]]) => {
+          const amountOfWords = words.length
+
+          if (!amountOfWords) {
+            return null
+          }
+
+          return (
+            <WordsContainer
+              key={key}
+              letter={key}
+              amountOfWords={amountOfWords}
+              words={words}
+            />
+          )
+        })}
+      </div>
     </div>
   )
 }
