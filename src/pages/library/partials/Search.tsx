@@ -3,6 +3,7 @@ import { useState } from 'react'
 import Button from 'components/Button'
 import Input from 'components/Input'
 import AddWord from './AddWord'
+import WordModal from 'components/word-modal/WordModal'
 
 const ADD_TEXT = 'Добавить слово'
 const SEARCH_TEXT = 'Search...'
@@ -39,7 +40,8 @@ const Search = ({
       >
         {ADD_TEXT}
       </Button>
-      <AddWord
+
+      <WordModal
         isOpened={isOpened}
         onClose={handleClose}
       />

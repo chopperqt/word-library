@@ -1,6 +1,6 @@
 import ModalContainer from "components/ModalContainer"
 import type { ModalContainerProps } from 'components/ModalContainer'
-import InputMulti from "components/InputMulti/InputMulti"
+import InputMulti from "components/input-multi/InputMulti"
 import { useForm } from "react-hook-form"
 import Button from "components/Button"
 import Toggle from "components/Toggle"

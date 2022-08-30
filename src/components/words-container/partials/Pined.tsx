@@ -11,9 +11,9 @@ const Pined = ({
     : IconsList.starOutline
 
   return (
-    <div className='mr-1'>
+    <button className='mr-1'>
       <Icon icon={icon} />
-    </div>
+    </button>
   )
 }
 

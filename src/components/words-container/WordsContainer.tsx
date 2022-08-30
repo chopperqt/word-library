@@ -2,6 +2,7 @@ import Edit from './partials/Edit'
 import Pined from './partials/Pined'
 
 import type { Word } from '../../mockData'
+import ExtraWords from './partials/ExtraWords'
 
 interface WordsContainerProps {
   amountOfWords: number
@@ -35,18 +36,20 @@ const WordsContainer = ({
           className="flex items-center"
         >
           <Pined isPined={pined} />
-          <Edit />
+          <Edit
+            english={english}
+            russia={russia}
+            isPined={pined}
+          />
           <div>
             {english}
           </div>
           <div>&nbsp;—&nbsp;</div>
           <div className="flex">
             {russia[0]}
-            <div>
-              {russia.length > 1 && (
-                <div>&nbsp;+{russia.length - 1}</div>
-              )}
-            </div>
+            {russia.length > 1 && (
+              <ExtraWords words={russia} />
+            )}
           </div>
         </div>
       ))}
