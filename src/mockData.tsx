@@ -4,6 +4,7 @@ export interface Word {
   russia: string
   createdAt: string
   updatedAt: string
+  pined: boolean
 }
 
 export const wordsMock: Word[] = [
@@ -13,6 +14,7 @@ export const wordsMock: Word[] = [
     russia: 'актуальный',
     createdAt: '22.02.2022',
     updatedAt: '23.08.2022',
+    pined: false,
   },
   {
     id: 2,
@@ -20,6 +22,7 @@ export const wordsMock: Word[] = [
     russia: 'привет',
     createdAt: '22.02.2022',
     updatedAt: '23.08.2022',
+    pined: false,
   },
   {
     id: 3,
@@ -27,6 +30,7 @@ export const wordsMock: Word[] = [
     russia: 'привет',
     createdAt: '22.02.2022',
     updatedAt: '23.08.2022',
+    pined: false,
   },
   {
     id: 4,
@@ -34,6 +38,7 @@ export const wordsMock: Word[] = [
     russia: 'привет',
     createdAt: '22.02.2022',
     updatedAt: '23.08.2022',
+    pined: false,
   },
   {
     id: 5,
@@ -41,6 +46,7 @@ export const wordsMock: Word[] = [
     russia: 'привет',
     createdAt: '22.02.2022',
     updatedAt: '23.08.2022',
+    pined: false,
   },
   {
     id: 6,
@@ -48,6 +54,7 @@ export const wordsMock: Word[] = [
     russia: 'привет',
     createdAt: '22.02.2022',
     updatedAt: '23.08.2022',
+    pined: false,
   },
   {
     id: 7,
@@ -55,6 +62,7 @@ export const wordsMock: Word[] = [
     russia: 'привет',
     createdAt: '22.02.2022',
     updatedAt: '23.08.2022',
+    pined: false,
   },
   {
     id: 8,
@@ -62,6 +70,7 @@ export const wordsMock: Word[] = [
     russia: 'привет',
     createdAt: '22.02.2022',
     updatedAt: '23.08.2022',
+    pined: false,
   },
   {
     id: 9,
@@ -69,6 +78,7 @@ export const wordsMock: Word[] = [
     russia: 'привет',
     createdAt: '22.02.2022',
     updatedAt: '23.08.2022',
+    pined: false,
   },
   {
     id: 10,
@@ -76,6 +86,7 @@ export const wordsMock: Word[] = [
     russia: 'привет',
     createdAt: '22.02.2022',
     updatedAt: '23.08.2022',
+    pined: false,
   },
   {
     id: 11,
@@ -83,6 +94,7 @@ export const wordsMock: Word[] = [
     russia: 'привет',
     createdAt: '22.02.2022',
     updatedAt: '23.08.2022',
+    pined: false,
   },
   {
     id: 12,
@@ -90,6 +102,7 @@ export const wordsMock: Word[] = [
     russia: 'оценить',
     createdAt: '22.02.2022',
     updatedAt: '23.08.2022',
+    pined: false,
   },
   {
     id: 13,
@@ -97,6 +110,7 @@ export const wordsMock: Word[] = [
     russia: 'распределить',
     createdAt: '22.02.2022',
     updatedAt: '23.08.2022',
+    pined: false,
   },
   {
     id: 14,
@@ -104,6 +118,7 @@ export const wordsMock: Word[] = [
     russia: 'требовать',
     createdAt: '22.02.2022',
     updatedAt: '23.08.2022',
+    pined: true,
   },
   {
     id: 15,
@@ -111,6 +126,7 @@ export const wordsMock: Word[] = [
     russia: 'запись к врачу',
     createdAt: '22.02.2022',
     updatedAt: '23.08.2022',
+    pined: false,
   },
   {
     id: 16,
@@ -118,6 +134,7 @@ export const wordsMock: Word[] = [
     russia: 'организовать',
     createdAt: '22.02.2022',
     updatedAt: '23.08.2022',
+    pined: false,
   },
   {
     id: 17,
@@ -125,6 +142,7 @@ export const wordsMock: Word[] = [
     russia: 'иметь дело с',
     createdAt: '22.02.2022',
     updatedAt: '23.08.2022',
+    pined: true,
   },
   {
     id: 18,
@@ -132,6 +150,7 @@ export const wordsMock: Word[] = [
     russia: 'в случае',
     createdAt: '22.02.2022',
     updatedAt: '23.08.2022',
+    pined: false,
   },
   {
     id: 19,
@@ -139,6 +158,7 @@ export const wordsMock: Word[] = [
     russia: 'замена',
     createdAt: '22.02.2022',
     updatedAt: '23.08.2022',
+    pined: false,
   },
   {
     id: 20,
@@ -146,5 +166,6 @@ export const wordsMock: Word[] = [
     russia: 'поставлять',
     createdAt: '22.02.2022',
     updatedAt: '23.08.2022',
+    pined: true,
   }
 ]
