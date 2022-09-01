@@ -9,6 +9,7 @@ const Button = ({
   ...props
 }: ButtonProps) => (
   <button
+    data-testid="button"
     className={DefaultStyles + className}
     {...props}
   >
