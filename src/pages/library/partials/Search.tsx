@@ -2,7 +2,6 @@ import { useState } from 'react'
 
 import Button from 'components/Button'
 import Input from 'components/Input'
-import AddWord from './AddWord'
 import WordModal from 'components/word-modal/WordModal'
 
 const ADD_TEXT = 'Добавить слово'
@@ -32,6 +31,7 @@ const Search = ({
         value={value}
         onChange={onChange}
         placeholder={SEARCH_TEXT}
+        name="search"
       />
       <Button
         onClick={handleOpen}

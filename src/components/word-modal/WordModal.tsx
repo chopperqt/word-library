@@ -1,3 +1,5 @@
+import TextField from "common/text-field/TextField"
+
 import { useForm } from "react-hook-form"
 
 import Button from "../Button"
@@ -32,10 +34,12 @@ const WordModal = ({
   const {
     control,
     handleSubmit: formSubmit,
-  } = useForm()
+  } = useForm({
+    mode: 'onChange',
+  })
 
   const handleSubmit = (data: any) => {
-    // Отрефакторить
+    // TODO Дописать интерфейс который приходит в дата 
     console.log(data)
 
     if (onSubmit) {
@@ -51,11 +55,10 @@ const WordModal = ({
       className="w-full max-w-2xl flex flex-col gap-3"
       onSubmit={formSubmit(handleSubmit)}
     >
-      <InputMulti
+      <TextField
         name="english"
         control={control}
         placeholder={ENGLISH_PLACEHOLDER_TEXT}
-        defaultValue={normalizedEnglish}
         isRequired={true}
       />
       <InputMulti
