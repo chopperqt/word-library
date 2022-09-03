@@ -2,9 +2,9 @@ import Button from "components/Button"
 import WordModal from "components/word-modal/"
 import useModalWord from "../hooks/useModalWord"
 
-const NO_WORDS_TEXT = 'Добро пожаловать в Библиотеку слов'
-const DESCRIPTION_TEXT = 'Добавьте ваше первое слово'
-const ADD_TEXT = 'Добавить слово'
+const NO_WORDS_TEXT = 'Welcome to the Word Library'
+const DESCRIPTION_TEXT = 'Add your first word'
+const ADD_TEXT = 'Add word'
 
 const EmptyWords = () => {
   const {

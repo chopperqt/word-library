@@ -1,4 +1,5 @@
 import TextField from "common/text-field/TextField"
+import { useEffect } from "react"
 
 import { useForm } from "react-hook-form"
 
@@ -10,7 +11,8 @@ import { normalizeWord } from "./helpers/normalizeWord"
 
 const ENGLISH_PLACEHOLDER_TEXT = 'Example'
 const RUSSIA_PLACEHOLDER_TEXT = 'Пример'
-const ADD_TEXT = 'Добавить'
+const ADD_TEXT = 'Add'
+const TOGGLER_TEXT = 'Add to bookmarks'
 
 interface WordModalProps {
   isOpened: boolean
@@ -34,6 +36,7 @@ const WordModal = ({
   const {
     control,
     handleSubmit: formSubmit,
+    reset,
   } = useForm({
     mode: 'onChange',
   })
@@ -47,9 +50,14 @@ const WordModal = ({
     }
   }
 
+  const handleClose = () => {
+    reset()
+    onClose()
+  }
+
   return (<ModalContainer
     isOpened={isOpened}
-    onClose={onClose}
+    onClose={handleClose}
   >
     <form
       className="w-full max-w-2xl flex flex-col gap-3"
@@ -68,7 +76,7 @@ const WordModal = ({
         defaultValue={normalizedRussia}
       />
       <Toggle
-        text="Добавить в закладки"
+        text={TOGGLER_TEXT}
         name="isPined"
         checked={isPined}
         control={control}

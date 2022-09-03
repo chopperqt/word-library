@@ -1,11 +1,17 @@
-import { CSSObjectWithLabel } from 'react-select'
+import { useController } from 'react-hook-form'
 import CreatableSelect from 'react-select/creatable'
 
-import { Components } from './constants'
+import {
+  Components,
+  customStyles,
+} from './constants'
 import useInputMulti from './hooks/useInputMulti'
+import {
+  FIELD_REQUIRED_TEXT,
+  UNACCEPTABLE_SYMBOL_TEXT,
+} from 'helpers/texts'
 
 import type { InputMultiProps } from '.'
-import { useController } from 'react-hook-form'
 
 const InputMulti = ({
   placeholder = '',
@@ -29,7 +35,11 @@ const InputMulti = ({
     rules: {
       required: {
         value: isRequired,
-        message: 'Поле обязталельное'
+        message: FIELD_REQUIRED_TEXT,
+      },
+      pattern: {
+        value: /^[а-яА-ЯёЁ\s]+$/,
+        message: UNACCEPTABLE_SYMBOL_TEXT,
       }
     }
   })
@@ -43,16 +53,6 @@ const InputMulti = ({
     onChange,
     value: fieldValue,
   })
-
-  const customStyles = {
-    control: (provide: CSSObjectWithLabel) => ({
-      ...provide,
-      border: '2px solid rgb(209 213 219)', //rgb(99 102 241)'
-      borderRadius: '0.375rem',
-      outline: 'none',
-      width: '100%',
-    }),
-  }
 
   return (
     <div>

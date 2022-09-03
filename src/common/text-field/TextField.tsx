@@ -2,10 +2,14 @@ import { ChangeEvent, useEffect } from 'react'
 import { useController } from "react-hook-form"
 
 import Input from "components/Input"
+import {
+  FIELD_REQUIRED_TEXT,
+  UNACCEPTABLE_SYMBOL_TEXT,
+} from 'helpers/texts'
 
 export interface TextFieldProps {
   name: string
-  control: any
+  control?: any
   placeholder?: string
   value?: string
   isRequired?: boolean
@@ -21,6 +25,8 @@ const TextField = ({
     field: {
       onChange: fieldUpdate,
       value: fieldValue,
+      ref,
+      onBlur,
     },
     fieldState: {
       error,
@@ -31,31 +37,41 @@ const TextField = ({
     rules: {
       required: {
         value: isRequired,
-        message: 'Поле обязательное!'
+        message: FIELD_REQUIRED_TEXT,
+      },
+      pattern: {
+        value: /^[a-zA-Z\s]+$/,
+        message: UNACCEPTABLE_SYMBOL_TEXT,
       }
-    }
+    },
   })
-
-  useEffect(() => {
-    if (!value) return
-
-    fieldUpdate(value)
-  }, [])
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     fieldUpdate(e.target.value)
   }
 
+  useEffect(() => {
+    if (!value) return
+
+    fieldUpdate(value)
+  }, [value])
+
   return (
     <div className='h-14'>
       <Input
+        data-testid="text-field"
+        ref={ref}
+        onBlur={onBlur}
         value={fieldValue}
-        name={name}
         placeholder={placeholder}
+        name={name}
         onChange={handleChange}
       />
-      {!!error?.message && (
-        <div className='text-sm text-rose-700'>
+      {error?.message && (
+        <div
+          className='text-sm text-rose-700'
+          data-testid="text-field-error"
+        >
           {error.message}
         </div>
       )}

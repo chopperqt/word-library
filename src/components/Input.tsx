@@ -30,7 +30,7 @@ const Input = forwardRef(({
 
   return (
     <input
-      onChange={(e) => handleChange(e)}
+      onChange={handleChange}
       value={value}
       data-testid="input-field"
       type="input"
