@@ -16,8 +16,16 @@ body {
   display: block;
 }
 
+.container {
+  width: 450px;
+}
+
 @media screen and (max-width: 700px) {
   .modal {
     width: 100%;
   } 
- }
+
+  .container {
+    width: 100%;
+  }
+}

@@ -1,11 +1,12 @@
 import { useForm } from "react-hook-form"
 
 import TextField from "common/text-field/TextField"
-import Button from "../Button"
+import Button from "components/button"
 import InputMulti from "../input-multi/InputMulti"
 import ModalContainer from "../ModalContainer"
 import Toggle from "../Toggle"
 import { normalizeWord } from "./helpers/normalizeWord"
+import { UNACCEPTABLE_SYMBOL_TEXT } from "helpers/texts"
 
 import type { WordForm } from "models/Library.models"
 
@@ -69,6 +70,10 @@ const WordModal = ({
         control={control}
         placeholder={ENGLISH_PLACEHOLDER_TEXT}
         isRequired={true}
+        pattern={{
+          value: /^[a-zA-Z\s]+$/,
+          message: UNACCEPTABLE_SYMBOL_TEXT,
+        }}
       />
       <InputMulti
         name="translate"

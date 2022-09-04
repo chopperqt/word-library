@@ -1,9 +1,11 @@
-import ModalContainer from "components/ModalContainer"
-import type { ModalContainerProps } from 'components/ModalContainer'
-import InputMulti from "components/input-multi/InputMulti"
 import { useForm } from "react-hook-form"
-import Button from "components/Button"
+
+import ModalContainer from "components/ModalContainer"
+import InputMulti from "components/input-multi/InputMulti"
+import Button from "components/button"
 import Toggle from "components/Toggle"
+
+import type { ModalContainerProps } from 'components/ModalContainer'
 
 const ENGLISH_PLACEHOLDER_TEXT = 'Example'
 const RUSSIA_PLACEHOLDER_TEXT = 'Пример'

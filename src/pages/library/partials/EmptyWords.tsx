@@ -1,4 +1,4 @@
-import Button from "components/Button"
+import Button from "components/button"
 import WordModal from "components/word-modal/"
 import useModalWord from "../hooks/useModalWord"
 

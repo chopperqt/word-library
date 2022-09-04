@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-import Button from 'components/Button'
+import Button from 'components/button'
 import Input from 'components/Input'
 import WordModal from 'components/word-modal/WordModal'
 

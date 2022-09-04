@@ -2,17 +2,19 @@ import { ChangeEvent, useEffect } from 'react'
 import { useController } from "react-hook-form"
 
 import Input from "components/Input"
-import {
-  FIELD_REQUIRED_TEXT,
-  UNACCEPTABLE_SYMBOL_TEXT,
-} from 'helpers/texts'
-
+import { FIELD_REQUIRED_TEXT } from 'helpers/texts'
 export interface TextFieldProps {
   name: string
   control?: any
   placeholder?: string
   value?: string
   isRequired?: boolean
+  className?: string
+  type?: string
+  pattern?: {
+    value: string | RegExp
+    message: string
+  }
 }
 const TextField = ({
   name,
@@ -20,7 +22,24 @@ const TextField = ({
   control,
   value,
   isRequired = false,
+  pattern,
+  className,
+  type = 'input',
 }: TextFieldProps) => {
+  let defaultRules: { [key: string]: unknown } = {
+    required: {
+      value: isRequired,
+      message: FIELD_REQUIRED_TEXT,
+    },
+  }
+
+  if (pattern) {
+    defaultRules = {
+      ...defaultRules,
+      pattern,
+    }
+  }
+
   const {
     field: {
       onChange: fieldUpdate,
@@ -34,16 +53,7 @@ const TextField = ({
   } = useController({
     control,
     name,
-    rules: {
-      required: {
-        value: isRequired,
-        message: FIELD_REQUIRED_TEXT,
-      },
-      pattern: {
-        value: /^[a-zA-Z\s]+$/,
-        message: UNACCEPTABLE_SYMBOL_TEXT,
-      }
-    },
+    rules: defaultRules,
   })
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -57,7 +67,7 @@ const TextField = ({
   }, [value])
 
   return (
-    <div className='h-14'>
+    <div className={`h-14 ${className}`}>
       <Input
         data-testid="text-field"
         ref={ref}
@@ -66,6 +76,7 @@ const TextField = ({
         placeholder={placeholder}
         name={name}
         onChange={handleChange}
+        type={type}
       />
       {error?.message && (
         <div

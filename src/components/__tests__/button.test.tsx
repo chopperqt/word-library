@@ -7,7 +7,7 @@ import {
 } from '@testing-library/react'
 import '@testing-library/jest-dom/extend-expect'
 
-import Button from 'components/Button'
+import Button from 'components/button/Button'
 
 afterEach(cleanup)
 
