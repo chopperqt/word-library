@@ -1,8 +1,8 @@
 import Edit from './partials/Edit'
 import Pined from './partials/Pined'
-
-import type { Word } from '../../mockData'
 import ExtraWords from './partials/ExtraWords'
+
+import type { Word } from 'models/Library.models'
 
 interface WordsContainerProps {
   amountOfWords: number
@@ -26,8 +26,8 @@ const WordsContainer = ({
     <div className="h-0.5 w-full bg-gray-50" />
     <div className="px-5 py-1 rounded-b-md">
       {words.map(({
-        english,
-        russia,
+        word,
+        translate,
         id,
         pined,
       }) => (
@@ -37,18 +37,18 @@ const WordsContainer = ({
         >
           <Pined isPined={pined} />
           <Edit
-            english={english}
-            russia={russia}
-            isPined={pined}
+            word={word}
+            translate={translate}
+            pined={pined}
           />
           <div>
-            {english}
+            {word}
           </div>
           <div>&nbsp;—&nbsp;</div>
           <div className="flex">
-            {russia[0]}
-            {russia.length > 1 && (
-              <ExtraWords words={russia} />
+            {translate[0]}
+            {translate.length > 1 && (
+              <ExtraWords words={translate} />
             )}
           </div>
         </div>

@@ -1,6 +1,6 @@
 import WordsContainer from "components/words-container/WordsContainer";
 import normalizeWords from "../../../helpers/normalizeWords";
-import type { Word } from "../../../mockData";
+import type { Word } from "models/Library.models";
 
 interface WordsProps {
   words: Word[]

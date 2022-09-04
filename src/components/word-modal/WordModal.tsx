@@ -1,13 +1,13 @@
-import TextField from "common/text-field/TextField"
-import { useEffect } from "react"
-
 import { useForm } from "react-hook-form"
 
+import TextField from "common/text-field/TextField"
 import Button from "../Button"
 import InputMulti from "../input-multi/InputMulti"
 import ModalContainer from "../ModalContainer"
 import Toggle from "../Toggle"
 import { normalizeWord } from "./helpers/normalizeWord"
+
+import type { WordForm } from "models/Library.models"
 
 const ENGLISH_PLACEHOLDER_TEXT = 'Example'
 const RUSSIA_PLACEHOLDER_TEXT = 'Пример'
@@ -18,33 +18,34 @@ interface WordModalProps {
   isOpened: boolean
   onClose: () => void
   onSubmit?: () => void
-  english?: string[]
-  russia?: string[]
-  isPined?: boolean
+  word?: string
+  translate?: string[]
+  pined?: boolean
 }
 
 const WordModal = ({
-  isOpened,
   onClose,
   onSubmit,
-  english = [],
-  russia = [],
-  isPined = false,
+  word,
+  translate = [],
+  isOpened = false,
+  pined = false,
 }: WordModalProps) => {
-  const normalizedEnglish = english.map(normalizeWord)
-  const normalizedRussia = russia.map(normalizeWord)
+  const normalizedTranslate = translate.map(normalizeWord)
   const {
     control,
     handleSubmit: formSubmit,
     reset,
   } = useForm({
     mode: 'onChange',
+    defaultValues: {
+      word,
+      translate,
+      pined,
+    }
   })
 
-  const handleSubmit = (data: any) => {
-    // TODO Дописать интерфейс который приходит в дата 
-    console.log(data)
-
+  const handleSubmit = (data: Partial<WordForm>) => {
     if (onSubmit) {
       onSubmit()
     }
@@ -64,23 +65,23 @@ const WordModal = ({
       onSubmit={formSubmit(handleSubmit)}
     >
       <TextField
-        name="english"
+        name="word"
         control={control}
         placeholder={ENGLISH_PLACEHOLDER_TEXT}
         isRequired={true}
       />
       <InputMulti
-        name="russia"
+        name="translate"
         control={control}
         placeholder={RUSSIA_PLACEHOLDER_TEXT}
-        defaultValue={normalizedRussia}
+        defaultValue={normalizedTranslate}
       />
       <Toggle
         text={TOGGLER_TEXT}
-        name="isPined"
-        checked={isPined}
+        name="pined"
+        checked={pined}
         control={control}
-        defaultChecked={isPined}
+        defaultChecked={pined}
       />
       <Button>
         {ADD_TEXT}

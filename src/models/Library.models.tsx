@@ -7,5 +7,10 @@ export interface Word {
   userID: string
 }
 
-export type Words = Word[]
+export interface WordForm {
+  word: Word['word']
+  translate: Word['translate']
+  pined: Word['pined']
+}
+
 export type WordID = Word['id']

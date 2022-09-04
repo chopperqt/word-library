@@ -6,10 +6,10 @@ import {
 import type { PayloadAction } from '@reduxjs/toolkit'
 
 import type { RootState } from 'services/stores'
-import type { Words } from 'models/Library.models'
+import type { Word } from 'models/Library.models'
 
 export interface Library {
-  words: Words[]
+  words: Word[]
 }
 
 const initialState: Library = {

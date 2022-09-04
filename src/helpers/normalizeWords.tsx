@@ -1,4 +1,4 @@
-import type { Word } from "../mockData";
+import type { Word } from "models/Library.models";
 
 export type Alphabet =
   'a' |
@@ -88,7 +88,7 @@ const normalizeWords = (words: Word[]): NormalizeWords => {
   }
 
   for (let word of words) {
-    const firstChar = word.english[0][0] as Alphabet
+    const firstChar = word.translate[0][0] as Alphabet
 
     initialObject[firstChar] = [
       ...initialObject[firstChar],

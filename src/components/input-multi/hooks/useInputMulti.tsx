@@ -40,11 +40,31 @@ const useInputMulti = ({
     }
   }
 
+  const validateForEmpty = (words: Object[]) => {
+    return !!words.length
+  }
+
+  const unacceptableSymbol = (words: Option[]) => {
+    if (!words) {
+      return false
+    }
+
+    return words.reduce((initialValue, { value }) => {
+      if (value.match(/^[а-яА-ЯёЁ\s]+$/)) {
+        initialValue = true
+      }
+
+      return initialValue
+    }, false)
+  }
+
   return {
     handleChange,
     handleInputChange,
     handleKeyDown,
     inputValue,
+    validateForEmpty,
+    unacceptableSymbol,
   }
 }
 

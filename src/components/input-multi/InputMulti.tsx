@@ -11,7 +11,7 @@ import {
   UNACCEPTABLE_SYMBOL_TEXT,
 } from 'helpers/texts'
 
-import type { InputMultiProps } from '.'
+import type { InputMultiProps, Option } from '.'
 
 const InputMulti = ({
   placeholder = '',
@@ -27,19 +27,24 @@ const InputMulti = ({
     },
     fieldState: {
       error,
-    }
+    },
+
   } = useController({
     control,
     name,
     defaultValue,
     rules: {
-      required: {
-        value: isRequired,
+      minLength: {
+        value: 1,
         message: FIELD_REQUIRED_TEXT,
       },
       pattern: {
         value: /^[а-яА-ЯёЁ\s]+$/,
         message: UNACCEPTABLE_SYMBOL_TEXT,
+      },
+      validate: {
+        isEmptyWords: (v) => validateForEmpty(v),
+        unacceptableSymbol: (v) => unacceptableSymbol(v as Option[])
       }
     }
   })
@@ -49,6 +54,8 @@ const InputMulti = ({
     handleInputChange,
     handleKeyDown,
     inputValue,
+    validateForEmpty,
+    unacceptableSymbol,
   } = useInputMulti({
     onChange,
     value: fieldValue,
@@ -70,8 +77,11 @@ const InputMulti = ({
         inputValue={inputValue}
         value={fieldValue}
       />
-      {error?.message && (
-        <div>{error.message}</div>
+      {error?.type === 'isEmptyWords' && (
+        <div className='text-sm text-rose-700'>{FIELD_REQUIRED_TEXT}</div>
+      )}
+      {error?.type === 'unacceptableSymbol' && (
+        <div className='text-sm text-rose-700'>{UNACCEPTABLE_SYMBOL_TEXT}</div>
       )}
     </div>
   )
