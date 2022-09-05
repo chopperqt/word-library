@@ -1,7 +1,6 @@
 import EmptyWords from "./partials/EmptyWords"
 import Search from "./partials/Search"
 import useLibrary from "./hooks/useLibrary"
-import { useUser } from "helpers/useUser"
 
 const Library = () => {
   const {

@@ -4,27 +4,34 @@ import { useNavigate } from "react-router-dom"
 
 import type { SignInField } from "models/Auth.models"
 import { signIn } from "api/auth.api"
-import { useUser } from "helpers/useUser"
+import { useDispatch, useSelector } from "react-redux"
+import { getUserID, setUser } from "services/user/User.store"
 
 const useSignIn = () => {
   const navigate = useNavigate()
-  const user = useUser()
+  const dispatch = useDispatch()
+  const userID = useSelector(getUserID)
   const {
     control,
     handleSubmit: submitForm,
   } = useForm<SignInField>()
 
   const handleSubmit = submitForm(async (data: SignInField) => {
-    signIn(data)
-    console.log(data)
+    const user = await signIn(data)
+
+    if (!user) {
+      return
+    }
+
+    dispatch(setUser(user))
   })
 
   useEffect(() => {
-    if (user?.id) {
+    if (!!userID) {
       navigate('/library')
     }
   }, [
-    user?.id,
+    userID,
     navigate,
   ])
 

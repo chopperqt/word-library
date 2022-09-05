@@ -34,6 +34,4 @@ export const getPinWords = createSelector(
   }
 )
 
-
-
 export default LibraryStore.reducer

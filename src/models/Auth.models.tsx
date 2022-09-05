@@ -9,7 +9,7 @@ export interface UserApi {
   role: string
 }
 
-export interface UserData {
+export interface User {
   avatarUrl: string
   email: string
   id: UserID

@@ -1,3 +1,7 @@
+import { ApiError } from "@supabase/supabase-js"
+import { User } from "models/Auth.models"
+import { useDispatch } from "react-redux"
+import { setUser } from "services/user/User.store"
 import supabase from "./client"
 export type AuthRequests =
   'loginWithGoogle' |
@@ -44,24 +48,44 @@ export interface LoginData {
 export const signIn = async ({
   login,
   password,
-}: LoginData): Promise<string | undefined> => {
+}: LoginData): Promise<User | null> => {
   const {
     error,
     user,
-    session,
-  } = await supabase.auth
+  } = await supabase
+    .auth
     .signIn({
       email: login,
       password,
     })
 
-  if (error) {
-    return
+  if (error || !user || !user?.id || !user?.email || !user?.role) {
+    return null
+  }
+
+  const {
+    id,
+    role,
+    email,
+    user_metadata,
+  } = user
+
+  return {
+    id,
+    role,
+    email,
+    avatarUrl: user_metadata?.avatar_url || '',
   }
 }
 
-export const logOut = async () => {
-  await supabase.auth.signOut()
+export const logOut = async (): Promise<ApiError | null> => {
+  const { error } = await supabase.auth.signOut()
+
+  if (error) {
+    return error
+  }
+
+  return null
 }
 
 // export const signUp = async ({
