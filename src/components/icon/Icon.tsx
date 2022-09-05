@@ -2,15 +2,15 @@ import { IconsList } from "./IconList"
 
 interface IconProps {
   icon: JSX.Element,
+  className?: string
 }
 const Icon = ({
   icon,
+  className,
 }: IconProps) => (
   <svg
-    width="16"
-    height="16"
     viewBox="0 0 16 16"
-    className="fill-sky-700 hover:fill-sky-500"
+    className={`fill-sky-700 hover:fill-sky-500 text-md w-5 h-5 ${className}`}
   >
     {icon}
   </svg>

@@ -2,13 +2,13 @@ import { useEffect } from "react"
 import { useForm } from "react-hook-form"
 import { useNavigate } from "react-router-dom"
 
-import type { SignInField } from "models/SignIn.models"
+import type { SignInField } from "models/Auth.models"
 import { signIn } from "api/auth.api"
 import { useUser } from "helpers/useUser"
 
 const useSignIn = () => {
   const navigate = useNavigate()
-  const { user } = useUser()
+  const user = useUser()
   const {
     control,
     handleSubmit: submitForm,
@@ -20,10 +20,13 @@ const useSignIn = () => {
   })
 
   useEffect(() => {
-    if (user) {
+    if (user?.id) {
       navigate('/library')
     }
-  }, [])
+  }, [
+    user?.id,
+    navigate,
+  ])
 
   return {
     control,

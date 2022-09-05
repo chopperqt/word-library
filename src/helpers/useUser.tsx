@@ -1,30 +1,26 @@
 import supabase from "api/client"
+import type { UserData } from "models/Auth.models"
 
-export const useUser = () => {
-  const hasUser = !!supabase.auth.user()
+export const useUser = (): UserData | null => {
+  const user = supabase?.auth?.user()
 
-  let user: any | undefined
-
-  if (hasUser) {
-    const {
-      role = '',
-      email = '',
-      id = '',
-      user_metadata,
-    } = supabase.auth.user() || {}
-    const {
-      avatar_url,
-    } = user_metadata || {}
-
-    user = {
-      role,
-      email,
-      id,
-      avatar_url,
-    }
+  if (!user || !user?.id || !user?.role || !user?.email) {
+    return null
   }
 
+  const {
+    role,
+    email,
+    id,
+    user_metadata: {
+      avatar_url,
+    },
+  } = user
+
   return {
-    user
+    role,
+    email,
+    id,
+    avatarUrl: avatar_url,
   }
 }

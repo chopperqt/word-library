@@ -58,13 +58,11 @@ export const signIn = async ({
   if (error) {
     return
   }
-
-  console.log(user, session)
 }
 
-// export const logOut = async () => {
-//   await supabase.auth.signOut()
-// }
+export const logOut = async () => {
+  await supabase.auth.signOut()
+}
 
 // export const signUp = async ({
 //   email,
