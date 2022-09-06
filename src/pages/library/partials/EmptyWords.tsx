@@ -11,6 +11,7 @@ const EmptyWords = () => {
     isOpened,
     handleClose,
     handleOpen,
+    handleCreateWord,
   } = useModalWord()
 
   return (
@@ -28,6 +29,7 @@ const EmptyWords = () => {
         {ADD_TEXT}
       </Button>
       <WordModal
+        onSubmit={handleCreateWord}
         isOpened={isOpened}
         onClose={handleClose}
       />

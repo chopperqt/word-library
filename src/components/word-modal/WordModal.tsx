@@ -7,7 +7,10 @@ import ModalContainer from "../ModalContainer"
 import Toggle from "../Toggle"
 import { normalizeWord } from "./helpers/normalizeWord"
 import { UNACCEPTABLE_SYMBOL_TEXT } from "helpers/texts"
+import { useSelector } from "react-redux"
+import { getUserID } from "services/user/User.store"
 
+import type { CreateWord } from "models/Library.models"
 import type { WordForm } from "models/Library.models"
 
 const ENGLISH_PLACEHOLDER_TEXT = 'Example'
@@ -18,7 +21,7 @@ const TOGGLER_TEXT = 'Add to bookmarks'
 interface WordModalProps {
   isOpened: boolean
   onClose: () => void
-  onSubmit?: () => void
+  onSubmit?: (data: CreateWord) => void
   word?: string
   translate?: string[]
   pined?: boolean
@@ -33,23 +36,30 @@ const WordModal = ({
   pined = false,
 }: WordModalProps) => {
   const normalizedTranslate = translate.map(normalizeWord)
+  const userID = useSelector(getUserID)
   const {
     control,
     handleSubmit: formSubmit,
     reset,
-  } = useForm({
+  } = useForm<WordForm>({
     mode: 'onChange',
-    defaultValues: {
-      word,
-      translate,
-      pined,
-    }
   })
 
-  const handleSubmit = (data: Partial<WordForm>) => {
-    if (onSubmit) {
-      onSubmit()
+  const handleSubmit = ({
+    pined,
+    translate,
+    word,
+  }: WordForm) => {
+    if (!onSubmit) {
+      return
     }
+
+    onSubmit({
+      pined,
+      translate: translate.map(({ value }) => value),
+      word,
+      userID,
+    })
   }
 
   const handleClose = () => {

@@ -27,9 +27,13 @@ const useSignIn = () => {
   })
 
   useEffect(() => {
-    if (!!userID) {
+    if (userID) {
       navigate('/library')
+
+      return
     }
+
+    // navigate('/signIn')
   }, [
     userID,
     navigate,

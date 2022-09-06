@@ -1,4 +1,7 @@
-import { useEffect } from "react"
+import {
+  ChangeEvent,
+  useEffect,
+} from "react"
 import { useController } from "react-hook-form"
 
 export interface ToggleProps {
@@ -10,7 +13,6 @@ export interface ToggleProps {
 }
 const Toggle = ({
   text,
-  checked = false,
   defaultChecked = false,
   control,
   name,
@@ -25,13 +27,13 @@ const Toggle = ({
     name,
   })
 
-  const handleChange = () => {
-    onChange(!fieldValue)
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    onChange(e.target.checked)
   }
 
   useEffect(() => {
-    if (checked) {
-      onChange(checked)
+    if (defaultChecked) {
+      onChange(defaultChecked)
 
       return
     }
@@ -45,8 +47,8 @@ const Toggle = ({
       className="inline-flex relative items-center cursor-pointer"
     >
       <input
-        onClick={handleChange}
-        checked={fieldValue}
+        onChange={handleChange}
+        defaultChecked={fieldValue}
         type="checkbox"
         id="default-toggle"
         className="sr-only peer"

@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { ChangeEvent, useState } from 'react'
 
 import Button from 'components/button'
 import Input from 'components/Input'
@@ -9,7 +9,7 @@ const SEARCH_TEXT = 'Search...'
 
 interface SearchProps {
   value: string,
-  onChange: () => void
+  onChange: (e: ChangeEvent<HTMLInputElement>) => void
 }
 const Search = ({
   value,

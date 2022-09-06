@@ -1,4 +1,8 @@
+import { createLibraryWord } from "api/library.api"
 import { useState } from "react"
+
+import type { CreateWord } from "models/Library.models"
+
 
 const useModalWord = () => {
   const [isOpened, setOpened] = useState<boolean>(false)
@@ -11,10 +15,15 @@ const useModalWord = () => {
     setOpened(true)
   }
 
+  const handleCreateWord = async (data: CreateWord) => {
+    await createLibraryWord(data)
+  }
+
   return {
     isOpened,
     handleClose,
     handleOpen,
+    handleCreateWord,
   }
 }
 

@@ -3,13 +3,15 @@ import { useState } from "react"
 import Icon, { IconsList } from "components/icon/Icon"
 import WordModal from "components/word-modal/WordModal"
 
-import type { WordForm } from "models/Library.models"
+import type { Word } from "models/Library.models"
+
+type EditProps = Pick<Word, 'word' | 'translate' | 'pined'>
 
 const Edit = ({
   word,
   translate = [],
   pined = false,
-}: WordForm) => {
+}: EditProps) => {
   const [isOpened, setOpened] = useState<boolean>(false)
 
   const handleOpen = () => {

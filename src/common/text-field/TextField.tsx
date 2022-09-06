@@ -11,6 +11,7 @@ export interface TextFieldProps {
   isRequired?: boolean
   className?: string
   type?: string
+  defaultValue?: string
   pattern?: {
     value: string | RegExp
     message: string
@@ -20,10 +21,10 @@ const TextField = ({
   name,
   placeholder,
   control,
-  value,
   isRequired = false,
   pattern,
   className,
+  value,
   type = 'input',
 }: TextFieldProps) => {
   let defaultRules: { [key: string]: unknown } = {
@@ -43,7 +44,7 @@ const TextField = ({
   const {
     field: {
       onChange: fieldUpdate,
-      value: fieldValue,
+      value: fieldValue = '',
       ref,
       onBlur,
     },
@@ -64,7 +65,10 @@ const TextField = ({
     if (!value) return
 
     fieldUpdate(value)
-  }, [value])
+  }, [
+    value,
+    fieldUpdate,
+  ])
 
   return (
     <div className={`h-14 ${className}`}>
