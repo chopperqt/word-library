@@ -1,33 +1,49 @@
+import { useEffect } from "react"
+
 import EmptyWords from "./partials/EmptyWords"
 import Search from "./partials/Search"
 import useLibrary from "./hooks/useLibrary"
+import { useSelector } from "react-redux"
+import {
+  getWords,
+  getPinWords,
+} from "services/library/Library.store"
+import Words from "./partials/Words"
+import { getLibraryWords } from "api/library.api"
 
 const Library = () => {
+  const words = useSelector(getWords)
+  const pinedWords = useSelector(getPinWords)
   const {
     formattedWords,
-    pinedWords,
     value,
     handleChangeValue,
   } = useLibrary()
 
-  if (!formattedWords.length) {
-    return (
-      <EmptyWords />
-    )
-  }
+  useEffect(() => {
+    getLibraryWords('9db4d4cc-a103-4c72-9247-f02713b3bfdd')
+  }, [])
+
+  // if (!formattedWords.length) {
+  //   return (
+  //     <EmptyWords />
+  //   )
+  // }
+
+  console.log('words', words)
 
   return (
     <div className="flex flex-col p-5 gap-5">
-      <Search
+      {/* <Search
         value={value}
         onChange={handleChangeValue}
-      />
-      {/* {!!words?.length && (
+      /> */}
+      {!!words?.length && (
         <Words
-          pinedWords={pinedWords}
+          //pinedWords={pinedWords}
           words={words}
         />
-      )} */}
+      )}
     </div>
   )
 }

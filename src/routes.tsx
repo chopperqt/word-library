@@ -1,11 +1,12 @@
 import Library from "pages/library/Library"
 import SignIn from "pages/sign-in/SignIn"
 import { Links } from "helpers/links"
+import { Navigate } from "react-router-dom"
 
-export const routes = [
+export const routesNoAuth = [
   {
     path: Links.library,
-    element: <Library />,
+    element: <Navigate to={Links.signIn} />,
     index: false,
   },
   {
@@ -20,7 +21,30 @@ export const routes = [
   },
   {
     path: Links.main,
-    element: <SignIn />,
+    element: <Navigate to={Links.signIn} />,
     index: true,
-  }
+  },
+]
+
+export const routesWithAuth = [
+  {
+    path: Links.library,
+    element: <Library />,
+    index: false,
+  },
+  {
+    path: Links.signIn,
+    element: <Navigate to={Links.library} />,
+    index: false,
+  },
+  {
+    path: Links.main,
+    element: <Navigate to={Links.library} />,
+    index: false,
+  },
+  {
+    path: Links.signUp,
+    element: <Navigate to={Links.library} />,
+    index: false,
+  },
 ]

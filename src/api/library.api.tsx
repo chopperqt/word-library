@@ -5,6 +5,8 @@ import type {
   Word,
 } from "models/Library.models"
 import type { UserID } from "models/Auth.models"
+import { store } from "services/stores"
+import { setWords } from "services/library/Library.store"
 
 const LIBRARY_TABLE = 'library'
 
@@ -35,6 +37,8 @@ export const getLibraryWords = async (userID: UserID): Promise<Word[] | null> =>
   if (error || !data) {
     return null
   }
+
+  store.dispatch(setWords(data))
 
   return data
 }

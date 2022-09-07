@@ -3,7 +3,10 @@ import {
   Routes,
   Route,
 } from 'react-router-dom'
-import { routes } from 'routes';
+import {
+  routesNoAuth,
+  routesWithAuth,
+} from 'routes';
 import Icon, { IconsList } from 'components/icon/Icon';
 import { logOut } from 'api/auth.api';
 import {
@@ -19,8 +22,10 @@ import supabase from 'api/client';
 
 function App() {
   const dispatch = useDispatch()
-  const userID = useSelector(getUserID)
   const user = supabase.auth.user()
+  const routes = user?.id
+    ? routesWithAuth
+    : routesNoAuth
 
   const handleLogOut = async () => {
     const response = await logOut()
@@ -33,21 +38,7 @@ function App() {
   }
 
   useEffect(() => {
-    if (user && user?.id && user?.email && user?.role) {
-      const {
-        id,
-        email,
-        role,
-        user_metadata,
-      } = user
-
-      dispatch(setUser({
-        id,
-        email,
-        role,
-        avatarUrl: user_metadata?.avatar_url || '',
-      }))
-    }
+    console.log('Root')
   }, [])
 
   return (
@@ -57,16 +48,16 @@ function App() {
           path,
           element,
           index,
-        }) => (
+        }, indexPage) => (
           <Route
-            key={path}
+            key={indexPage}
             index={index}
             path={path}
             element={element}
           />
         ))}
       </Routes>
-      {userID && (
+      {!!user?.id && (
         <button
           className="text-black absolute right-10 top-10 text-xl"
           onClick={handleLogOut}

@@ -13,11 +13,9 @@ import {
 import { useNavigate } from 'react-router-dom'
 import { getUserID } from 'services/user/User.store'
 import { getLibraryWords } from 'api/library.api'
-import { Links } from 'helpers/links'
+
 
 const useLibrary = () => {
-  const words = useSelector(getWords)
-  const pinedWords = useSelector(getPinWords)
   const userID = useSelector(getUserID)
   const [value, setValue] = useState<string>('')
   const navigate = useNavigate()
@@ -45,22 +43,25 @@ const useLibrary = () => {
 
   useEffect(() => {
     if (userID) {
-      getLibraryWords(userID)
-
       return
     }
-
-    navigate(Links.signIn)
   }, [
     userID,
     navigate,
   ])
 
+  useEffect(() => {
+    if (!userID) {
+      return
+    }
+
+    getLibraryWords(userID)
+  }, [])
+
   return {
     value,
     handleChangeValue,
     formattedWords: [],
-    pinedWords,
   }
 }
 

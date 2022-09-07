@@ -4,8 +4,14 @@ import { useNavigate } from "react-router-dom"
 
 import type { SignInField } from "models/Auth.models"
 import { signIn } from "api/auth.api"
-import { useDispatch, useSelector } from "react-redux"
-import { getUserID, setUser } from "services/user/User.store"
+import {
+  useDispatch,
+  useSelector,
+} from "react-redux"
+import {
+  getUserID,
+  setUser,
+} from "services/user/User.store"
 
 const useSignIn = () => {
   const navigate = useNavigate()
@@ -38,6 +44,10 @@ const useSignIn = () => {
     userID,
     navigate,
   ])
+
+  useEffect(() => {
+    console.log('SignIn')
+  }, [])
 
   return {
     control,
