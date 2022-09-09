@@ -3,6 +3,7 @@ import {
   Routes,
   Route,
 } from 'react-router-dom'
+
 import {
   routesNoAuth,
   routesWithAuth,
@@ -23,6 +24,7 @@ import supabase from 'api/client';
 function App() {
   const dispatch = useDispatch()
   const user = supabase.auth.user()
+  const userID = useSelector(getUserID)
   const routes = user?.id
     ? routesWithAuth
     : routesNoAuth
@@ -38,7 +40,14 @@ function App() {
   }
 
   useEffect(() => {
-    console.log('Root')
+    if (user?.id && !userID) {
+      dispatch(setUser({
+        id: user.id,
+        avatarUrl: user.user_metadata.avatar_url,
+        email: user.email as string,
+        role: user!.role as string,
+      }))
+    }
   }, [])
 
   return (

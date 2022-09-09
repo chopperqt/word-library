@@ -20,10 +20,6 @@ const Library = () => {
     handleChangeValue,
   } = useLibrary()
 
-  useEffect(() => {
-    getLibraryWords('9db4d4cc-a103-4c72-9247-f02713b3bfdd')
-  }, [])
-
   // if (!formattedWords.length) {
   //   return (
   //     <EmptyWords />

@@ -6,7 +6,10 @@ import type {
 } from "models/Library.models"
 import type { UserID } from "models/Auth.models"
 import { store } from "services/stores"
-import { setWords } from "services/library/Library.store"
+import {
+  setWords,
+  setWordsLoading,
+} from "services/library/Library.store"
 
 const LIBRARY_TABLE = 'library'
 
@@ -26,6 +29,8 @@ export const createLibraryWord = async (wordData: CreateWord): Promise<Word[] | 
 }
 
 export const getLibraryWords = async (userID: UserID): Promise<Word[] | null> => {
+  store.dispatch(setWordsLoading(true))
+
   const {
     data,
     error,
@@ -33,6 +38,8 @@ export const getLibraryWords = async (userID: UserID): Promise<Word[] | null> =>
     .from(LIBRARY_TABLE)
     .select('*')
     .match({ userID })
+
+  store.dispatch(setWordsLoading(false))
 
   if (error || !data) {
     return null

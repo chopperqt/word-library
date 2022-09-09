@@ -10,10 +10,12 @@ import type { Word } from 'models/Library.models'
 
 export interface Library {
   words: Word[]
+  isLoadingWords: boolean
 }
 
 const initialState: Library = {
-  words: []
+  words: [],
+  isLoadingWords: false
 }
 
 const LibraryStore = createSlice({
@@ -23,10 +25,14 @@ const LibraryStore = createSlice({
     setWords: (state, action: PayloadAction<Word[]>) => {
       state.words = action.payload
     },
+    setWordsLoading: (state, action: PayloadAction<boolean>) => {
+      state.isLoadingWords = action.payload
+    },
   }
 })
 
 export const {
+  setWordsLoading,
   setWords,
 } = LibraryStore.actions
 
@@ -40,6 +46,11 @@ export const getPinWords = createSelector(
   (words) => {
     return words.filter((pined) => pined)
   }
+)
+
+export const getWordsLoadingStatus = createSelector(
+  (state: RootState) => state.LibraryStore.isLoadingWords,
+  (loading) => loading
 )
 
 export default LibraryStore.reducer

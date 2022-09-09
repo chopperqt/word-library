@@ -19,8 +19,6 @@ const Words = ({
   //   : 'Закреплённые'
   const formattedLibrary = `Библиотека(${words.length})`
 
-  console.log(normalizeWords)
-
 
   return (
     <div className="flex flex-col items-start gap-3 flex-wrap">

@@ -11,5 +11,7 @@ export const Fields = [
   }
 ]
 
-export const SIGN_IN_TEXT = 'Sign In'
+export const SIGN_IN_TEXT = 'Sign in'
+export const LOGIN_TEXT = 'Login'
 export const LINK_TEXT = "Haven`t registered yet?"
+export const LINE_STYLES = 'h-1 bg-black w-full rounded-md opacity-10'

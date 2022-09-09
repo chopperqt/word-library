@@ -84,7 +84,7 @@ const TextField = ({
       />
       {error?.message && (
         <div
-          className='text-sm text-rose-700'
+          className='text-sm text-rose-700 flex'
           data-testid="text-field-error"
         >
           {error.message}

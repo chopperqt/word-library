@@ -1,8 +1,11 @@
 import { ApiError } from "@supabase/supabase-js"
 import { User } from "models/Auth.models"
 import { useDispatch } from "react-redux"
+import { setLoading } from "services/loading/Loading.store"
+import { store } from "services/stores"
 import { setUser } from "services/user/User.store"
 import supabase from "./client"
+
 export type AuthRequests =
   'loginWithGoogle' |
   'signUp' |
@@ -49,6 +52,11 @@ export const signIn = async ({
   login,
   password,
 }: LoginData): Promise<User | null> => {
+  store.dispatch(setLoading({
+    name: 'signUp',
+    isLoading: true,
+  }))
+
   const {
     error,
     user,
@@ -60,6 +68,13 @@ export const signIn = async ({
     })
 
   if (error || !user || !user?.id || !user?.email || !user?.role) {
+    store.dispatch(setLoading({
+      name: 'signUp',
+      isLoading: false,
+      isError: true,
+      isFetched: true,
+    }))
+
     return null
   }
 
@@ -69,6 +84,13 @@ export const signIn = async ({
     email,
     user_metadata,
   } = user
+
+  store.dispatch(setLoading({
+    name: 'signUp',
+    isLoading: false,
+    isError: false,
+    isFetched: true,
+  }))
 
   return {
     id,
