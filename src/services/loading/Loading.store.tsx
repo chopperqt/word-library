@@ -30,11 +30,15 @@ const LoadingStore = createSlice({
         isLoading,
       } = action.payload
 
+      const formattedFetch = typeof isFetched === 'boolean'
+        ? isFetched
+        : state[name]?.isFetched
+
       state[name] = {
         ...state[name],
-        isLoading: isLoading || state[name]?.isLoading,
-        isFetched: isFetched || state[name]?.isFetched,
-        isError: isError || state[name]?.isError,
+        isLoading,
+        isFetched: formattedFetch,
+        isError,
       }
     }
   }

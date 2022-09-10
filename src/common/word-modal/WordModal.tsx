@@ -2,9 +2,9 @@ import { useForm } from "react-hook-form"
 
 import TextField from "common/text-field/TextField"
 import Button from "components/button"
-import InputMulti from "../input-multi/InputMulti"
-import ModalContainer from "../ModalContainer"
-import Toggle from "../Toggle"
+import InputMulti from "components/input-multi"
+import ModalContainer from "components/ModalContainer"
+import Toggle from "components/Toggle"
 import { getNormalizeOptionWord } from "./helpers/getNormalizeOptionWord"
 import { UNACCEPTABLE_SYMBOL_TEXT } from "helpers/texts"
 import { useSelector } from "react-redux"
@@ -39,6 +39,7 @@ const WordModal = ({
 }: WordModalProps) => {
   const normalizedTranslate = translate.map(getNormalizeOptionWord)
   const isLoadingCreate = useSelector(getLoading).createLibraryWord?.isLoading
+  const isLoadingUpdate = useSelector(getLoading).updateLibraryWord?.isLoading
   const userID = useSelector(getUserID)
   const {
     control,
@@ -74,45 +75,45 @@ const WordModal = ({
     onClose()
   }
 
-  return (<ModalContainer
-    isOpened={isOpened}
-    onClose={handleClose}
-  >
-    <form
-      className="w-full max-w-2xl flex flex-col gap-3"
-      onSubmit={formSubmit(handleSubmit)}
+  return (
+    <ModalContainer
+      isOpened={isOpened}
+      onClose={handleClose}
     >
-      <TextField
-        name="word"
-        control={control}
-        placeholder={ENGLISH_PLACEHOLDER_TEXT}
-        isRequired={true}
-        value={word}
-        pattern={{
-          value: /^[a-zA-Z\s]+$/,
-          message: UNACCEPTABLE_SYMBOL_TEXT,
-        }}
-      />
-      <InputMulti
-        name="translate"
-        control={control}
-        placeholder={RUSSIA_PLACEHOLDER_TEXT}
-        defaultValue={normalizedTranslate}
-      />
-      <Toggle
-        text={TOGGLER_TEXT}
-        name="pined"
-        checked={pined}
-        control={control}
-        defaultChecked={pined}
-      />
-      <Button
-        loading={isLoadingCreate}
+      <form
+        className="w-full max-w-2xl flex flex-col gap-3"
+        onSubmit={formSubmit(handleSubmit)}
       >
-        {ADD_TEXT}
-      </Button>
-    </form>
-  </ModalContainer>
+        <TextField
+          name="word"
+          control={control}
+          placeholder={ENGLISH_PLACEHOLDER_TEXT}
+          isRequired={true}
+          value={word}
+          pattern={{
+            value: /^[a-zA-Z\s]+$/,
+            message: UNACCEPTABLE_SYMBOL_TEXT,
+          }}
+        />
+        <InputMulti
+          name="translate"
+          control={control}
+          placeholder={RUSSIA_PLACEHOLDER_TEXT}
+          defaultValue={normalizedTranslate}
+        />
+        <Toggle
+          text={TOGGLER_TEXT}
+          name="pined"
+          control={control}
+          defaultChecked={pined}
+        />
+        <Button
+          loading={isLoadingCreate || isLoadingUpdate}
+        >
+          {ADD_TEXT}
+        </Button>
+      </form>
+    </ModalContainer>
   )
 }
 

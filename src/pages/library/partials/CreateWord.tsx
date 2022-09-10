@@ -3,8 +3,7 @@ import { useSelector } from "react-redux"
 
 import Button from "components/button"
 import { getUserID } from "services/user/User.store"
-import useModalWord from '../hooks/useModalWord'
-import WordModal from "components/word-modal"
+import WordModal, { useModalWord } from "common/word-modal"
 
 const ADD_TEXT = 'Add'
 
@@ -14,7 +13,9 @@ const CreateWord = () => {
     handleClose,
     handleOpen,
     isOpened,
-  } = useModalWord()
+  } = useModalWord({
+    userID
+  })
 
   return (
     <React.Fragment>

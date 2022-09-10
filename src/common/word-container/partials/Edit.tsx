@@ -1,26 +1,28 @@
-import { useState } from "react"
-
 import Icon, { IconsList } from "components/icon/Icon"
-import WordModal from "components/word-modal/WordModal"
+import WordModal, { useModalWord } from "common/word-modal"
 
 import type { Word } from "models/Library.models"
+import type { UserID } from "models/Auth.models"
 
-type EditProps = Pick<Word, 'word' | 'translate' | 'pined'>
+interface EditProps extends Pick<Word, 'word' | 'translate' | 'pined'> {
+  userID: UserID
+}
 
 const Edit = ({
   word,
   translate = [],
   pined = false,
+  userID,
 }: EditProps) => {
-  const [isOpened, setOpened] = useState<boolean>(false)
-
-  const handleOpen = () => {
-    setOpened(true)
-  }
-
-  const handleClose = () => {
-    setOpened(false)
-  }
+  const {
+    handleOpen,
+    handleClose,
+    isOpened,
+    handleUpdateWord,
+  } = useModalWord({
+    userID,
+    word,
+  })
 
   return (
     <>
@@ -39,6 +41,7 @@ const Edit = ({
         word={word}
         translate={translate}
         pined={pined}
+        onSubmit={handleUpdateWord}
       />
     </>
   )

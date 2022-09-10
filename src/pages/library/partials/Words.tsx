@@ -1,15 +1,19 @@
-import WordsContainer from "components/words-container/WordsContainer";
+import { useSelector } from "react-redux";
+
+import WordsContainer from "common/word-container/WordsContainer";
 import normalizeWords from "../../../helpers/normalizeWords";
 import type { Word } from "models/Library.models";
+import {
+  getPinWords,
+  getWords,
+} from "services/library/Library.store";
+import { getUserID } from "services/user/User.store";
+import React from "react";
 
-interface WordsProps {
-  words: Word[]
-  pinedWords: Word[]
-}
-const Words = ({
-  words,
-  pinedWords = [],
-}: WordsProps) => {
+const Words = () => {
+  const userID = useSelector(getUserID)
+  const words = useSelector(getWords)
+  const pinedWords = useSelector(getPinWords)
   const normalizedWords = normalizeWords(words)
   const normalizedPinedWords = normalizeWords(pinedWords)
   const formattedLibrary = `Library(${words.length})`
@@ -20,26 +24,32 @@ const Words = ({
 
   return (
     <div className="flex flex-col items-start gap-3 flex-wrap">
-      <div className="text-2xl">{formattedPined}</div>
-      <div className="flex justify-start items-start gap-3 flex-wrap">
-        {Object.entries(normalizedPinedWords).map(([key, words]: [key: string, words: any]) => {
-          const amountOfWords = words.length
 
-          if (!amountOfWords) {
-            return null
-          }
+      {!!pinedWords.length && (
+        <React.Fragment>
+          <div className="text-2xl">{formattedPined}</div>
+          <div className="flex justify-start items-start gap-3 flex-wrap">
+            {Object.entries(normalizedPinedWords).map(([key, words]: [key: string, words: any]) => {
+              const amountOfWords = words.length
 
-          return (
-            <WordsContainer
-              key={key}
-              letter={key}
-              amountOfWords={amountOfWords}
-              words={words}
-              color="bg-indigo-700"
-            />
-          )
-        })}
-      </div>
+              if (!amountOfWords) {
+                return null
+              }
+
+              return (
+                <WordsContainer
+                  key={key}
+                  userID={userID}
+                  letter={key}
+                  amountOfWords={amountOfWords}
+                  words={words}
+                  color="bg-indigo-700"
+                />
+              )
+            })}
+          </div>
+        </React.Fragment>
+      )}
       <div className="text-2xl mt-5">{formattedLibrary}</div>
       <div className="flex justify-start items-start gap-3 flex-wrap">
         {Object.entries(normalizedWords).map(([key, words]: [key: string, words: Word[]]) => {
@@ -52,6 +62,7 @@ const Words = ({
           return (
             <WordsContainer
               key={key}
+              userID={userID}
               letter={key}
               amountOfWords={amountOfWords}
               words={words}

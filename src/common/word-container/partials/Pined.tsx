@@ -2,10 +2,14 @@ import Icon, { IconsList } from "components/icon/Icon"
 
 interface PinedProps {
   isPined: boolean
+  word: string
 }
 const Pined = ({
   isPined,
+  word,
 }: PinedProps) => {
+
+
   const icon = isPined
     ? IconsList.starFill
     : IconsList.starOutline

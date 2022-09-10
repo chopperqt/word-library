@@ -3,33 +3,31 @@ import { useSelector } from "react-redux"
 
 import EmptyContent from "./partials/EmptyContent"
 import useLibrary from "./hooks/useLibrary"
-import {
-  getWords,
-  getPinWords,
-} from "services/library/Library.store"
+import { getWords } from "services/library/Library.store"
 import Words from "./partials/Words"
 import { getLoading } from "services/loading/Loading.store"
-import Spin from "components/spin"
+import { getUserID } from "services/user/User.store"
 import ErrorContent from "./partials/ErrorContent"
 import CreateWord from "./partials/CreateWord"
 import Skeleton from "components/Skeleton"
+import Spin from "components/spin"
 
 const Search = lazy(() => import('./partials/Search'))
 
 const Library = () => {
+  const words = useSelector(getWords)
+  const userID = useSelector(getUserID)
   const isFetched = useSelector(getLoading).getLibraryWords?.isFetched
   const isError = useSelector(getLoading).getLibraryWords?.isError
-  const pinedWords = useSelector(getPinWords)
-  const words = useSelector(getWords)
   const hasWords = !!words.length
-
-  console.log(pinedWords)
 
   const {
     formattedWords,
     value,
     handleChangeValue,
-  } = useLibrary()
+  } = useLibrary({
+    userID,
+  })
 
   if (!isFetched) {
     return (
@@ -69,10 +67,7 @@ const Library = () => {
         <CreateWord />
       </div>
       {hasWords && (
-        <Words
-          pinedWords={pinedWords}
-          words={words}
-        />
+        <Words />
       )}
     </div>
   )

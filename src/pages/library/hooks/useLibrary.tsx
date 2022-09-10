@@ -3,14 +3,18 @@ import {
   useEffect,
   ChangeEvent,
 } from 'react'
-import { useSelector } from 'react-redux'
 
 import { useNavigate } from 'react-router-dom'
-import { getUserID } from 'services/user/User.store'
 import { getLibraryWords } from 'api/library.api'
+import type { UserID } from 'models/Auth.models'
 
-const useLibrary = () => {
-  const userID = useSelector(getUserID)
+interface UseLibraryProps {
+  userID: UserID
+}
+const useLibrary = ({
+  userID,
+}: UseLibraryProps) => {
+
   const [value, setValue] = useState<string>('')
   const navigate = useNavigate()
 

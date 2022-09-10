@@ -6,7 +6,6 @@ import { useController } from "react-hook-form"
 
 export interface ToggleProps {
   text?: string
-  checked: boolean
   defaultChecked?: boolean
   control: any
   name: string
@@ -32,9 +31,7 @@ const Toggle = ({
   }
 
   useEffect(() => {
-    if (defaultChecked) {
-      onChange(defaultChecked)
-
+    if (typeof defaultChecked !== 'boolean') {
       return
     }
 
@@ -48,7 +45,7 @@ const Toggle = ({
     >
       <input
         onChange={handleChange}
-        defaultChecked={fieldValue}
+        checked={fieldValue}
         type="checkbox"
         id="default-toggle"
         className="sr-only peer"

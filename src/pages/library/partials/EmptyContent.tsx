@@ -1,18 +1,23 @@
+import { useSelector } from "react-redux"
+
 import Button from "components/button"
-import WordModal from "components/word-modal/"
-import useModalWord from "../hooks/useModalWord"
+import WordModal, { useModalWord } from "common/word-modal"
+import { getUserID } from "services/user/User.store"
 
 const NO_WORDS_TEXT = 'Welcome to the Word Library'
 const DESCRIPTION_TEXT = 'Add your first word'
 const ADD_TEXT = 'Add word'
 
 const EmptyContent = () => {
+  const userID = useSelector(getUserID)
   const {
     isOpened,
     handleClose,
     handleOpen,
     handleCreateWord,
-  } = useModalWord()
+  } = useModalWord({
+    userID,
+  })
 
   return (
     <div className="w-screen h-screen flex flex-col  justify-center items-center">
