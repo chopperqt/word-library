@@ -29,6 +29,8 @@ const useModalWord = ({
     }
 
     getLibraryWords(userID)
+
+    handleClose()
   }
 
   const handleUpdateWord = async (data: CreateWord) => {

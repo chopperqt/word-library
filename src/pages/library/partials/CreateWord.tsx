@@ -13,6 +13,7 @@ const CreateWord = () => {
     handleClose,
     handleOpen,
     isOpened,
+    handleCreateWord,
   } = useModalWord({
     userID
   })
@@ -26,7 +27,7 @@ const CreateWord = () => {
         {ADD_TEXT}
       </Button>
       <WordModal
-        onSubmit={() => { }}
+        onSubmit={handleCreateWord}
         isOpened={isOpened}
         onClose={handleClose}
       />

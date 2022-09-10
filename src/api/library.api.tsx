@@ -14,7 +14,8 @@ const LIBRARY_TABLE = 'library'
 export type LibraryRequests =
   'createLibraryWord' |
   'getLibraryWords' |
-  'updateLibraryWord'
+  'updateLibraryWord' |
+  'updatePin'
 
 export const createLibraryWord = async (wordData: CreateWord): Promise<Word[] | null> => {
   const {
@@ -116,6 +117,36 @@ export const getLibraryWords = async (userID: UserID): Promise<Word[] | null> =>
   return data
 }
 
-export const updatePin = async () => {
+export const updatePin = async (userID: UserID, pined: boolean, word: string): Promise<Word[] | null> => {
+  const {
+    handleSetError,
+    handleSetPending,
+    handleSetSuccess,
+  } = loadingController('updatePin')
+
+  handleSetPending()
+
+  const {
+    data,
+    error
+  } = await supabase
+    .from(LIBRARY_TABLE)
+    .update({
+      pined,
+    })
+    .match({
+      userID,
+      word,
+    })
+
+  if (error) {
+    handleSetError()
+
+    return null
+  }
+
+  handleSetSuccess()
+
+  return data
 
 }

@@ -3,6 +3,8 @@ import { useController } from "react-hook-form"
 
 import Input from "components/Input"
 import { FIELD_REQUIRED_TEXT } from 'helpers/texts'
+import { useSelector } from 'react-redux'
+import { getWords } from 'services/library/Library.store'
 export interface TextFieldProps {
   name: string
   control?: any
@@ -17,6 +19,9 @@ export interface TextFieldProps {
     message: string
   }
 }
+
+const ALREADY_EXIST_TEXT = 'The word already exists'
+
 const TextField = ({
   name,
   placeholder,
@@ -27,6 +32,7 @@ const TextField = ({
   value,
   type = 'input',
 }: TextFieldProps) => {
+  const words = useSelector(getWords)
   let defaultRules: { [key: string]: unknown } = {
     required: {
       value: isRequired,
@@ -54,7 +60,14 @@ const TextField = ({
   } = useController({
     control,
     name,
-    rules: defaultRules,
+    rules: {
+      ...defaultRules,
+      validate: {
+        checkTheSame: (str: string): boolean => {
+          return !words.filter(({ word }) => word.toLowerCase().replace(' ', '') === str.toLowerCase().replace(' ', '')).length
+        }
+      }
+    },
   })
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -82,6 +95,14 @@ const TextField = ({
         onChange={handleChange}
         type={type}
       />
+      {error?.type === 'checkTheSame' && (
+        <div
+          className='text-sm text-rose-700 flex'
+          data-testid="text-field-error"
+        >
+          {ALREADY_EXIST_TEXT}
+        </div>
+      )}
       {error?.message && (
         <div
           className='text-sm text-rose-700 flex'

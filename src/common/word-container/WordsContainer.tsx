@@ -39,6 +39,7 @@ const WordsContainer = ({
           className="flex items-center"
         >
           <Pined
+            userID={userID}
             isPined={pined}
             word={word}
           />
