@@ -87,6 +87,7 @@ const WordModal = ({
         control={control}
         placeholder={ENGLISH_PLACEHOLDER_TEXT}
         isRequired={true}
+        value={word}
         pattern={{
           value: /^[a-zA-Z\s]+$/,
           message: UNACCEPTABLE_SYMBOL_TEXT,

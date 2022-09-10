@@ -28,7 +28,10 @@ const Edit = ({
         onClick={handleOpen}
         className="mr-1"
       >
-        <Icon icon={IconsList.editOutline} />
+        <Icon
+          icon={IconsList.editOutline}
+          className="w-3 h-3"
+        />
       </button>
       <WordModal
         isOpened={isOpened}

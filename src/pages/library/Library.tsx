@@ -1,7 +1,7 @@
+import { lazy, Suspense } from "react"
 import { useSelector } from "react-redux"
 
 import EmptyContent from "./partials/EmptyContent"
-import Search from "./partials/Search"
 import useLibrary from "./hooks/useLibrary"
 import {
   getWords,
@@ -12,6 +12,9 @@ import { getLoading } from "services/loading/Loading.store"
 import Spin from "components/spin"
 import ErrorContent from "./partials/ErrorContent"
 import CreateWord from "./partials/CreateWord"
+import Skeleton from "components/Skeleton"
+
+const Search = lazy(() => import('./partials/Search'))
 
 const Library = () => {
   const isFetched = useSelector(getLoading).getLibraryWords?.isFetched
@@ -55,10 +58,14 @@ const Library = () => {
   return (
     <div className="flex flex-col p-5 gap-5">
       <div className="flex gap-3">
-        <Search
-          value={value}
-          onChange={handleChangeValue}
-        />
+        <Suspense fallback={(
+          <Skeleton height={40} />
+        )}>
+          <Search
+            value={value}
+            onChange={handleChangeValue}
+          />
+        </Suspense>
         <CreateWord />
       </div>
       {hasWords && (

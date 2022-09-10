@@ -12,7 +12,10 @@ const Pined = ({
 
   return (
     <button className='mr-1'>
-      <Icon icon={icon} />
+      <Icon
+        icon={icon}
+        className="w-3 h-3"
+      />
     </button>
   )
 }
