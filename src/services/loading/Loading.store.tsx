@@ -13,7 +13,7 @@ import type {
 } from 'models/Loading.models'
 
 export type Loading = {
-  [key in Requests]: Statuses
+  [key in Requests]: Partial<Statuses>
 }
 
 const initialState: Partial<Loading> = {}
@@ -25,15 +25,16 @@ const LoadingStore = createSlice({
     setLoading: (state, action: PayloadAction<StatusesPayload>) => {
       const {
         name,
-        isError = false,
-        isFetched = false,
-        isLoading = false,
+        isError,
+        isFetched,
+        isLoading,
       } = action.payload
 
       state[name] = {
-        isLoading,
-        isFetched,
-        isError,
+        ...state[name],
+        isLoading: isLoading || state[name]?.isLoading,
+        isFetched: isFetched || state[name]?.isFetched,
+        isError: isError || state[name]?.isError,
       }
     }
   }

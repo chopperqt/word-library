@@ -1,42 +1,69 @@
-import { useEffect } from "react"
+import { useSelector } from "react-redux"
 
-import EmptyWords from "./partials/EmptyWords"
+import EmptyContent from "./partials/EmptyContent"
 import Search from "./partials/Search"
 import useLibrary from "./hooks/useLibrary"
-import { useSelector } from "react-redux"
 import {
   getWords,
   getPinWords,
 } from "services/library/Library.store"
 import Words from "./partials/Words"
-import { getLibraryWords } from "api/library.api"
+import { getLoading } from "services/loading/Loading.store"
+import Spin from "components/spin"
+import ErrorContent from "./partials/ErrorContent"
+import CreateWord from "./partials/CreateWord"
 
 const Library = () => {
-  const words = useSelector(getWords)
+  const isFetched = useSelector(getLoading).getLibraryWords?.isFetched
+  const isError = useSelector(getLoading).getLibraryWords?.isError
   const pinedWords = useSelector(getPinWords)
+  const words = useSelector(getWords)
+  const hasWords = !!words.length
+
+  console.log(pinedWords)
+
   const {
     formattedWords,
     value,
     handleChangeValue,
   } = useLibrary()
 
-  // if (!formattedWords.length) {
-  //   return (
-  //     <EmptyWords />
-  //   )
-  // }
+  if (!isFetched) {
+    return (
+      <div className="flex justify-center items-center w-screen h-screen" >
+        <Spin
+          color="indigo"
+          width={90}
+          height={90}
+        />
+      </div>
+    )
+  }
 
-  console.log('words', words)
+  if (isError) {
+    return (
+      <ErrorContent />
+    )
+  }
+
+  if (!hasWords) {
+    return (
+      <EmptyContent />
+    )
+  }
 
   return (
     <div className="flex flex-col p-5 gap-5">
-      {/* <Search
-        value={value}
-        onChange={handleChangeValue}
-      /> */}
-      {!!words?.length && (
+      <div className="flex gap-3">
+        <Search
+          value={value}
+          onChange={handleChangeValue}
+        />
+        <CreateWord />
+      </div>
+      {hasWords && (
         <Words
-          //pinedWords={pinedWords}
+          pinedWords={pinedWords}
           words={words}
         />
       )}

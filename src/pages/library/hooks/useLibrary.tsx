@@ -1,24 +1,16 @@
 import {
   useState,
-  useMemo,
   useEffect,
   ChangeEvent,
 } from 'react'
 import { useSelector } from 'react-redux'
 
-import {
-  getPinWords,
-  getWords,
-  getWordsLoadingStatus,
-} from 'services/library/Library.store'
 import { useNavigate } from 'react-router-dom'
 import { getUserID } from 'services/user/User.store'
 import { getLibraryWords } from 'api/library.api'
 
-
 const useLibrary = () => {
   const userID = useSelector(getUserID)
-  const isLoadingWords = useSelector(getWordsLoadingStatus)
   const [value, setValue] = useState<string>('')
   const navigate = useNavigate()
 
@@ -57,9 +49,7 @@ const useLibrary = () => {
       return
     }
 
-    if (!isLoadingWords) {
-      getLibraryWords(userID)
-    }
+    getLibraryWords(userID)
   }, [userID])
 
   return {

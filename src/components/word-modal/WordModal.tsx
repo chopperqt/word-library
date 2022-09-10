@@ -5,13 +5,15 @@ import Button from "components/button"
 import InputMulti from "../input-multi/InputMulti"
 import ModalContainer from "../ModalContainer"
 import Toggle from "../Toggle"
-import { normalizeWord } from "./helpers/normalizeWord"
+import { getNormalizeOptionWord } from "./helpers/getNormalizeOptionWord"
 import { UNACCEPTABLE_SYMBOL_TEXT } from "helpers/texts"
 import { useSelector } from "react-redux"
 import { getUserID } from "services/user/User.store"
 
 import type { CreateWord } from "models/Library.models"
 import type { WordForm } from "models/Library.models"
+import { getLoading } from "services/loading/Loading.store"
+import { getNormalizeWord } from "./helpers/getNormalizeWord"
 
 const ENGLISH_PLACEHOLDER_TEXT = 'Example'
 const RUSSIA_PLACEHOLDER_TEXT = 'Пример'
@@ -35,7 +37,8 @@ const WordModal = ({
   isOpened = false,
   pined = false,
 }: WordModalProps) => {
-  const normalizedTranslate = translate.map(normalizeWord)
+  const normalizedTranslate = translate.map(getNormalizeOptionWord)
+  const isLoadingCreate = useSelector(getLoading).createLibraryWord?.isLoading
   const userID = useSelector(getUserID)
   const {
     control,
@@ -54,10 +57,14 @@ const WordModal = ({
       return
     }
 
-    onSubmit({
-      pined,
-      translate: translate.map(({ value }) => value),
+    const normalizedWord = getNormalizeWord({
+      translate,
       word,
+      pined,
+    })
+
+    onSubmit({
+      ...normalizedWord,
       userID,
     })
   }
@@ -98,7 +105,9 @@ const WordModal = ({
         control={control}
         defaultChecked={pined}
       />
-      <Button>
+      <Button
+        loading={isLoadingCreate}
+      >
         {ADD_TEXT}
       </Button>
     </form>

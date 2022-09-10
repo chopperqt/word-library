@@ -6,7 +6,7 @@ const NO_WORDS_TEXT = 'Welcome to the Word Library'
 const DESCRIPTION_TEXT = 'Add your first word'
 const ADD_TEXT = 'Add word'
 
-const EmptyWords = () => {
+const EmptyContent = () => {
   const {
     isOpened,
     handleClose,
@@ -37,4 +37,4 @@ const EmptyWords = () => {
   )
 }
 
-export default EmptyWords
+export default EmptyContent

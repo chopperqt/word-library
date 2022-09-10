@@ -1,4 +1,5 @@
 import { ApiError } from "@supabase/supabase-js"
+import { loadingController } from "helpers/loadingController"
 import { User } from "models/Auth.models"
 import { useDispatch } from "react-redux"
 import { setLoading } from "services/loading/Loading.store"
@@ -12,7 +13,8 @@ export type AuthRequests =
   'validateEmail' |
   'deleteUser' |
   'login' |
-  'getUser'
+  'getUser' |
+  'signIn'
 
 export type UserEmail = string
 export type UserID = string
@@ -52,10 +54,13 @@ export const signIn = async ({
   login,
   password,
 }: LoginData): Promise<User | null> => {
-  store.dispatch(setLoading({
-    name: 'signUp',
-    isLoading: true,
-  }))
+  const {
+    handleSetError,
+    handleSetPending,
+    handleSetSuccess,
+  } = loadingController('signIn')
+
+  handleSetPending()
 
   const {
     error,
@@ -68,12 +73,7 @@ export const signIn = async ({
     })
 
   if (error || !user || !user?.id || !user?.email || !user?.role) {
-    store.dispatch(setLoading({
-      name: 'signUp',
-      isLoading: false,
-      isError: true,
-      isFetched: true,
-    }))
+    handleSetError()
 
     return null
   }
@@ -85,12 +85,7 @@ export const signIn = async ({
     user_metadata,
   } = user
 
-  store.dispatch(setLoading({
-    name: 'signUp',
-    isLoading: false,
-    isError: false,
-    isFetched: true,
-  }))
+  handleSetSuccess()
 
   return {
     id,

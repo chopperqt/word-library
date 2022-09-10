@@ -88,9 +88,11 @@ const normalizeWords = (words: Word[]): NormalizeWords => {
   }
 
   for (let word of words) {
-    console.log(word)
+    console.log(word.word)
 
-    const firstChar = word.word[0] as Alphabet
+    const firstChar = word.word[0].toLowerCase() as Alphabet
+
+    console.log(firstChar)
 
     initialObject[firstChar] = [
       ...initialObject[firstChar],

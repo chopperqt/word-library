@@ -14,13 +14,11 @@ import Link from "components/link"
 import { getLoading } from "services/loading/Loading.store"
 
 const SignIn = () => {
-  const isLoading = useSelector(getLoading).signUp?.isLoading
+  const isLoading = useSelector(getLoading).signIn?.isLoading
   const {
     handleSubmit,
     control,
   } = useSignIn()
-
-  console.log('isLoading', isLoading)
 
   return (
     <div className="w-full flex justify-center items-center h-screen text-center">

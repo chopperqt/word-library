@@ -68,7 +68,7 @@ function App() {
       </Routes>
       {!!user?.id && (
         <button
-          className="text-black absolute right-10 top-10 text-xl"
+          className="text-black absolute right-10 bottom-10 text-xl"
           onClick={handleLogOut}
         >
           <Icon icon={IconsList.logout} />

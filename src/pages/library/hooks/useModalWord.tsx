@@ -3,7 +3,6 @@ import { useState } from "react"
 
 import type { CreateWord } from "models/Library.models"
 
-
 const useModalWord = () => {
   const [isOpened, setOpened] = useState<boolean>(false)
 
