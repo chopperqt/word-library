@@ -68,20 +68,12 @@ const TextField = ({
         }
       }
     },
+    defaultValue: value,
   })
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     fieldUpdate(e.target.value)
   }
-
-  useEffect(() => {
-    if (!value) return
-
-    fieldUpdate(value)
-  }, [
-    value,
-    fieldUpdate,
-  ])
 
   return (
     <div className={`h-14 ${className}`}>

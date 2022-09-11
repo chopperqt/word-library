@@ -1,4 +1,4 @@
-import { lazy, Suspense } from "react"
+import React, { lazy, Suspense } from "react"
 import { useSelector } from "react-redux"
 
 import EmptyContent from "./partials/EmptyContent"
@@ -11,6 +11,7 @@ import ErrorContent from "./partials/ErrorContent"
 import CreateWord from "./partials/CreateWord"
 import Skeleton from "components/Skeleton"
 import Spin from "components/spin"
+import Preloader from "./partials/Preloader"
 
 const Search = lazy(() => import('./partials/Search'))
 
@@ -19,6 +20,7 @@ const Library = () => {
   const userID = useSelector(getUserID)
   const isFetched = useSelector(getLoading).getLibraryWords?.isFetched
   const isError = useSelector(getLoading).getLibraryWords?.isError
+  const isLoading = useSelector(getLoading).getLibraryWords?.isLoading
   const hasWords = !!words.length
 
   const {
@@ -54,22 +56,27 @@ const Library = () => {
   }
 
   return (
-    <div className="flex flex-col p-5 gap-5">
-      <div className="flex gap-3">
-        <Suspense fallback={(
-          <Skeleton height={40} />
-        )}>
-          <Search
-            value={value}
-            onChange={handleChangeValue}
-          />
-        </Suspense>
-        <CreateWord />
-      </div>
-      {hasWords && (
-        <Words />
+    <React.Fragment>
+      {isLoading && (
+        <Preloader />
       )}
-    </div>
+      <div className="flex flex-col p-5 gap-5">
+        <div className="flex gap-3">
+          <Suspense fallback={(
+            <Skeleton height={40} />
+          )}>
+            <Search
+              value={value}
+              onChange={handleChangeValue}
+            />
+          </Suspense>
+          <CreateWord />
+        </div>
+        {hasWords && (
+          <Words />
+        )}
+      </div>
+    </React.Fragment>
   )
 }
 

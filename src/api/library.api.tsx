@@ -15,7 +15,8 @@ export type LibraryRequests =
   'createLibraryWord' |
   'getLibraryWords' |
   'updateLibraryWord' |
-  'updatePin'
+  'updatePin' |
+  'deleteLibraryWords'
 
 export const createLibraryWord = async (wordData: CreateWord): Promise<Word[] | null> => {
   const {
@@ -114,6 +115,38 @@ export const getLibraryWords = async (userID: UserID): Promise<Word[] | null> =>
 
   handleSetSuccess()
 
+  return data
+}
+
+export const deleteLibraryWords = async (userID: UserID, word: string) => {
+  const {
+    handleSetError,
+    handleSetPending,
+    handleSetSuccess,
+  } = loadingController('deleteLibraryWords')
+
+  handleSetPending()
+
+  const {
+    data,
+    error,
+  } = await supabase
+    .from(LIBRARY_TABLE)
+    .delete()
+    .match({
+      userID,
+      word,
+    })
+
+  if (error || !data) {
+    handleSetError()
+
+    return
+  }
+
+  handleSetSuccess()
+
+  // TODO нужно посмотреть что вернут запрос и добавить тип который возвращает фукнция
   return data
 }
 

@@ -3,6 +3,8 @@ import { useSelector } from "react-redux"
 import Button from "components/button"
 import WordModal, { useModalWord } from "common/word-modal"
 import { getUserID } from "services/user/User.store"
+import { getLoading } from "services/loading/Loading.store"
+import Preloader from "./Preloader"
 
 const NO_WORDS_TEXT = 'Welcome to the Word Library'
 const DESCRIPTION_TEXT = 'Add your first word'
@@ -10,6 +12,7 @@ const ADD_TEXT = 'Add word'
 
 const EmptyContent = () => {
   const userID = useSelector(getUserID)
+  const isLoading = useSelector(getLoading).getLibraryWords?.isLoading
   const {
     isOpened,
     handleClose,
@@ -21,6 +24,9 @@ const EmptyContent = () => {
 
   return (
     <div className="w-screen h-screen flex flex-col  justify-center items-center">
+      {isLoading && (
+        <Preloader />
+      )}
       <div className="text-2xl font-bold text-gray-800">
         {NO_WORDS_TEXT}
       </div>

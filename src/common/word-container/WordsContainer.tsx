@@ -4,6 +4,7 @@ import ExtraWords from './partials/ExtraWords'
 
 import type { Word } from 'models/Library.models'
 import type { UserID } from 'models/Auth.models'
+import Delete from './partials/Delete'
 
 interface WordsContainerProps {
   amountOfWords: number
@@ -48,6 +49,10 @@ const WordsContainer = ({
             word={word}
             translate={translate}
             pined={pined}
+          />
+          <Delete
+            userID={userID}
+            word={word}
           />
           <div>
             {word}
