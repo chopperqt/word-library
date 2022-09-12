@@ -45,8 +45,6 @@ const useModalWord = ({
     }
 
     getLibraryWords(userID)
-
-    handleClose()
   }
 
   return {

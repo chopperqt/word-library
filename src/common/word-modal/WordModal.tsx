@@ -14,6 +14,7 @@ import type { CreateWord } from "models/Library.models"
 import type { WordForm } from "models/Library.models"
 import { getLoading } from "services/loading/Loading.store"
 import { getNormalizeWord } from "./helpers/getNormalizeWord"
+import { useEffect } from "react"
 
 const ENGLISH_PLACEHOLDER_TEXT = 'Example'
 const RUSSIA_PLACEHOLDER_TEXT = 'Пример'
@@ -27,6 +28,7 @@ interface WordModalProps {
   word?: string
   translate?: string[]
   pined?: boolean
+  isCheckUniqueWord?: boolean
 }
 
 const WordModal = ({
@@ -36,6 +38,7 @@ const WordModal = ({
   translate = [],
   isOpened = false,
   pined = false,
+  isCheckUniqueWord = false
 }: WordModalProps) => {
   const normalizedTranslate = translate.map(getNormalizeOptionWord)
   const isLoadingCreate = useSelector(getLoading).createLibraryWord?.isLoading
@@ -75,6 +78,12 @@ const WordModal = ({
     onClose()
   }
 
+  useEffect(() => {
+    return () => {
+      reset()
+    }
+  }, [])
+
   return (
     <ModalContainer
       isOpened={isOpened}
@@ -85,6 +94,7 @@ const WordModal = ({
         onSubmit={formSubmit(handleSubmit)}
       >
         <TextField
+          isCheckUniqueWord={isCheckUniqueWord}
           name="word"
           control={control}
           placeholder={ENGLISH_PLACEHOLDER_TEXT}

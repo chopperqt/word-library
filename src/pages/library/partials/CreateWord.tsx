@@ -27,6 +27,7 @@ const CreateWord = () => {
         {ADD_TEXT}
       </Button>
       <WordModal
+        isCheckUniqueWord={true}
         onSubmit={handleCreateWord}
         isOpened={isOpened}
         onClose={handleClose}

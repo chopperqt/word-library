@@ -5,6 +5,7 @@ import Input from "components/Input"
 import { FIELD_REQUIRED_TEXT } from 'helpers/texts'
 import { useSelector } from 'react-redux'
 import { getWords } from 'services/library/Library.store'
+import { checkUniqueWord } from './helpers/checkUniqueWord'
 export interface TextFieldProps {
   name: string
   control?: any
@@ -14,6 +15,7 @@ export interface TextFieldProps {
   className?: string
   type?: string
   defaultValue?: string
+  isCheckUniqueWord?: boolean
   pattern?: {
     value: string | RegExp
     message: string
@@ -31,6 +33,7 @@ const TextField = ({
   className,
   value,
   type = 'input',
+  isCheckUniqueWord = false,
 }: TextFieldProps) => {
   const words = useSelector(getWords)
   let defaultRules: { [key: string]: unknown } = {
@@ -47,6 +50,15 @@ const TextField = ({
     }
   }
 
+  if (isCheckUniqueWord) {
+    defaultRules = {
+      ...defaultRules,
+      validate: {
+        isWordUnique: (str: string): boolean => checkUniqueWord(str, words)
+      }
+    }
+  }
+
   const {
     field: {
       onChange: fieldUpdate,
@@ -60,14 +72,7 @@ const TextField = ({
   } = useController({
     control,
     name,
-    rules: {
-      ...defaultRules,
-      validate: {
-        checkTheSame: (str: string): boolean => {
-          return !words.filter(({ word }) => word.toLowerCase().replace(' ', '') === str.toLowerCase().replace(' ', '')).length
-        }
-      }
-    },
+    rules: defaultRules,
     defaultValue: value,
   })
 
@@ -87,7 +92,7 @@ const TextField = ({
         onChange={handleChange}
         type={type}
       />
-      {error?.type === 'checkTheSame' && (
+      {error?.type === 'isWordUnique' && (
         <div
           className='text-sm text-rose-700 flex'
           data-testid="text-field-error"
