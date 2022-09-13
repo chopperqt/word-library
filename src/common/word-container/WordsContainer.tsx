@@ -46,6 +46,7 @@ const WordsContainer = ({
           />
           <Edit
             userID={userID}
+            wordID={id}
             word={word}
             translate={translate}
             pined={pined}

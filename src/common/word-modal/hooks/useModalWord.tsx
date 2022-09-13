@@ -1,19 +1,30 @@
 import { createLibraryWord, getLibraryWords, updateLibraryWord } from "api/library.api"
 import { useState } from "react"
 
-import type { CreateWord } from "models/Library.models"
+import type {
+  WordForm,
+  WordID,
+} from "models/Library.models"
 import type { UserID } from "models/Auth.models"
+import { getNormalizeWord } from "../helpers/getNormalizeWord"
 interface UseModalWordProps {
   userID: UserID,
+  wordID?: WordID,
   word?: string
+  reset?: () => void
 }
 const useModalWord = ({
   userID,
-  word,
+  wordID,
+  reset,
 }: UseModalWordProps) => {
   const [isOpened, setOpened] = useState<boolean>(false)
 
   const handleClose = () => {
+    if (reset) {
+      reset()
+    }
+
     setOpened(false)
   }
 
@@ -21,30 +32,42 @@ const useModalWord = ({
     setOpened(true)
   }
 
-  const handleCreateWord = async (data: CreateWord) => {
-    const response = await createLibraryWord(data)
+  const handleCreateWord = async (word: WordForm) => {
+    const normalizedWord = getNormalizeWord(word)
+
+    const response = await createLibraryWord({
+      ...normalizedWord,
+      userID,
+    })
 
     if (response === null) {
-      return
+      return null
     }
 
     getLibraryWords(userID)
-
     handleClose()
   }
 
-  const handleUpdateWord = async (data: CreateWord) => {
-    if (!word) {
-      return
-    }
+  const handleUpdateWord = async (word: WordForm) => {
+    // if (!wordID) {
+    //   return null
+    // }
 
-    const response = await updateLibraryWord(data, word)
+    // const normalizedWord = getNormalizeWord(word)
 
-    if (response === null) {
-      return
-    }
 
-    getLibraryWords(userID)
+    // const response = await updateLibraryWord({
+    //   ...normalizedWord,
+    //   wordID,
+    //   userID,
+    // })
+
+    // if (response === null) {
+    //   return null
+    // }
+
+    // getLibraryWords(userID)
+    // handleClose()
   }
 
   return {

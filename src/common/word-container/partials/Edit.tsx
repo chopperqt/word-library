@@ -1,11 +1,18 @@
 import Icon, { IconsList } from "components/icon/Icon"
 import WordModal, { useModalWord } from "common/word-modal"
 
-import type { Word } from "models/Library.models"
+import {
+  Word,
+  WordForm,
+  WordID,
+} from "models/Library.models"
 import type { UserID } from "models/Auth.models"
+import { useForm } from "react-hook-form"
+import { getNormalizeOptionWord } from "common/word-modal/helpers/getNormalizeOptionWord"
 
 interface EditProps extends Pick<Word, 'word' | 'translate' | 'pined'> {
   userID: UserID
+  wordID: WordID
 }
 
 const Edit = ({
@@ -15,6 +22,19 @@ const Edit = ({
   userID,
 }: EditProps) => {
   const {
+    control,
+    reset,
+    handleSubmit: formSubmit,
+  } = useForm<WordForm>({
+    mode: 'onChange',
+    defaultValues: {
+      word,
+      translate: translate.map(getNormalizeOptionWord),
+      pined,
+    }
+  })
+
+  const {
     handleOpen,
     handleClose,
     isOpened,
@@ -22,6 +42,7 @@ const Edit = ({
   } = useModalWord({
     userID,
     word,
+    reset,
   })
 
   return (
@@ -38,10 +59,8 @@ const Edit = ({
       <WordModal
         isOpened={isOpened}
         onClose={handleClose}
-        word={word}
-        translate={translate}
-        pined={pined}
-        onSubmit={handleUpdateWord}
+        control={control}
+        onSubmit={formSubmit(handleUpdateWord)}
       />
     </>
   )

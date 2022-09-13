@@ -10,6 +10,8 @@ export interface Word {
   createdAt: Date | string
 }
 
+export type WordID = Word['id']
+
 export interface WordForm {
   word: Word['word']
   translate: Option[]
@@ -21,4 +23,7 @@ export interface CreateWord extends Pick<WordForm, 'pined' | 'word'> {
   translate: Word['translate']
 }
 
-export type WordID = Word['id']
+export interface UpdateWord extends CreateWord {
+  wordID: WordID
+}
+

@@ -2,7 +2,9 @@ import supabase from "./client"
 
 import type {
   CreateWord,
+  UpdateWord,
   Word,
+  WordID,
 } from "models/Library.models"
 import type { UserID } from "models/Auth.models"
 import { store } from "services/stores"
@@ -45,7 +47,7 @@ export const createLibraryWord = async (wordData: CreateWord): Promise<Word[] | 
   return data
 }
 
-export const updateLibraryWord = async (wordData: CreateWord, oldWord: string): Promise<Word[] | null> => {
+export const updateLibraryWord = async (wordData: UpdateWord): Promise<Word[] | null> => {
   const {
     handleSetError,
     handleSetPending,
@@ -59,6 +61,7 @@ export const updateLibraryWord = async (wordData: CreateWord, oldWord: string): 
     translate,
     word,
     userID,
+    wordID,
   } = wordData
 
   const {
@@ -73,7 +76,7 @@ export const updateLibraryWord = async (wordData: CreateWord, oldWord: string): 
     })
     .match({
       userID,
-      word: oldWord
+      id: wordID,
     })
 
 
