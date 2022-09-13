@@ -1,5 +1,9 @@
-import { createLibraryWord, getLibraryWords, updateLibraryWord } from "api/library.api"
-import { useState } from "react"
+import {
+  createLibraryWord,
+  getLibraryWords,
+  updateLibraryWord,
+} from "api/library.api"
+import { useEffect, useState } from "react"
 
 import type {
   WordForm,
@@ -16,15 +20,11 @@ interface UseModalWordProps {
 const useModalWord = ({
   userID,
   wordID,
-  reset,
+  reset = () => { },
 }: UseModalWordProps) => {
   const [isOpened, setOpened] = useState<boolean>(false)
 
-  const handleClose = () => {
-    if (reset) {
-      reset()
-    }
-
+  const handleClose = async () => {
     setOpened(false)
   }
 
@@ -69,6 +69,17 @@ const useModalWord = ({
     // getLibraryWords(userID)
     // handleClose()
   }
+
+  useEffect(() => {
+    if (isOpened) {
+      return
+    }
+
+    reset()
+  }, [
+    reset,
+    isOpened,
+  ])
 
   return {
     isOpened,
