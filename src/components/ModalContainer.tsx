@@ -22,8 +22,12 @@ const ModalContainer = ({
   isOpened = false,
   onClose,
   children,
-}: ModalContainerProps) => (
-  <div>
+}: ModalContainerProps) => {
+  if (!isOpened) {
+    return null
+  }
+
+  return (
     <Modal
       isOpen={isOpened}
       onRequestClose={onClose}
@@ -34,8 +38,7 @@ const ModalContainer = ({
         {children}
       </div>
     </Modal>
-
-  </div>
-)
+  )
+}
 
 export default ModalContainer

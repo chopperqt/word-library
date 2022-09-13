@@ -9,8 +9,6 @@ import { getNormalizeOptionWord } from "./helpers/getNormalizeOptionWord"
 import { UNACCEPTABLE_SYMBOL_TEXT } from "helpers/texts"
 import { getLoading } from "services/loading/Loading.store"
 
-import type { WordForm } from "models/Library.models"
-
 const ENGLISH_PLACEHOLDER_TEXT = 'Example'
 const RUSSIA_PLACEHOLDER_TEXT = 'Пример'
 const ADD_TEXT = 'Add'
