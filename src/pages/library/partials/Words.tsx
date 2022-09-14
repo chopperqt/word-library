@@ -9,6 +9,7 @@ import {
 } from "services/library/Library.store";
 import { getUserID } from "services/user/User.store";
 import React from "react";
+import ResetPin from "./ResetPin";
 
 const Words = () => {
   const userID = useSelector(getUserID)
@@ -26,7 +27,12 @@ const Words = () => {
     <div className="flex flex-col items-start gap-3 flex-wrap">
       {!!pinedWords.length && (
         <React.Fragment>
-          <div className="text-2xl">{formattedPined}</div>
+          <div className="flex items-center">
+            <div className="text-2xl">
+              {formattedPined}
+            </div>
+            <ResetPin />
+          </div>
           <div className="flex justify-start items-start gap-3 flex-wrap">
             {Object.entries(normalizedPinedWords).map(([key, words]: [key: string, words: any]) => {
               const amountOfWords = words.length

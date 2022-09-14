@@ -8,14 +8,11 @@ import {
   routesNoAuth,
   routesWithAuth,
 } from 'routes';
-import Icon, { IconsList } from 'components/icon/Icon';
-import { logOut } from 'api/auth.api';
 import {
   useDispatch,
   useSelector,
 } from 'react-redux';
 import {
-  clearUser,
   getUserID,
   setUser,
 } from 'services/user/User.store';
@@ -28,16 +25,6 @@ function App() {
   const routes = user?.id
     ? routesWithAuth
     : routesNoAuth
-
-  const handleLogOut = async () => {
-    const response = await logOut()
-
-    if (response) {
-      return
-    }
-
-    dispatch(clearUser())
-  }
 
   useEffect(() => {
     if (user?.id && !userID) {
@@ -66,14 +53,6 @@ function App() {
           />
         ))}
       </Routes>
-      {!!user?.id && (
-        <button
-          className="text-black absolute right-10 bottom-10 text-xl"
-          onClick={handleLogOut}
-        >
-          <Icon icon={IconsList.logout} />
-        </button>
-      )}
     </div>
   );
 }
