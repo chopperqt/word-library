@@ -28,7 +28,7 @@ const Words = () => {
       {!!pinedWords.length && (
         <React.Fragment>
           <div className="flex items-center">
-            <div className="text-2xl">
+            <div className="text-2xl font-bold">
               {formattedPined}
             </div>
             <ResetPin />

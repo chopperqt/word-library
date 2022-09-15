@@ -20,6 +20,7 @@ const Edit = ({
   translate = [],
   pined = false,
   userID,
+  wordID,
 }: EditProps) => {
   const {
     control,
@@ -41,6 +42,7 @@ const Edit = ({
     handleUpdateWord,
   } = useModalWord({
     userID,
+    wordID,
     word,
     reset,
   })

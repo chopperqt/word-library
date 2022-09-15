@@ -34,7 +34,10 @@ const ModalContainer = ({
       style={ModalStyles}
       overlayClassName="bg-black/90 fixed inset-0 flex justify-center items-center"
     >
-      <div className='modal'>
+      <div
+        className='modal'
+        data-testid="modal-test"
+      >
         {children}
       </div>
     </Modal>

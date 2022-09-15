@@ -21,7 +21,7 @@ const AgreementModal = ({
     isOpened={isOpened}
     onClose={onClose}
   >
-    <div>
+    <div data-testid="agreement-content">
       <div className="text-2xl text-center">
         {AGREEMENT_TEXT}
       </div>

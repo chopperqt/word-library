@@ -49,25 +49,25 @@ const useModalWord = ({
   }
 
   const handleUpdateWord = async (word: WordForm) => {
-    // if (!wordID) {
-    //   return null
-    // }
+    if (!wordID) {
+      return null
+    }
 
-    // const normalizedWord = getNormalizeWord(word)
+    const normalizedWord = getNormalizeWord(word)
 
 
-    // const response = await updateLibraryWord({
-    //   ...normalizedWord,
-    //   wordID,
-    //   userID,
-    // })
+    const response = await updateLibraryWord({
+      ...normalizedWord,
+      wordID,
+      userID,
+    })
 
-    // if (response === null) {
-    //   return null
-    // }
+    if (response === null) {
+      return null
+    }
 
-    // getLibraryWords(userID)
-    // handleClose()
+    getLibraryWords(userID)
+    handleClose()
   }
 
   useEffect(() => {

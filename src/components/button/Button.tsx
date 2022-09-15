@@ -37,7 +37,10 @@ const Button = ({
       {...props}
     >
       {loading && (
-        <div className="mr-2">
+        <div
+          className="mr-2"
+          data-testid="button-spin"
+        >
           <Spin
             height={25}
             width={25}
