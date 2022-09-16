@@ -27,6 +27,7 @@ const AgreementModal = ({
       </div>
       <div className="flex gap-3 mt-5 justify-center">
         <Button
+          disabled={isLoading}
           onClick={onClick}
           loading={isLoading}
         >

@@ -7,7 +7,8 @@ import ModalContainer from "components/ModalContainer"
 import Toggle from "components/Toggle"
 import { getNormalizeOptionWord } from "./helpers/getNormalizeOptionWord"
 import { UNACCEPTABLE_SYMBOL_TEXT } from "helpers/texts"
-import { getLoading } from "services/loading/Loading.store"
+
+import type { Word } from "models/Library.models"
 
 const ENGLISH_PLACEHOLDER_TEXT = 'Example'
 const RUSSIA_PLACEHOLDER_TEXT = 'Пример'
@@ -18,10 +19,12 @@ interface WordModalProps {
   isOpened: boolean
   onClose: () => void
   onSubmit: () => void
+  control: any
   translate?: string[]
   pined?: boolean
   isCheckUniqueWord?: boolean
-  control: any
+  isLoading?: boolean
+  words?: Word[]
 }
 
 const WordModal = ({
@@ -32,10 +35,10 @@ const WordModal = ({
   pined = false,
   isCheckUniqueWord = false,
   control,
+  isLoading = false,
+  words = []
 }: WordModalProps) => {
   const normalizedTranslate = translate.map(getNormalizeOptionWord)
-  const isLoadingCreate = useSelector(getLoading).createLibraryWord?.isLoading
-  const isLoadingUpdate = useSelector(getLoading).updateLibraryWord?.isLoading
 
   return (
     <ModalContainer
@@ -52,6 +55,7 @@ const WordModal = ({
           control={control}
           placeholder={ENGLISH_PLACEHOLDER_TEXT}
           isRequired={true}
+          words={words}
           pattern={{
             value: /^[a-zA-Z\s]+$/,
             message: UNACCEPTABLE_SYMBOL_TEXT,
@@ -69,9 +73,7 @@ const WordModal = ({
           control={control}
           defaultChecked={pined}
         />
-        <Button
-          loading={isLoadingCreate || isLoadingUpdate}
-        >
+        <Button loading={isLoading}>
           {ADD_TEXT}
         </Button>
       </form>

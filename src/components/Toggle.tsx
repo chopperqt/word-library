@@ -1,7 +1,4 @@
-import {
-  ChangeEvent,
-  useEffect,
-} from "react"
+import { ChangeEvent } from "react"
 import { useController } from "react-hook-form"
 
 export interface ToggleProps {
@@ -20,23 +17,16 @@ const Toggle = ({
     field: {
       value: fieldValue,
       onChange,
-    }
+    },
   } = useController({
     control,
     name,
+    defaultValue: defaultChecked,
   })
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     onChange(e.target.checked)
   }
-
-  useEffect(() => {
-    if (typeof defaultChecked !== 'boolean') {
-      return
-    }
-
-    onChange(defaultChecked)
-  }, [])
 
   return (
     <label

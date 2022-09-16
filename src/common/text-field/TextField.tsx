@@ -6,6 +6,8 @@ import { FIELD_REQUIRED_TEXT } from 'helpers/texts'
 import { useSelector } from 'react-redux'
 import { getWords } from 'services/library/Library.store'
 import { checkUniqueWord } from './helpers/checkUniqueWord'
+
+import type { Word } from 'models/Library.models'
 export interface TextFieldProps {
   name: string
   control?: any
@@ -16,6 +18,7 @@ export interface TextFieldProps {
   type?: string
   defaultValue?: string
   isCheckUniqueWord?: boolean
+  words?: Word[]
   pattern?: {
     value: string | RegExp
     message: string
@@ -34,8 +37,8 @@ const TextField = ({
   value,
   type = 'input',
   isCheckUniqueWord = false,
+  words = []
 }: TextFieldProps) => {
-  const words = useSelector(getWords)
   let defaultRules: { [key: string]: unknown } = {
     required: {
       value: isRequired,

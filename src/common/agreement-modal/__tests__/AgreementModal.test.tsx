@@ -63,15 +63,29 @@ describe('Test AgreementModal click', () => {
 
 
 describe('Test AgreementModal loading', () => {
-  it('loading truthy', () => {
-    render(
+  it('loading change', () => {
+    const defaultProps = {
+      isOpened: true,
+      onClose: () => { },
+      onClick: () => { },
+    }
+
+    const { rerender } = render(
       <AgreementModal
-        isOpened={true}
-        onClose={() => { }}
-        onClick={() => { }}
+        {...defaultProps}
+        isLoading={true}
       />
     )
 
-    expect(screen.getByTestId('spin-button')).toBeTruthy()
+    expect(screen.getByTestId('button-spin')).toBeTruthy()
+
+    rerender(
+      <AgreementModal
+        {...defaultProps}
+        isLoading={false}
+      />
+    )
+
+    expect(screen.queryByTestId('button-spin')).not.toBeTruthy()
   })
 })
