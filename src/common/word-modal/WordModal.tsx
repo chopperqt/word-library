@@ -29,7 +29,7 @@ const WordModal = ({
   onClose,
   onSubmit,
   translate = [],
-  isOpened = false,
+  isOpened,
   pined = false,
   isCheckUniqueWord = false,
   control,
