@@ -20,7 +20,7 @@ const WordsContainer = ({
   color = 'bg-sky-700',
   userID,
 }: WordsContainerProps) => (
-  <div className="flex flex-col bg-white rounded-b-md shadow-md">
+  <div className="flex flex-col bg-white rounded-b-md shadow-md mb-3 break-inside-avoid-column">
     <div className={`text-lg px-5 py-1 ${color} rounded-t-md`}>
       <div className="flex gap-1 justify-center color text-white">
         <div>{letter.toUpperCase()}</div>

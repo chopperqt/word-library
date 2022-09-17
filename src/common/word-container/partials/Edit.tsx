@@ -9,6 +9,8 @@ import {
 import type { UserID } from "models/Auth.models"
 import { useForm } from "react-hook-form"
 import { getNormalizeOptionWord } from "common/word-modal/helpers/getNormalizeOptionWord"
+import { useSelector } from "react-redux"
+import { getLoading } from "services/loading/Loading.store"
 
 interface EditProps extends Pick<Word, 'word' | 'translate' | 'pined'> {
   userID: UserID
@@ -22,6 +24,7 @@ const Edit = ({
   userID,
   wordID,
 }: EditProps) => {
+  const isLoading = useSelector(getLoading).updateLibraryWord?.isLoading
   const {
     control,
     reset,
@@ -59,10 +62,13 @@ const Edit = ({
         />
       </button>
       <WordModal
+        isUpdate={true}
         isOpened={isOpened}
         onClose={handleClose}
         control={control}
         onSubmit={formSubmit(handleUpdateWord)}
+        isLoading={isLoading}
+        translate={translate}
       />
     </>
   )

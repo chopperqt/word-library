@@ -42,4 +42,11 @@ export const getPinWords = createSelector(
   }
 )
 
+export const getOnlyWords = createSelector(
+  (state: RootState) => state.LibraryStore.words,
+  (words) => {
+    return words.map(({ word }) => word)
+  }
+)
+
 export default LibraryStore.reducer
