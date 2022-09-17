@@ -11,6 +11,7 @@ import type { Word } from "models/Library.models"
 const ENGLISH_PLACEHOLDER_TEXT = 'Example'
 const RUSSIA_PLACEHOLDER_TEXT = 'Пример'
 const ADD_TEXT = 'Add'
+const UPDATE_TEXT = 'Update'
 const TOGGLER_TEXT = 'Add to bookmarks'
 
 interface WordModalProps {
@@ -23,6 +24,7 @@ interface WordModalProps {
   isCheckUniqueWord?: boolean
   isLoading?: boolean
   words?: string[]
+  isUpdate?: boolean
 }
 
 const WordModal = ({
@@ -34,9 +36,14 @@ const WordModal = ({
   isCheckUniqueWord = false,
   control,
   isLoading = false,
-  words = []
+  words = [],
+  isUpdate = false,
 }: WordModalProps) => {
   const normalizedTranslate = translate.map(getNormalizeOptionWord)
+
+  let text = isUpdate
+    ? UPDATE_TEXT
+    : ADD_TEXT
 
   return (
     <ModalContainer
@@ -73,7 +80,7 @@ const WordModal = ({
           defaultChecked={pined}
         />
         <Button loading={isLoading}>
-          {ADD_TEXT}
+          {text}
         </Button>
       </form>
     </ModalContainer>

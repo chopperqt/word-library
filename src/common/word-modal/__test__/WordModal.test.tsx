@@ -4,7 +4,6 @@ import {
   render,
   screen,
   waitFor,
-  act,
 } from '@testing-library/react'
 import { useForm } from 'react-hook-form'
 
@@ -36,6 +35,56 @@ it('WordModal render correctly', () => {
   render((
     <Component />
   ))
+})
+
+describe('Test button text', () => {
+  it('Add button text', () => {
+    const Component = () => {
+      const {
+        control,
+      } = useForm<WordForm>({
+        mode: 'onChange',
+      })
+
+      return (
+        <WordModal
+          control={control}
+          isOpened={true}
+          onClose={() => { }}
+          onSubmit={() => { }}
+          isUpdate={false}
+        />
+      )
+    }
+
+    render(<Component />)
+
+    expect(screen.getByText('Add')).toBeTruthy()
+  })
+
+  it('Update button text', () => {
+    const Component = () => {
+      const {
+        control,
+      } = useForm<WordForm>({
+        mode: 'onChange',
+      })
+
+      return (
+        <WordModal
+          control={control}
+          isOpened={true}
+          isUpdate={true}
+          onClose={() => { }}
+          onSubmit={() => { }}
+        />
+      )
+    }
+
+    render(<Component />)
+
+    expect(screen.getByText('Update')).toBeTruthy()
+  })
 })
 
 describe('Check component clicks', () => {
