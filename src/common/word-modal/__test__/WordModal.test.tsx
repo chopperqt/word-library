@@ -4,6 +4,7 @@ import {
   render,
   screen,
   waitFor,
+  act,
 } from '@testing-library/react'
 import { useForm } from 'react-hook-form'
 
@@ -37,38 +38,94 @@ it('WordModal render correctly', () => {
   ))
 })
 
-describe('Check clicks', () => {
+describe('Check component clicks', () => {
   const handleSubmit = jest.fn()
+  const handleClose = jest.fn()
+
+  const Component = () => {
+    const {
+      control,
+    } = useForm<WordForm>({
+      mode: 'onChange',
+    })
+
+    handleSubmit.mockImplementation(event => {
+      event.preventDefault()
+    })
+
+    return (
+      <WordModal
+        control={control}
+        isOpened={true}
+        onClose={handleClose}
+        onSubmit={handleSubmit}
+      />
+    )
+  }
 
   it('Click submit', async () => {
-    const Component = () => {
-      const {
-        control,
-      } = useForm<WordForm>({
-        mode: 'onChange',
-      })
-
-      handleSubmit.mockImplementation(event => {
-        event.preventDefault()
-      })
-
-      return (
-        <WordModal
-          control={control}
-          isOpened={true}
-          onClose={() => { }}
-          onSubmit={handleSubmit}
-        />
-      )
-    }
-
     render(<Component />)
-
 
     const submitButton = screen.getByText('Add')
 
     fireEvent.click(submitButton)
 
     await waitFor(() => expect(handleSubmit).toBeCalled())
+  })
+
+  it('Click close modal', () => {
+    render(<Component />)
+
+    const form = screen.getByTestId('word-modal-form')
+
+    fireEvent.keyDown(form, {
+      key: "Escape",
+      code: "Escape",
+      keyCode: 27,
+      charCode: 27
+    });
+
+    expect(handleClose).toBeCalled()
+  })
+})
+
+describe('Check fields errors', () => {
+  const handleSubmit = jest.fn()
+
+  const Component = () => {
+    const {
+      control,
+    } = useForm<WordForm>({
+      mode: 'onChange',
+    })
+
+    return (
+      <WordModal
+        control={control}
+        isOpened={true}
+        onClose={() => { }}
+        onSubmit={handleSubmit}
+      />
+    )
+  }
+
+  it('Check word required message', async () => {
+    render(<Component />)
+
+    fireEvent.change(screen.getByTestId('text-field'), {
+      target: {
+        value: 'test',
+      }
+    })
+
+    fireEvent.change(screen.getByTestId('text-field'), {
+      target: {
+        value: '',
+      }
+    })
+
+    const error = await screen.findByText('Field is required!')
+
+    expect(error).toBeInTheDocument()
   })
 })

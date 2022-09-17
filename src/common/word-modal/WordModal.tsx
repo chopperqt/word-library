@@ -1,5 +1,3 @@
-import { useSelector } from "react-redux"
-
 import TextField from "common/text-field/TextField"
 import Button from "components/button"
 import InputMulti from "components/input-multi"
@@ -24,7 +22,7 @@ interface WordModalProps {
   pined?: boolean
   isCheckUniqueWord?: boolean
   isLoading?: boolean
-  words?: Word[]
+  words?: string[]
 }
 
 const WordModal = ({
@@ -48,6 +46,7 @@ const WordModal = ({
       <form
         className="w-full max-w-2xl flex flex-col gap-3"
         onSubmit={onSubmit}
+        data-testid="word-modal-form"
       >
         <TextField
           isCheckUniqueWord={isCheckUniqueWord}

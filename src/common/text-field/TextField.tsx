@@ -1,13 +1,8 @@
-import { ChangeEvent, useEffect } from 'react'
 import { useController } from "react-hook-form"
 
 import Input from "components/Input"
 import { FIELD_REQUIRED_TEXT } from 'helpers/texts'
-import { useSelector } from 'react-redux'
-import { getWords } from 'services/library/Library.store'
 import { checkUniqueWord } from './helpers/checkUniqueWord'
-
-import type { Word } from 'models/Library.models'
 export interface TextFieldProps {
   name: string
   control?: any
@@ -18,7 +13,7 @@ export interface TextFieldProps {
   type?: string
   defaultValue?: string
   isCheckUniqueWord?: boolean
-  words?: Word[]
+  words?: string[]
   pattern?: {
     value: string | RegExp
     message: string
@@ -64,7 +59,7 @@ const TextField = ({
 
   const {
     field: {
-      onChange: fieldUpdate,
+      onChange,
       value: fieldValue = '',
       ref,
       onBlur,
@@ -79,10 +74,6 @@ const TextField = ({
     defaultValue: value,
   })
 
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    fieldUpdate(e.target.value)
-  }
-
   return (
     <div className={`h-14 ${className}`}>
       <Input
@@ -92,7 +83,7 @@ const TextField = ({
         value={fieldValue}
         placeholder={placeholder}
         name={name}
-        onChange={handleChange}
+        onChange={onChange}
         type={type}
       />
       {error?.type === 'isWordUnique' && (

@@ -1,5 +1,7 @@
-import { Word } from "models/Library.models"
-
-export const checkUniqueWord = (str: string, words: Word[]) => {
-  return !words.filter(({ word }) => word.toLowerCase().replaceAll(' ', '') === str.toLowerCase().replaceAll(' ', '')).length
+export const checkUniqueWord = (str: string, words: string[]) => {
+  return !words
+    .filter((word) => {
+      return word.toLowerCase().replaceAll(' ', '') === str.toLowerCase().replaceAll(' ', '')
+    })
+    .length
 }
