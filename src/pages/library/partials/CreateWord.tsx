@@ -8,6 +8,7 @@ import { useForm } from "react-hook-form"
 import { WordForm } from "models/Library.models"
 import { getLoading } from "services/loading/Loading.store"
 import { getOnlyWords } from "services/library/Library.store"
+import Icon, { IconsList } from "components/icon/Icon"
 
 const ADD_TEXT = 'Add'
 
@@ -40,7 +41,13 @@ const CreateWord = () => {
         className="whitespace-nowrap"
         onClick={handleOpen}
       >
-        {ADD_TEXT}
+        <Icon
+          className="block md:hidden fill-white w-5 h-5 hover:fill-white"
+          icon={IconsList.plusCircle}
+        />
+        <div className="hidden md:block">
+          {ADD_TEXT}
+        </div>
       </Button>
       <WordModal
         isCheckUniqueWord={true}

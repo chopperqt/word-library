@@ -27,9 +27,10 @@ const Library = () => {
   const hasWords = !!words.length
 
   const {
-    searchWords,
+    wordsSearched,
     value,
     handleChangeValue,
+    isNothingFound,
   } = useLibrary({
     userID,
     words,
@@ -80,7 +81,10 @@ const Library = () => {
           <CreateWord />
         </div>
         {hasWords && (
-          <Words searchWords={searchWords} />
+          <Words
+            wordsSearched={wordsSearched}
+            isNothingFound={isNothingFound}
+          />
         )}
       </div>
     </React.Fragment>

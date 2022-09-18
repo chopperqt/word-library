@@ -2,7 +2,7 @@ import { ChangeEvent } from 'react'
 
 import Input from 'components/Input'
 
-const SEARCH_TEXT = 'Search...'
+const SEARCH_TEXT = '🔍 Search...'
 
 interface SearchProps {
   value: string,

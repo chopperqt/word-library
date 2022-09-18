@@ -15,7 +15,12 @@ const ExtraWordsModal = ({
     onClose={onClose}
   >
     {words.map((word, index) => (
-      <div className="text-1xl">{index + 1}. {word}</div>
+      <div
+        key={index}
+        className="text-1xl"
+      >
+        {index + 1}. {word}
+      </div>
     ))}
   </ModalContainer>
 )

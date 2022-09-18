@@ -26,9 +26,9 @@ const useLibrary = ({
     setValue(e.target.value)
   }
 
-  const searchWords = useMemo(() => {
-    if (!value.length) {
-      return []
+  const wordsSearched = useMemo(() => {
+    if (value.length < 2) {
+      return
     }
 
     return words.filter(({
@@ -41,7 +41,14 @@ const useLibrary = ({
       return formattedWord.includes(formattedValue)
     })
   }, [
+    value,
     words,
+  ])
+
+  const isNothingFound = useMemo(() => {
+    return wordsSearched?.length === 0 && value.length !== 0 && value.length > 2
+  }, [
+    wordsSearched,
     value,
   ])
 
@@ -65,7 +72,8 @@ const useLibrary = ({
   return {
     value,
     handleChangeValue,
-    searchWords,
+    wordsSearched,
+    isNothingFound,
   }
 }
 
