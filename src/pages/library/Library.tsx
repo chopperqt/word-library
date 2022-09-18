@@ -27,11 +27,12 @@ const Library = () => {
   const hasWords = !!words.length
 
   const {
-    formattedWords,
+    searchWords,
     value,
     handleChangeValue,
   } = useLibrary({
     userID,
+    words,
   })
 
   if (!isFetched) {
@@ -79,7 +80,7 @@ const Library = () => {
           <CreateWord />
         </div>
         {hasWords && (
-          <Words />
+          <Words searchWords={searchWords} />
         )}
       </div>
     </React.Fragment>

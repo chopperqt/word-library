@@ -8,16 +8,33 @@ import {
   getWords,
 } from "services/library/Library.store";
 import { getUserID } from "services/user/User.store";
-import React from "react";
+import React, { useMemo } from "react";
 import ResetPin from "./ResetPin";
 
-const Words = () => {
+interface WordsProps {
+  searchWords: Word[]
+}
+const Words = ({
+  searchWords,
+}: WordsProps) => {
   const userID = useSelector(getUserID)
   const words = useSelector(getWords)
   const pinedWords = useSelector(getPinWords)
-  const normalizedWords = normalizeWords(words)
   const normalizedPinedWords = normalizeWords(pinedWords)
   const formattedLibrary = `Library(${words.length})`
+
+  const normalizedWords = useMemo(() => {
+    let formattedWords = words
+
+    if (searchWords.length > 0) {
+      formattedWords = searchWords
+    }
+
+    return normalizeWords(formattedWords)
+  }, [
+    searchWords,
+    words,
+  ])
 
   const formattedPined = pinedWords.length
     ? `Pined(${pinedWords.length})`
