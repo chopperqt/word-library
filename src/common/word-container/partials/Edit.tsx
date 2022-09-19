@@ -11,6 +11,7 @@ import { useForm } from "react-hook-form"
 import { getNormalizeOptionWord } from "common/word-modal/helpers/getNormalizeOptionWord"
 import { useSelector } from "react-redux"
 import { getLoading } from "services/loading/Loading.store"
+import { useEffect } from "react"
 
 interface EditProps extends Pick<Word, 'word' | 'translate' | 'pined'> {
   userID: UserID
@@ -24,18 +25,12 @@ const Edit = ({
   userID,
   wordID,
 }: EditProps) => {
-  const isLoading = useSelector(getLoading).updateLibraryWord?.isLoading
   const {
     control,
     reset,
     handleSubmit: formSubmit,
   } = useForm<WordForm>({
     mode: 'onChange',
-    defaultValues: {
-      word,
-      translate: translate.map(getNormalizeOptionWord),
-      pined,
-    }
   })
 
   const {
@@ -49,6 +44,8 @@ const Edit = ({
     word,
     reset,
   })
+
+  const isLoading = useSelector(getLoading).updateLibraryWord?.isLoading
 
   return (
     <>
@@ -68,7 +65,9 @@ const Edit = ({
         control={control}
         onSubmit={formSubmit(handleUpdateWord)}
         isLoading={isLoading}
-        translate={translate}
+        word={word}
+        translate={translate.map(getNormalizeOptionWord)}
+        pined={pined}
       />
     </>
   )

@@ -1,3 +1,4 @@
+import { useEffect } from "react"
 import { useController } from "react-hook-form"
 
 import Input from "components/Input"
@@ -14,6 +15,7 @@ export interface TextFieldProps {
   defaultValue?: string
   isCheckUniqueWord?: boolean
   words?: string[]
+  shouldFocus?: boolean
   pattern?: {
     value: string | RegExp
     message: string
@@ -32,7 +34,8 @@ const TextField = ({
   value,
   type = 'input',
   isCheckUniqueWord = false,
-  words = []
+  words = [],
+  shouldFocus = false,
 }: TextFieldProps) => {
   let defaultRules: { [key: string]: unknown } = {
     required: {

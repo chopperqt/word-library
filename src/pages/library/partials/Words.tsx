@@ -73,7 +73,7 @@ const Words = ({
         {isNothingFound && (
           <NothingFound />
         )}
-        {!isNothingFound && Object.entries(normalizedWords).map(([key, words]: [key: string, words: Word[]]) => {
+        {!isNothingFound && normalizedWords.map(([key, words]: [key: string, words: Word[]]) => {
           const amountOfWords = words.length
 
           if (!amountOfWords) {
@@ -94,7 +94,5 @@ const Words = ({
     </div>
   )
 }
-
-//flex justify-start items-start gap-3 flex-wrap
 
 export default Words

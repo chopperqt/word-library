@@ -11,11 +11,13 @@ import type {
 } from "models/Library.models"
 import type { UserID } from "models/Auth.models"
 import { getNormalizeWord } from "../helpers/getNormalizeWord"
+import type { UseFormSetFocus } from "react-hook-form"
 interface UseModalWordProps {
   userID: UserID,
   wordID?: WordID,
   word?: string
   reset?: () => void
+  setFocus?: () => void
 }
 const useModalWord = ({
   userID,

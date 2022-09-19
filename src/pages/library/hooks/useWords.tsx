@@ -20,7 +20,7 @@ const useWords = ({
       formattedWords = wordsSearched
     }
 
-    return normalizeWords(formattedWords)
+    return Object.entries(normalizeWords(formattedWords))
   }, [
     wordsSearched,
     words,

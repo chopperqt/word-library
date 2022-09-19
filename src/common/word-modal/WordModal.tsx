@@ -1,12 +1,11 @@
+import { useEffect } from "react"
+
 import TextField from "common/text-field/TextField"
 import Button from "components/button"
-import InputMulti from "components/input-multi"
+import InputMulti, { Option } from "components/input-multi"
 import ModalContainer from "components/ModalContainer"
 import Toggle from "components/Toggle"
-import { getNormalizeOptionWord } from "./helpers/getNormalizeOptionWord"
 import { UNACCEPTABLE_SYMBOL_TEXT } from "helpers/texts"
-
-import type { Word } from "models/Library.models"
 
 const ENGLISH_PLACEHOLDER_TEXT = 'Example'
 const RUSSIA_PLACEHOLDER_TEXT = 'Пример'
@@ -19,18 +18,18 @@ interface WordModalProps {
   onClose: () => void
   onSubmit: () => void
   control: any
-  translate?: string[]
+  translate?: Option[]
   pined?: boolean
   isCheckUniqueWord?: boolean
   isLoading?: boolean
   words?: string[]
   isUpdate?: boolean
+  word?: string
 }
 
 const WordModal = ({
   onClose,
   onSubmit,
-  translate = [],
   isOpened,
   pined = false,
   isCheckUniqueWord = false,
@@ -38,9 +37,9 @@ const WordModal = ({
   isLoading = false,
   words = [],
   isUpdate = false,
+  translate = [],
+  word,
 }: WordModalProps) => {
-  const normalizedTranslate = translate.map(getNormalizeOptionWord)
-
   let text = isUpdate
     ? UPDATE_TEXT
     : ADD_TEXT
@@ -62,6 +61,7 @@ const WordModal = ({
           placeholder={ENGLISH_PLACEHOLDER_TEXT}
           isRequired={true}
           words={words}
+          value={word}
           pattern={{
             value: /^[a-zA-Z\s]+$/,
             message: UNACCEPTABLE_SYMBOL_TEXT,
@@ -71,7 +71,7 @@ const WordModal = ({
           name="translate"
           control={control}
           placeholder={RUSSIA_PLACEHOLDER_TEXT}
-          defaultValue={normalizedTranslate}
+          defaultValue={translate}
         />
         <Toggle
           text={TOGGLER_TEXT}
