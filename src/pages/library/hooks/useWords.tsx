@@ -1,39 +1,21 @@
-import { useMemo } from 'react'
+import { useMemo } from "react";
 
-import type { Word } from 'models/Library.models';
-import normalizeWords from 'helpers/normalizeWords';
+import { normalizeWords } from "helpers/normalizeWords";
+
+import type { Word } from "models/Library.models";
 
 interface UseWordsProps {
-  words: Word[]
-  wordsPined: Word[]
-  wordsSearched: Word[]
+  words: Word[];
 }
-const useWords = ({
-  words = [],
-  wordsPined = [],
-  wordsSearched = [],
-}: UseWordsProps) => {
+
+export const useWords = ({ words = [] }: UseWordsProps) => {
   const normalizedWords = useMemo(() => {
-    let formattedWords = words
+    let formattedWords = words;
 
-    if (wordsSearched.length > 0) {
-      formattedWords = wordsSearched
-    }
-
-    return Object.entries(normalizeWords(formattedWords))
-  }, [
-    wordsSearched,
-    words,
-  ])
-
-  const wordsTitle = `Library(${words.length})`
-  const wordsPinedTitle = `Pined(${wordsPined.length})`
+    return Object.entries(normalizeWords(formattedWords));
+  }, [words]);
 
   return {
     normalizedWords,
-    wordsTitle,
-    wordsPinedTitle,
   };
-}
-
-export default useWords;
+};

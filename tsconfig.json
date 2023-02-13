@@ -1,6 +1,10 @@
 {
   "compilerOptions": {
-    "baseUrl": "src",
+    "baseUrl": "./src",
+    "paths": {
+      "api/*": ["api/*"],
+      "services/*": ["services/*"]
+    },
     "target": "es5",
     "lib": [
       "dom",
@@ -19,9 +23,9 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
-    "jsx": "react-jsx"
+    "jsx": "preserve"
   },
   "include": [
-    "src"
-  ],
+    "./src"
+  ]
 }
