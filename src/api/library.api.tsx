@@ -91,7 +91,7 @@ export const updateLibraryWord = async (wordData: UpdateWord): Promise<Word[] | 
   return data
 }
 
-export const getLibraryWords = async (userID: UserID): Promise<Word[] | null> => {
+export const getLibraryWords = async (userID: UserID, from:number = 0, to:number = 70): Promise<Word[] | null> => {
   const {
     handleSetError,
     handleSetPending,
@@ -106,6 +106,9 @@ export const getLibraryWords = async (userID: UserID): Promise<Word[] | null> =>
   } = await supabase
     .from(LIBRARY_TABLE)
     .select('*')
+    .limit(70)
+    .order('word')
+    .range(from, to)
     .match({ userID })
 
   if (error || !data) {

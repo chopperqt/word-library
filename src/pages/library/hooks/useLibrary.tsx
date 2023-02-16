@@ -3,6 +3,7 @@ import {
   useEffect,
   ChangeEvent,
   useMemo,
+  useRef,
 } from 'react'
 
 import { useNavigate } from 'react-router-dom'
@@ -14,17 +15,62 @@ import type { Word } from 'models/Library.models'
 interface UseLibraryProps {
   userID: UserID
   words: Word[]
+  isFetched?: boolean
+  isLoading?: boolean
 }
 const useLibrary = ({
   userID,
   words,
+  isFetched = false,
+  isLoading = false,
 }: UseLibraryProps) => {
   const [value, setValue] = useState<string>('')
+  const fetchBlockRef = useRef<HTMLDivElement | null>(null)
   const navigate = useNavigate()
 
-  const handleChangeValue = (e: ChangeEvent<HTMLInputElement>) => {
-    setValue(e.target.value)
-  }
+  useEffect(() => {
+    if (userID) {
+      return
+    }
+  }, [
+    userID,
+    navigate,
+  ])
+
+  useEffect(() => {
+    if (!userID) {
+      return
+    }
+
+    getLibraryWords(userID)
+  }, [userID])
+
+  useEffect(() => {
+    if (!isFetched) {
+      return
+    }
+
+    const fetchBlockObserver = new IntersectionObserver((entry) => {
+      if (!entry.length) {
+        return
+      }
+
+      if (entry[0].isIntersecting) {
+        getLibraryWords(userID, 71, 140)
+      }
+    })
+
+
+    if (!fetchBlockRef.current || !fetchBlockRef) {
+      return
+    }
+
+    fetchBlockObserver.observe(fetchBlockRef.current)
+
+    return () => {
+      fetchBlockObserver.disconnect()
+    }
+  }, [isFetched, isLoading])
 
   const wordsSearched = useMemo(() => {
     if (value.length < 2) {
@@ -52,28 +98,16 @@ const useLibrary = ({
     value,
   ])
 
-  useEffect(() => {
-    if (userID) {
-      return
-    }
-  }, [
-    userID,
-    navigate,
-  ])
-
-  useEffect(() => {
-    if (!userID) {
-      return
-    }
-
-    getLibraryWords(userID)
-  }, [userID])
+  const handleChangeValue = (e: ChangeEvent<HTMLInputElement>) => {
+    setValue(e.target.value)
+  }
 
   return {
     value,
     handleChangeValue,
     wordsSearched,
     isNothingFound,
+    fetchBlockRef,
   }
 }
 
