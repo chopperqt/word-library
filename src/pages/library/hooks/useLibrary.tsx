@@ -6,11 +6,12 @@ import {
   useRef,
 } from 'react'
 
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import { getLibraryWords } from 'api/library.api'
 
 import type { UserID } from 'models/Auth.models'
 import type { Word } from 'models/Library.models'
+import { useObserver } from 'helpers/useObserver'
 
 interface UseLibraryProps {
   userID: UserID
@@ -27,14 +28,27 @@ const useLibrary = ({
   const [value, setValue] = useState<string>('')
   const fetchBlockRef = useRef<HTMLDivElement | null>(null)
   const navigate = useNavigate()
+  const { page } = useParams()
+  const { pathname, search } = useLocation()
+
+  const { observer } = useObserver({
+    threshold: 0.50,
+    callback: () => console.log('work'),
+  })
 
   useEffect(() => {
-    if (userID) {
+    if (userID || !fetchBlockRef.current) {
       return
     }
+
+    observer.observe(fetchBlockRef.current)
+
+    return () => {
+      observer.disconnect()
+    }
   }, [
+    observer,
     userID,
-    navigate,
   ])
 
   useEffect(() => {
@@ -42,34 +56,26 @@ const useLibrary = ({
       return
     }
 
+
+    const params = new URLSearchParams(search)
+
+    if (params.has('page')) {
+      console.log('test')
+
+      return
+    }
+
+    params.set('page', "2")
+
+    
+
+    navigate(`${pathname}?${params.toString()}`)
+
     getLibraryWords(userID)
   }, [userID])
 
   useEffect(() => {
-    if (!isFetched) {
-      return
-    }
-
-    const fetchBlockObserver = new IntersectionObserver((entry) => {
-      if (!entry.length) {
-        return
-      }
-
-      if (entry[0].isIntersecting) {
-        getLibraryWords(userID, 71, 140)
-      }
-    })
-
-
-    if (!fetchBlockRef.current || !fetchBlockRef) {
-      return
-    }
-
-    fetchBlockObserver.observe(fetchBlockRef.current)
-
-    return () => {
-      fetchBlockObserver.disconnect()
-    }
+    console.log('page?: ', page)
   }, [isFetched, isLoading])
 
   const wordsSearched = useMemo(() => {
