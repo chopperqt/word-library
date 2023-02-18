@@ -4,14 +4,19 @@ import {
   ChangeEvent,
   useMemo,
   useRef,
+  useCallback,
+  useLayoutEffect,
 } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { useLocation, useNavigate } from 'react-router-dom'
 
-import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import { getLibraryWords } from 'api/library.api'
+import { useObserver } from 'helpers/useObserver'
+import { usePagination } from 'helpers/usePagination'
+import { getPage, handleIncreasePage, setPage } from 'services/pagination/Pagination.store'
 
 import type { UserID } from 'models/Auth.models'
 import type { Word } from 'models/Library.models'
-import { useObserver } from 'helpers/useObserver'
 
 interface UseLibraryProps {
   userID: UserID
@@ -25,15 +30,31 @@ const useLibrary = ({
   isFetched = false,
   isLoading = false,
 }: UseLibraryProps) => {
+  const { pathname, search } = useLocation()
+  const searchParams = new URLSearchParams(search)
+  const currentPage = searchParams.get('page')
+
+  const page = useSelector(getPage)
+  const dispatch = useDispatch()
   const [value, setValue] = useState<string>('')
   const fetchBlockRef = useRef<HTMLDivElement | null>(null)
   const navigate = useNavigate()
-  const { page } = useParams()
-  const { pathname, search } = useLocation()
+  const { from, to } = usePagination({
+    page: +page,
+  })
+
+  const callback = useCallback(() => {
+    if (!isFetched || isLoading) {
+      return
+    }
+
+    dispatch(handleIncreasePage())
+  }, [isFetched, isLoading])
 
   const { observer } = useObserver({
-    threshold: 0.50,
-    callback: () => console.log('work'),
+    threshold: 0.25,
+    callback,
+    element: fetchBlockRef,
   })
 
   useEffect(() => {
@@ -48,6 +69,7 @@ const useLibrary = ({
     }
   }, [
     observer,
+    page,
     userID,
   ])
 
@@ -56,27 +78,20 @@ const useLibrary = ({
       return
     }
 
+    searchParams.set('page', page.toString())
 
-    const params = new URLSearchParams(search)
+    navigate(`${pathname}?${searchParams.toString()}`)
 
-    if (params.has('page')) {
-      console.log('test')
+    getLibraryWords(userID, from, to)
+  }, [page, userID])
 
+  useLayoutEffect(() => {
+    if (!currentPage) {
       return
     }
 
-    params.set('page', "2")
-
-    
-
-    navigate(`${pathname}?${params.toString()}`)
-
-    getLibraryWords(userID)
-  }, [userID])
-
-  useEffect(() => {
-    console.log('page?: ', page)
-  }, [isFetched, isLoading])
+    dispatch(setPage(+currentPage))
+  }, [])
 
   const wordsSearched = useMemo(() => {
     if (value.length < 2) {

@@ -10,6 +10,7 @@ import type { UserID } from "models/Auth.models"
 import { store } from "services/stores"
 import { setWords } from "services/library/Library.store"
 import { loadingController } from "helpers/loadingController"
+import { setAmountOfPages } from "services/pagination/Pagination.store"
 
 const LIBRARY_TABLE = 'library'
 
@@ -100,24 +101,30 @@ export const getLibraryWords = async (userID: UserID, from:number = 0, to:number
 
   handleSetPending()
 
+  console.log(from ,to)
+
   const {
     data,
     error,
+    count,
   } = await supabase
     .from(LIBRARY_TABLE)
-    .select('*')
+    .select('*', { count: 'exact' })
     .limit(70)
     .order('word')
     .range(from, to)
     .match({ userID })
 
-  if (error || !data) {
+  if (error || !data || !count) {
     handleSetError()
 
     return null
   }
 
+  const amountOfPages = Math.round(count / 70)
+
   store.dispatch(setWords(data))
+  store.dispatch(setAmountOfPages(amountOfPages))
 
   handleSetSuccess()
 

@@ -1,26 +1,45 @@
+import { useEffect, useMemo } from "react"
 
 interface UseObserver {
 	threshold?: number
 	callback: () => void
+	element: React.MutableRefObject<HTMLElement | null>
 }
 
 export const useObserver = ({
 	threshold = 0,
 	callback,
+	element,
 }:UseObserver) => {
-	const observer = new IntersectionObserver((entry) => {
-		if (!entry.length) {
-			return
+	const observer = useMemo(() => {
+		return new IntersectionObserver((entry) => {
+			if (!entry.length) {
+				return
+			}
+	
+			if (!entry[0].isIntersecting) {
+				console.log('enter')
+	
+				return
+			}
+	
+			callback()
+		}, {
+			threshold,
+		})
+	}, [callback])
+
+	useEffect(() => {
+		if (!element.current) {
+			return 
 		}
 
-		if (!entry[0].isIntersecting) {
-			return
-		}
+		observer.observe(element.current)
 
-		callback()
-	}, {
-		threshold,
-	})
+		return () => {
+			observer.disconnect()
+		}
+	}, [element, callback])
 
 	return {
 		observer,
