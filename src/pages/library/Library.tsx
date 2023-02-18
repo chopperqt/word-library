@@ -27,7 +27,7 @@ const Library = () => {
   const user = supabase?.auth?.user();
   const hasWords = !!words.length;
 
-  const { wordsSearched, value, handleChangeValue, isNothingFound, fetchBlockRef } =
+  const { wordsSearched, value, handleChangeValue, isNothingFound, fetchBlockRef, isLastPage } =
     useLibrary({
       userID,
       words,
@@ -65,9 +65,11 @@ const Library = () => {
         <WordsPined />
         <Words />
       </div>
-      <div ref={fetchBlockRef} className="w-full h-[100px] flex items-center justify-center">
-        <Spin width={50} height={50} color="indigo" />
+      {!isLastPage && (
+        <div ref={fetchBlockRef} className="w-full h-[100px] flex items-center justify-center">
+          <Spin width={50} height={50} color="indigo" />
       </div>
+      )}
     </React.Fragment>
   );
 };

@@ -13,7 +13,7 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import { getLibraryWords } from 'api/library.api'
 import { useObserver } from 'helpers/useObserver'
 import { usePagination } from 'helpers/usePagination'
-import { getPage, handleIncreasePage, setPage } from 'services/pagination/Pagination.store'
+import { getAmountOfPages, getPage, handleIncreasePage, setPage } from 'services/pagination/Pagination.store'
 
 import type { UserID } from 'models/Auth.models'
 import type { Word } from 'models/Library.models'
@@ -35,12 +35,14 @@ const useLibrary = ({
   const currentPage = searchParams.get('page')
 
   const page = useSelector(getPage)
+  const amountOfPages = useSelector(getAmountOfPages)
   const dispatch = useDispatch()
   const [value, setValue] = useState<string>('')
   const fetchBlockRef = useRef<HTMLDivElement | null>(null)
   const navigate = useNavigate()
-  const { from, to } = usePagination({
+  const { from, to, isLastPage, } = usePagination({
     page: +page,
+    amountOfPages,
   })
 
   const callback = useCallback(() => {
@@ -129,6 +131,7 @@ const useLibrary = ({
     wordsSearched,
     isNothingFound,
     fetchBlockRef,
+    isLastPage,
   }
 }
 
