@@ -60,22 +60,6 @@ const useLibrary = ({
   })
 
   useEffect(() => {
-    if (userID || !fetchBlockRef.current) {
-      return
-    }
-
-    observer.observe(fetchBlockRef.current)
-
-    return () => {
-      observer.disconnect()
-    }
-  }, [
-    observer,
-    page,
-    userID,
-  ])
-
-  useEffect(() => {
     if (!userID) {
       return
     }
@@ -84,8 +68,26 @@ const useLibrary = ({
 
     navigate(`${pathname}?${searchParams.toString()}`)
 
+    if (!words.length) {
+      getLibraryWords(userID, 0, to)
+
+      return
+    }
+
     getLibraryWords(userID, from, to)
   }, [page, userID])
+
+  useEffect(() => {
+    if (!fetchBlockRef.current) {
+      return
+    }
+
+    observer.observe(fetchBlockRef.current)
+
+    return () => {
+      observer.disconnect()
+    }
+  }, [fetchBlockRef])
 
   useLayoutEffect(() => {
     if (!currentPage) {

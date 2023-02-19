@@ -16,7 +16,7 @@ import supabase from "api/client";
 import Logout from "./partials/Logout";
 import WordsPined from "./components/wordsPined";
 
-const Search = lazy(() => import("./partials/Search"));
+const Search = lazy(() => import("./components/search"));
 
 const Library = () => {
   const words = useSelector(getWords);
@@ -58,7 +58,7 @@ const Library = () => {
         <div className="flex gap-3">
           {user?.id && <Logout />}
           <Suspense fallback={<Skeleton height={40} />}>
-            <Search value={value} onChange={handleChangeValue} />
+            <Search />
           </Suspense>
           <CreateWord />
         </div>

@@ -1,10 +1,10 @@
-import supabase from "./client"
+import { debounce } from 'lodash-es'
 
+import supabase from "./client"
 import type {
   CreateWord,
   UpdateWord,
   Word,
-  WordID,
 } from "models/Library.models"
 import type { UserID } from "models/Auth.models"
 import { store } from "services/stores"
@@ -19,7 +19,8 @@ export type LibraryRequests =
   'getLibraryWords' |
   'updateLibraryWord' |
   'updatePin' |
-  'deleteLibraryWords'
+  'deleteLibraryWords' |
+  'searchWord'
 
 export const createLibraryWord = async (wordData: CreateWord): Promise<Word[] | null> => {
   const {
@@ -196,3 +197,31 @@ export const updatePin = async (userID: UserID, pined: boolean, word: string): P
   return data
 
 }
+
+export const searchWord = debounce(async (userID: UserID, word: string):Promise<Word[] | null> => {
+  const {
+    handleSetError,
+    handleSetPending,
+    handleSetSuccess,
+  } = loadingController('searchWord')
+
+  handleSetPending()
+
+  const {data, error} = await supabase
+    .from(LIBRARY_TABLE)
+    .select('*')
+    .match({userID})
+    .textSearch('word', word)
+
+  if (error) {
+    handleSetError()
+    
+    return null
+  }
+
+  console.log('searchWord: ', data)
+
+  handleSetSuccess()
+
+  return data
+}, 600)
