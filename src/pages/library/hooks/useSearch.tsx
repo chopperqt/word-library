@@ -3,9 +3,11 @@ import { useSelector } from "react-redux";
 
 import { searchWord } from "api/library.api";
 import { getUserID } from "services/user/User.store";
+import { getLoading } from "services/loading/Loading.store";
 
 const useSearch = () => {
 	const userID = useSelector(getUserID)
+	const isLoading = useSelector(getLoading).searchWord?.isLoading
 
 	const [value, setValue] = useState('')
 
@@ -23,7 +25,8 @@ const useSearch = () => {
 
 	return {
 		value,
-		handleChangeValue
+		handleChangeValue,
+		isLoading
 	};
 }
  

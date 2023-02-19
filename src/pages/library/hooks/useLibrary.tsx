@@ -54,7 +54,7 @@ const useLibrary = ({
   }, [isFetched, isLoading])
 
   const { observer } = useObserver({
-    threshold: 0.25,
+    threshold: 0.95,
     callback,
     element: fetchBlockRef,
   })
