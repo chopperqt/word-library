@@ -1,14 +1,34 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { PayloadAction, createSlice, createSelector } from "@reduxjs/toolkit";
 
-const initialState = {
-	words: []
+import type { Word } from "models/Library.models";
+import type { Search } from "models/Search.model";
+import type { RootState } from "services/stores";
+
+const initialState:Search = {
+	searchWords: []
 }
 
-
-const searchStore = createSlice({
+const SearchStore = createSlice({
 	name: 'SearchStore',
 	initialState,
 	reducers: {
-		
+		clearSearch: (state) => {
+			state.searchWords = []
+		},
+		setSearchWords: (state, payload:PayloadAction<Word[]>) => {
+			state.searchWords = payload.payload
+		}
 	}
 })
+
+export const { 
+	clearSearch,
+	setSearchWords,
+} = SearchStore.actions
+
+export const getSearchWords = createSelector(
+	(state: RootState) => state.SearchStore,
+	(items) => items.searchWords
+)
+
+export default SearchStore.reducer

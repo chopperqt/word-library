@@ -4,13 +4,15 @@ import LibraryStore from './library/Library.store'
 import UserStore from './user/User.store'
 import LoadingStore from './loading/Loading.store'
 import PaginationStore from './pagination/Pagination.store'
+import SearchStore from './search/Search.store'
 
 export const store = configureStore({
   reducer: {
     LibraryStore,
     UserStore,
     LoadingStore,
-    PaginationStore
+    PaginationStore,
+    SearchStore,
   }
 })
 
