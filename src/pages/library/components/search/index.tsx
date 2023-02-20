@@ -5,7 +5,7 @@ const SEARCH_STYLES = 'w-full absolute top-[45px] rounded-sm bg-white p-1'
 const SEARCH_TEXT = '🔍 Search...'
 
 const Search = () => {
-	const { handleChangeValue, value, isLoading } = useSearch()
+	const { handleChangeValue, value, isLoading, isShowSearchedWord } = useSearch()
 
 	return (
 		<form className='flex items-center w-full relative'>
@@ -16,8 +16,11 @@ const Search = () => {
       name="search"
       isLoading={isLoading}
     />
-    <div className={SEARCH_STYLES}>
-    </div>
+    {isShowSearchedWord && (
+      <div className={SEARCH_STYLES}>
+      </div>
+    )}
+    
   </form>
 	);
 }

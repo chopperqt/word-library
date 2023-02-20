@@ -11,6 +11,7 @@ import { store } from "services/stores"
 import { setWords } from "services/library/Library.store"
 import { loadingController } from "helpers/loadingController"
 import { setAmountOfPages } from "services/pagination/Pagination.store"
+import { setSearchWords } from 'services/search/Search.store'
 
 const LIBRARY_TABLE = 'library'
 
@@ -219,7 +220,7 @@ export const searchWord = debounce(async (userID: UserID, word: string):Promise<
     return null
   }
 
-  console.log('searchWord: ', data)
+  store.dispatch(setSearchWords(data))
 
   handleSetSuccess()
 
