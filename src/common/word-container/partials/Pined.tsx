@@ -1,38 +1,23 @@
-import {
-  getLibraryWords,
-  updatePin,
-} from "api/library.api"
 import Icon, { IconsList } from "components/icon/Icon"
-import type { UserID } from "models/Auth.models"
 
 interface PinedProps {
   isPined: boolean
-  word: string
-  userID: UserID
+  onClick: () => void
 }
 const Pined = ({
   isPined,
-  word,
-  userID,
+  onClick,
 }: PinedProps) => {
-  const icon = isPined
-    ? IconsList.starFill
-    : IconsList.starOutline
+  let icon = IconsList.starOutline
 
-  const handlePinClick = async () => {
-    const response = await updatePin(userID, !isPined, word)
-
-    if (response === null) {
-      return
-    }
-
-    getLibraryWords(userID)
+  if (isPined) {
+    icon = IconsList.starFill
   }
 
   return (
     <button
       className='mr-1'
-      onClick={handlePinClick}
+      onClick={onClick}
     >
       <Icon
         icon={icon}

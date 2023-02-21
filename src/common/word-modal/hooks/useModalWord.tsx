@@ -1,17 +1,19 @@
+import { useEffect, useState } from "react"
+
 import {
   createLibraryWord,
   getLibraryWords,
   updateLibraryWord,
 } from "api/library.api"
-import { useEffect, useState } from "react"
-
 import type {
   WordForm,
   WordID,
 } from "models/Library.models"
-import type { UserID } from "models/Auth.models"
 import { getNormalizeWord } from "../helpers/getNormalizeWord"
-import type { UseFormSetFocus } from "react-hook-form"
+
+import type { UserID } from "models/Auth.models"
+
+
 interface UseModalWordProps {
   userID: UserID,
   wordID?: WordID,
@@ -56,7 +58,6 @@ const useModalWord = ({
     }
 
     const normalizedWord = getNormalizeWord(word)
-
 
     const response = await updateLibraryWord({
       ...normalizedWord,

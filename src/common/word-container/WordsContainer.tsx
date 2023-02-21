@@ -1,10 +1,11 @@
 import Edit from './partials/Edit'
 import Pined from './partials/Pined'
+import Delete from './partials/Delete'
 import ExtraWords from './partials/ExtraWords'
 
-import type { Word } from 'models/Library.models'
+import type { Word, WordForm } from 'models/Library.models'
 import type { UserID } from 'models/Auth.models'
-import Delete from './partials/Delete'
+
 
 interface WordsContainerProps {
   amountOfWords: number
@@ -12,6 +13,8 @@ interface WordsContainerProps {
   letter: string
   color?: string
   userID: UserID
+  onClickPin: (word: string, isPined: boolean) => void
+  onClickUpdate: (wordID: number, word: WordForm) => void
 }
 const WordsContainer = ({
   amountOfWords,
@@ -19,6 +22,7 @@ const WordsContainer = ({
   letter,
   color = 'bg-sky-700',
   userID,
+  onClickPin,
 }: WordsContainerProps) => {
   if (!words.length) {
     return null
@@ -45,9 +49,8 @@ const WordsContainer = ({
             className="flex items-center"
           >
             <Pined
-              userID={userID}
+              onClick={() => onClickPin(word, pined)}
               isPined={pined}
-              word={word}
             />
             <Edit
               userID={userID}

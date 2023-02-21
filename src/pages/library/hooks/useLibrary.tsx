@@ -38,25 +38,10 @@ const useLibrary = ({
   const amountOfPages = useSelector(getAmountOfPages)
   const dispatch = useDispatch()
   const [value, setValue] = useState<string>('')
-  const fetchBlockRef = useRef<HTMLDivElement | null>(null)
   const navigate = useNavigate()
   const { from, to, isLastPage, } = usePagination({
     page: +page,
     amountOfPages,
-  })
-
-  const callback = useCallback(() => {
-    if (!isFetched || isLoading) {
-      return
-    }
-
-    dispatch(handleIncreasePage())
-  }, [isFetched, isLoading])
-
-  const { observer } = useObserver({
-    threshold: 0.95,
-    callback,
-    element: fetchBlockRef,
   })
 
   useEffect(() => {
@@ -76,18 +61,6 @@ const useLibrary = ({
 
     getLibraryWords(userID, from, to)
   }, [page, userID])
-
-  useEffect(() => {
-    if (!fetchBlockRef.current) {
-      return
-    }
-
-    observer.observe(fetchBlockRef.current)
-
-    return () => {
-      observer.disconnect()
-    }
-  }, [fetchBlockRef])
 
   useLayoutEffect(() => {
     if (!currentPage) {
@@ -127,12 +100,16 @@ const useLibrary = ({
     setValue(e.target.value)
   }
 
+  const handleGetMoreWords = () => {
+    dispatch(handleIncreasePage())
+  }
+
   return {
     value,
     handleChangeValue,
     wordsSearched,
     isNothingFound,
-    fetchBlockRef,
+    handleGetMoreWords,
     isLastPage,
   }
 }

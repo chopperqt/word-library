@@ -11,7 +11,7 @@ const WordsPined = () => {
   const words = useSelector(getPinWords);
   const userID = useSelector(getUserID);
 
-  const { normalizedWords } = useWords({ words });
+  const { normalizedWords, handleClickPin } = useWords({ words });
 
   if (!words.length) {
     return null;
@@ -38,6 +38,7 @@ const WordsPined = () => {
 
             return (
               <WordsContainer
+                onClickPin={handleClickPin}
                 key={key}
                 userID={userID}
                 letter={key}

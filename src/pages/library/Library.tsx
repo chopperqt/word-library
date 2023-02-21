@@ -15,8 +15,11 @@ import Preloader from "./partials/Preloader";
 import supabase from "api/client";
 import Logout from "./partials/Logout";
 import WordsPined from "./components/wordsPined";
+import Button from "components/button";
 
 const Search = lazy(() => import("./components/search"));
+
+const BUTTON_TEXT = 'More...'
 
 const Library = () => {
   const words = useSelector(getWords);
@@ -27,7 +30,7 @@ const Library = () => {
   const user = supabase?.auth?.user();
   const hasWords = !!words.length;
 
-  const { wordsSearched, value, handleChangeValue, isNothingFound, fetchBlockRef, isLastPage } =
+  const { isLastPage, handleGetMoreWords } =
     useLibrary({
       userID,
       words,
@@ -66,9 +69,11 @@ const Library = () => {
         <Words />
       </div>
       {!isLastPage && (
-        <div ref={fetchBlockRef} className="w-full h-[100px] flex items-center justify-center">
-          <Spin width={50} height={50} color="indigo" />
-      </div>
+        <div className="w-full h-[100px] flex items-center justify-center">
+          <Button onClick={handleGetMoreWords} loading={isLoading}>
+            {BUTTON_TEXT}
+          </Button>
+        </div>
       )}
     </React.Fragment>
   );

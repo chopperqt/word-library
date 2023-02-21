@@ -1,21 +1,20 @@
-import Icon, { IconsList } from "components/icon/Icon"
-import WordModal, { useModalWord } from "common/word-modal"
+import { useForm } from "react-hook-form"
 
+import WordModal, { useModalWord } from "common/word-modal"
+import { getNormalizeOptionWord } from "common/word-modal/helpers/getNormalizeOptionWord"
+import Icon, { IconsList } from "components/icon/Icon"
 import {
   Word,
   WordForm,
   WordID,
 } from "models/Library.models"
+
 import type { UserID } from "models/Auth.models"
-import { useForm } from "react-hook-form"
-import { getNormalizeOptionWord } from "common/word-modal/helpers/getNormalizeOptionWord"
-import { useSelector } from "react-redux"
-import { getLoading } from "services/loading/Loading.store"
-import { useEffect } from "react"
 
 interface EditProps extends Pick<Word, 'word' | 'translate' | 'pined'> {
   userID: UserID
   wordID: WordID
+  isLoading: boolean
 }
 
 const Edit = ({
@@ -24,6 +23,7 @@ const Edit = ({
   pined = false,
   userID,
   wordID,
+  isLoading = false
 }: EditProps) => {
   const {
     control,
@@ -44,8 +44,6 @@ const Edit = ({
     word,
     reset,
   })
-
-  const isLoading = useSelector(getLoading).updateLibraryWord?.isLoading
 
   return (
     <>
