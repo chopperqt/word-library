@@ -14,6 +14,8 @@ const Search = () => {
     searchWords, 
     handleClickPin, 
     handleSubmitUpdate,
+    handleClickDelete,
+    isLoadingDelete,
     isLoadingUpdate,
   } = useSearch()
 
@@ -33,9 +35,11 @@ const Search = () => {
             wordID={id}
             onClickPin={handleClickPin}
             onSubmitUpdate={handleSubmitUpdate}
+            onClickDelete={handleClickDelete}
             word={word} 
             pined={pined} 
             isLoadingUpdate={isLoadingUpdate}
+            isLoadingDelete={isLoadingDelete}
             translate={translate}
           />
         ))}

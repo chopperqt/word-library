@@ -11,7 +11,7 @@ const WordsPined = () => {
   const words = useSelector(getPinWords);
   const userID = useSelector(getUserID);
 
-  const { normalizedWords, handleClickPin } = useWords({ words });
+  const { normalizedWords, handleClickPin, handleDeleteWord, handleSubmitUpdate, isLoadingDelete, isLoadingUpdate } = useWords({ words });
 
   if (!words.length) {
     return null;
@@ -38,6 +38,8 @@ const WordsPined = () => {
 
             return (
               <WordsContainer
+                onClickDelete={handleDeleteWord}
+                onSubmitUpdate={handleSubmitUpdate}
                 onClickPin={handleClickPin}
                 key={key}
                 userID={userID}
@@ -45,6 +47,8 @@ const WordsPined = () => {
                 amountOfWords={amountOfWords}
                 words={words}
                 color="bg-indigo-700"
+                isLoadingDelete={!!isLoadingDelete}
+                isLoadingUpdate={!!isLoadingUpdate}
               />
             );
           }

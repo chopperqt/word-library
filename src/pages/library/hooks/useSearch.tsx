@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-import { getLibraryWords, searchWord, updateLibraryWord, updatePin } from "api/library.api";
+import { deleteLibraryWords, getLibraryWords, searchWord, updateLibraryWord, updatePin } from "api/library.api";
 import { getUserID } from "services/user/User.store";
 import { getLoading } from "services/loading/Loading.store";
 import { clearSearch, getSearchWords } from "services/search/Search.store";
@@ -16,6 +16,7 @@ const useSearch = () => {
 	const searchWords = useSelector(getSearchWords)
 	const isLoading = useSelector(getLoading).searchWord?.isLoading
 	const isLoadingUpdate = useSelector(getLoading).updateLibraryWord?.isLoading
+	const isLoadingDelete = useSelector(getLoading).deleteLibraryWords?.isLoading
 
 	const [value, setValue] = useState('')
 
@@ -69,6 +70,16 @@ const useSearch = () => {
 		return response
 	}
 
+	const handleClickDelete = async (word:string):Promise<Word[] | null> => {
+		const response = await deleteLibraryWords(userID, word)
+
+		if (response === null) {
+			return null
+		}
+
+		return response as Word[]
+	}
+
 	return {
 		searchWords,
 		value,
@@ -77,6 +88,8 @@ const useSearch = () => {
 		isShowSearchedWord,
 		handleClickPin,
 		handleSubmitUpdate,
+		handleClickDelete,
+		isLoadingDelete,
 		isLoadingUpdate,
 	};
 }

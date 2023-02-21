@@ -1,21 +1,16 @@
-import { useSelector } from "react-redux"
 import { useForm } from "react-hook-form"
 
 import Button from "components/button"
 import WordModal, { useModalWord } from "common/word-modal"
-import { getUserID } from "services/user/User.store"
-import { getLoading } from "services/loading/Loading.store"
-import Preloader from "./Preloader"
+import Preloader from "../../partials/Preloader"
 import { WordForm } from "models/Library.models"
+import useEmpty from "pages/library/hooks/useEmpty"
 
 const NO_WORDS_TEXT = 'Welcome to the Word Library'
 const DESCRIPTION_TEXT = 'Add your first word'
 const ADD_TEXT = 'Add word'
 
-const EmptyContent = () => {
-  const userID = useSelector(getUserID)
-  const isLoading = useSelector(getLoading).getLibraryWords?.isLoading
-
+const Empty = () => {
   const {
     control,
     handleSubmit: formSubmit,
@@ -24,14 +19,21 @@ const EmptyContent = () => {
     mode: 'onChange',
   })
 
+  const { 
+    userID,
+    isLoading,
+    onSubmit,
+   } = useEmpty()
+
   const {
     isOpened,
     handleClose,
     handleOpen,
-    handleCreateWord,
+    handleSubmit,
   } = useModalWord({
     userID,
     reset,
+    onSubmit,
   })
 
   return (
@@ -53,7 +55,7 @@ const EmptyContent = () => {
       </Button>
       <WordModal
         control={control}
-        onSubmit={formSubmit(handleCreateWord)}
+        onSubmit={formSubmit(handleSubmit)}
         isOpened={isOpened}
         onClose={handleClose}
       />
@@ -61,4 +63,4 @@ const EmptyContent = () => {
   )
 }
 
-export default EmptyContent
+export default Empty

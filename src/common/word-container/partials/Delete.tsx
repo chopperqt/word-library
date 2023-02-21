@@ -1,23 +1,16 @@
-import {
-  deleteLibraryWords,
-  getLibraryWords,
-} from "api/library.api"
 import AgreementModal, { useAgreementModal } from "common/agreement-modal"
 import Icon, { IconsList } from "components/icon/Icon"
 
-import type { UserID } from "models/Auth.models"
-import { useSelector } from "react-redux"
-import { getLoading } from "services/loading/Loading.store"
+import type { Word } from "models/Library.models"
 
 interface DeleteProps {
-  userID: UserID
-  word: string
+  isLoading?:boolean
+  onClick: () => Promise<Word[] | null>
 }
 const Delete = ({
-  userID,
-  word,
+  isLoading = false,
+  onClick,
 }: DeleteProps) => {
-  const isLoading = useSelector(getLoading).deleteLibraryWords?.isLoading
   const {
     handleClose,
     handleOpen,
@@ -25,15 +18,13 @@ const Delete = ({
   } = useAgreementModal()
 
   const handleDelete = async () => {
-    const response = await deleteLibraryWords(userID, word)
+    const response = await onClick()
 
     if (response === null) {
       return
     }
 
     handleClose()
-
-    await getLibraryWords(userID)
   }
 
   return (

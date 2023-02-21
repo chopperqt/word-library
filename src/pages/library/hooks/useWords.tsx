@@ -2,7 +2,7 @@ import { useSelector } from "react-redux";
 import { useMemo } from "react";
 
 import { normalizeWords } from "helpers/normalizeWords";
-import { getLibraryWords, updateLibraryWord, updatePin } from "api/library.api";
+import { deleteLibraryWords, getLibraryWords, updateLibraryWord, updatePin } from "api/library.api";
 import { getUserID } from "services/user/User.store";
 import { getNormalizeWord } from "common/word-modal/helpers/getNormalizeWord";
 
@@ -17,6 +17,7 @@ interface UseWordsProps {
 export const useWords = ({ words = [] }: UseWordsProps) => {
   const userID = useSelector(getUserID)
   const isLoadingUpdate = useSelector(getLoading).updateLibraryWord?.isLoading
+  const isLoadingDelete = useSelector(getLoading).deleteLibraryWords?.isLoading
 
   const normalizedWords = useMemo(() => {
     let formattedWords = words;
@@ -52,10 +53,24 @@ export const useWords = ({ words = [] }: UseWordsProps) => {
     return response
 	}
 
+  const handleDeleteWord = async (word: string):Promise<Word[] | null> => {
+    const response = await deleteLibraryWords(userID, word)
+
+    if (response === null) {
+      return null
+    }
+
+    await getLibraryWords(userID)
+
+    return response as Word[]
+  }
+
   return {
     normalizedWords,
     handleClickPin,
     handleSubmitUpdate,
+    handleDeleteWord,
     isLoadingUpdate,
+    isLoadingDelete,
   };
 };

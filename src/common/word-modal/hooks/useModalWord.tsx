@@ -30,23 +30,7 @@ const useModalWord = ({
     setOpened(true)
   }
 
-  const handleCreateWord = async (word: WordForm) => {
-    // const normalizedWord = getNormalizeWord(word)
-
-    // const response = await createLibraryWord({
-    //   ...normalizedWord,
-    //   userID,
-    // })
-
-    // if (response === null) {
-    //   return null
-    // }
-
-    //getLibraryWords(userID)
-    handleClose()
-  }
-
-  const handleUpdateWord = async (word: WordForm) => {
+  const handleSubmit = async (word: WordForm) => {
     if (!wordID) {
       return
     }
@@ -79,8 +63,7 @@ const useModalWord = ({
     isOpened,
     handleClose,
     handleOpen,
-    handleCreateWord,
-    handleUpdateWord,
+    handleSubmit,
   }
 }
 

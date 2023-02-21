@@ -6,7 +6,6 @@ import ExtraWords from './partials/ExtraWords'
 import type { Word, WordForm } from 'models/Library.models'
 import type { UserID } from 'models/Auth.models'
 
-
 interface WordsContainerProps {
   amountOfWords: number
   words: Word[]
@@ -15,7 +14,9 @@ interface WordsContainerProps {
   userID: UserID
   onClickPin: (word: string, isPined: boolean) => void
   onSubmitUpdate: (word: WordForm, wordID: number) => Promise<Word[] | null>
+  onClickDelete: (word: string) => Promise<Word[] | null>
   isLoadingUpdate: boolean
+  isLoadingDelete: boolean
 }
 const WordsContainer = ({
   amountOfWords,
@@ -25,7 +26,9 @@ const WordsContainer = ({
   userID,
   onClickPin,
   onSubmitUpdate,
-  isLoadingUpdate = false
+  onClickDelete,
+  isLoadingUpdate = false,
+  isLoadingDelete = false,
 }: WordsContainerProps) => {
   if (!words.length) {
     return null
@@ -67,8 +70,8 @@ const WordsContainer = ({
               isLoading={isLoadingUpdate}
             />
             <Delete
-              userID={userID}
-              word={wordName}
+              onClick={() => onClickDelete(wordName)}
+              isLoading={isLoadingDelete}
             />
             <div>
               {wordName}

@@ -13,7 +13,14 @@ const Words = () => {
   const words = useSelector(getWords);
   const userID = useSelector(getUserID);
 
-  const { normalizedWords, handleClickPin, handleSubmitUpdate, isLoadingUpdate } = useWords({ words });
+  const { 
+    normalizedWords, 
+    handleClickPin, 
+    handleSubmitUpdate, 
+    handleDeleteWord, 
+    isLoadingUpdate,
+    isLoadingDelete,
+  } = useWords({ words });
 
   if (!normalizedWords.length) {
     return null;
@@ -36,12 +43,14 @@ const Words = () => {
             <WordsContainer
               onSubmitUpdate={handleSubmitUpdate}
               onClickPin={handleClickPin}
+              onClickDelete={handleDeleteWord}
               key={key}
               userID={userID}
               letter={key}
               amountOfWords={amountOfWords}
               words={words}
               isLoadingUpdate={!!isLoadingUpdate}
+              isLoadingDelete={!!isLoadingDelete}
             />
           );
         })}

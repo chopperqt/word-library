@@ -37,7 +37,7 @@ const Edit = ({
     handleOpen,
     handleClose,
     isOpened,
-    handleUpdateWord,
+    handleSubmit,
   } = useModalWord({
     onSubmit,
     wordID,
@@ -61,7 +61,7 @@ const Edit = ({
         isOpened={isOpened}
         onClose={handleClose}
         control={control}
-        onSubmit={formSubmit(handleUpdateWord)}
+        onSubmit={formSubmit(handleSubmit)}
         isLoading={isLoading}
         word={word}
         translate={translate.map(getNormalizeOptionWord)}

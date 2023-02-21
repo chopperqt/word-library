@@ -1,22 +1,15 @@
 import React from "react"
-import { useSelector } from "react-redux"
 
 import Button from "components/button"
-import { getUserID } from "services/user/User.store"
 import WordModal, { useModalWord } from "common/word-modal"
 import { useForm } from "react-hook-form"
 import { WordForm } from "models/Library.models"
-import { getLoading } from "services/loading/Loading.store"
-import { getOnlyWords } from "services/library/Library.store"
 import Icon, { IconsList } from "components/icon/Icon"
+import useCreateWord from "pages/library/hooks/useCreateWord"
 
 const ADD_TEXT = 'Add'
 
 const CreateWord = () => {
-  const userID = useSelector(getUserID)
-  const isLoading = useSelector(getLoading).createLibraryWord?.isLoading
-  const words = useSelector(getOnlyWords)
-
   const {
     reset,
     handleSubmit: formSubmit,
@@ -26,13 +19,22 @@ const CreateWord = () => {
   })
 
   const {
+    onSubmit,
+    isLoading,
+    userID,
+    words,
+  } = useCreateWord()
+
+  const {
     handleClose,
     handleOpen,
     isOpened,
-    handleCreateWord,
+    handleSubmit,
   } = useModalWord({
+    shouldCloseAfterSubmit: true,
     userID,
     reset,
+    onSubmit,
   })
 
   return (
@@ -51,7 +53,7 @@ const CreateWord = () => {
       </Button>
       <WordModal
         isCheckUniqueWord={true}
-        onSubmit={formSubmit(handleCreateWord)}
+        onSubmit={formSubmit(handleSubmit)}
         isOpened={isOpened}
         onClose={handleClose}
         control={control}

@@ -1,14 +1,14 @@
 import React, { lazy, Suspense } from "react";
 import { useSelector } from "react-redux";
 
-import EmptyContent from "./partials/EmptyContent";
+import EmptyContent from "./components/empty/EmptyContent";
 import useLibrary from "./hooks/useLibrary";
 import { getWords } from "services/library/Library.store";
 import Words from "./components/words";
 import { getLoading } from "services/loading/Loading.store";
 import { getUserID } from "services/user/User.store";
 import ErrorContent from "./partials/ErrorContent";
-import CreateWord from "./partials/CreateWord";
+import CreateWord from "./components/createWord/CreateWord";
 import Skeleton from "components/Skeleton";
 import Spin from "components/spin";
 import Preloader from "./partials/Preloader";
