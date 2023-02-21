@@ -12,7 +12,7 @@ import {
 interface EditProps extends Pick<Word, 'word' | 'translate' | 'pined'> {
   wordID: WordID
   isLoading: boolean
-  onSubmit: (word: WordForm, wordID: number) => Promise<Word[] | null>
+  onSubmit: (word: WordForm, wordID?: number) => Promise<Word[] | null>
   shouldCloseAfterSubmit?: boolean
 }
 

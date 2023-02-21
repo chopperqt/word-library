@@ -22,6 +22,7 @@ const ExtraWords = ({
       <button
         onClick={handleOpen}
         className="ml-1 underline text-sky-700 hover:text-sky-500"
+        type="button"
       >
         &nbsp;+{words.length - 1}
       </button>

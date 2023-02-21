@@ -52,7 +52,11 @@ const useSearch = () => {
 		getLibraryWords(userID)
 	}
 
-	const handleSubmitUpdate = async (word: WordForm, wordID: number):Promise<Word[] | null> => {
+	const handleSubmitUpdate = async (word: WordForm, wordID?: number):Promise<Word[] | null> => {
+		if (!wordID) {
+			return null
+		}
+
 		const normalizedWord = getNormalizeWord(word)
 
 		const response = await updateLibraryWord({

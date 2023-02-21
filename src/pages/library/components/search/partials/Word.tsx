@@ -8,7 +8,7 @@ interface WordProps {
 	pined: boolean
 	onClickPin: (word: string, isPined: boolean) => void
 	onClickDelete: (word: string) => Promise<IWord[] | null>
-	onSubmitUpdate: (word:WordForm, wordID:number) => Promise<IWord[] | null>
+	onSubmitUpdate: (word:WordForm, wordID?:number) => Promise<IWord[] | null>
 	isLoadingUpdate?:boolean
 	isLoadingDelete?: boolean
 	wordID: number

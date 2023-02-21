@@ -16,6 +16,9 @@ const CreateWord = () => {
     control,
   } = useForm<WordForm>({
     mode: 'onChange',
+    defaultValues: {
+      translate: []
+    }
   })
 
   const {

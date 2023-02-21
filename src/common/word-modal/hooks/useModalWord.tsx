@@ -11,7 +11,7 @@ interface UseModalWordProps {
   wordID?: WordID,
   userID?: UserID
   reset?: () => void
-  onSubmit: (word: WordForm, wordID: number) => Promise<Word[] | null>
+  onSubmit: (word: WordForm, wordID?: number) => Promise<Word[] | null>
   shouldCloseAfterSubmit?: boolean
 }
 const useModalWord = ({
@@ -31,10 +31,6 @@ const useModalWord = ({
   }
 
   const handleSubmit = async (word: WordForm) => {
-    if (!wordID) {
-      return
-    }
-
     const response = await onSubmit(word, wordID)
 
     if (response === null) {

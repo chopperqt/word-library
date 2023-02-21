@@ -1,6 +1,6 @@
 import { useSelector } from "react-redux";
 
-import { createLibraryWord } from "api/library.api";
+import { createLibraryWord, getLibraryWords } from "api/library.api";
 import { getNormalizeWord } from "common/word-modal/helpers/getNormalizeWord";
 import { getUserID } from "services/user/User.store";
 
@@ -28,6 +28,8 @@ const useCreateWord = () => {
 		if (response === null) {
 			return null
 		}
+
+		await getLibraryWords(userID)
 
 		return response
 	}

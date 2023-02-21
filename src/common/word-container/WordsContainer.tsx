@@ -13,7 +13,7 @@ interface WordsContainerProps {
   color?: string
   userID: UserID
   onClickPin: (word: string, isPined: boolean) => void
-  onSubmitUpdate: (word: WordForm, wordID: number) => Promise<Word[] | null>
+  onSubmitUpdate: (word: WordForm, wordID?: number) => Promise<Word[] | null>
   onClickDelete: (word: string) => Promise<Word[] | null>
   isLoadingUpdate: boolean
   isLoadingDelete: boolean

@@ -79,7 +79,7 @@ const WordModal = ({
           control={control}
           defaultChecked={pined}
         />
-        <Button loading={isLoading}>
+        <Button loading={isLoading} type="submit">
           {text}
         </Button>
       </form>
