@@ -6,7 +6,16 @@ const SEARCH_STYLES = 'w-full absolute top-[45px] rounded-sm bg-white p-1'
 const SEARCH_TEXT = '🔍 Search...'
 
 const Search = () => {
-	const { handleChangeValue, value, isLoading, isShowSearchedWord, searchWords, handleClickPin } = useSearch()
+	const { 
+    handleChangeValue, 
+    value, 
+    isLoading, 
+    isShowSearchedWord, 
+    searchWords, 
+    handleClickPin, 
+    handleSubmitUpdate,
+    isLoadingUpdate,
+  } = useSearch()
 
 	return (
 		<form className='flex items-center w-full relative'>
@@ -19,11 +28,15 @@ const Search = () => {
     />
     {isShowSearchedWord && (
       <div className={SEARCH_STYLES}>
-        {searchWords.map(({pined, word }) => (
+        {searchWords.map(({pined, word, id, translate }) => (
           <Word 
-            onClickPin={handleClickPin} 
+            wordID={id}
+            onClickPin={handleClickPin}
+            onSubmitUpdate={handleSubmitUpdate}
             word={word} 
             pined={pined} 
+            isLoadingUpdate={isLoadingUpdate}
+            translate={translate}
           />
         ))}
       </div>

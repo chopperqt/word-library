@@ -5,9 +5,9 @@ import { getLibraryWords, searchWord, updateLibraryWord, updatePin } from "api/l
 import { getUserID } from "services/user/User.store";
 import { getLoading } from "services/loading/Loading.store";
 import { clearSearch, getSearchWords } from "services/search/Search.store";
-
-import  type{ WordForm } from "models/Library.models";
 import { getNormalizeWord } from "common/word-modal/helpers/getNormalizeWord";
+
+import  type{ Word, WordForm } from "models/Library.models";
 
 const useSearch = () => {
 	const dispatch = useDispatch()
@@ -15,6 +15,7 @@ const useSearch = () => {
 	const userID = useSelector(getUserID)
 	const searchWords = useSelector(getSearchWords)
 	const isLoading = useSelector(getLoading).searchWord?.isLoading
+	const isLoadingUpdate = useSelector(getLoading).updateLibraryWord?.isLoading
 
 	const [value, setValue] = useState('')
 
@@ -50,7 +51,7 @@ const useSearch = () => {
 		getLibraryWords(userID)
 	}
 
-	const handleClickUpdate = async (wordID: number, word: WordForm) => {
+	const handleSubmitUpdate = async (word: WordForm, wordID: number):Promise<Word[] | null> => {
 		const normalizedWord = getNormalizeWord(word)
 
 		const response = await updateLibraryWord({
@@ -64,6 +65,8 @@ const useSearch = () => {
 		}
 
 		getLibraryWords(userID)
+
+		return response
 	}
 
 	return {
@@ -73,7 +76,8 @@ const useSearch = () => {
 		isLoading,
 		isShowSearchedWord,
 		handleClickPin,
-		handleClickUpdate,
+		handleSubmitUpdate,
+		isLoadingUpdate,
 	};
 }
  

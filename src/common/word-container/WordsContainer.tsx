@@ -1,4 +1,4 @@
-import Edit from './partials/Edit'
+import Edit from './components/editWord/EditWord'
 import Pined from './partials/Pined'
 import Delete from './partials/Delete'
 import ExtraWords from './partials/ExtraWords'
@@ -14,7 +14,8 @@ interface WordsContainerProps {
   color?: string
   userID: UserID
   onClickPin: (word: string, isPined: boolean) => void
-  onClickUpdate: (wordID: number, word: WordForm) => void
+  onSubmitUpdate: (word: WordForm, wordID: number) => Promise<Word[] | null>
+  isLoadingUpdate: boolean
 }
 const WordsContainer = ({
   amountOfWords,
@@ -23,6 +24,8 @@ const WordsContainer = ({
   color = 'bg-sky-700',
   userID,
   onClickPin,
+  onSubmitUpdate,
+  isLoadingUpdate = false
 }: WordsContainerProps) => {
   if (!words.length) {
     return null
@@ -38,33 +41,37 @@ const WordsContainer = ({
       </div>
       <div className="h-0.5 w-full bg-gray-50" />
       <div className="px-5 py-1">
-        {words.map(({
-          word,
-          translate,
-          id,
-          pined,
-        }) => (
+        {words.map((word) => {
+          const {
+            word: wordName,
+            translate,
+            id,
+            pined,
+          } = word
+
+          return (
           <div
             key={id}
             className="flex items-center"
           >
             <Pined
-              onClick={() => onClickPin(word, pined)}
+              onClick={() => onClickPin(wordName, pined)}
               isPined={pined}
             />
             <Edit
-              userID={userID}
+              onSubmit={onSubmitUpdate}
               wordID={id}
-              word={word}
+              word={wordName}
               translate={translate}
               pined={pined}
+              isLoading={isLoadingUpdate}
             />
             <Delete
               userID={userID}
-              word={word}
+              word={wordName}
             />
             <div>
-              {word}
+              {wordName}
             </div>
             <div>&nbsp;—&nbsp;</div>
             <div className="flex">
@@ -74,7 +81,7 @@ const WordsContainer = ({
               )}
             </div>
           </div>
-        ))}
+        )})}
       </div>
     </div>
   )

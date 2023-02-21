@@ -7,6 +7,7 @@ import { getUserID } from "services/user/User.store";
 import { getNormalizeWord } from "common/word-modal/helpers/getNormalizeWord";
 
 import type { Word, WordForm } from "models/Library.models";
+import { getLoading } from "services/loading/Loading.store";
 
 
 interface UseWordsProps {
@@ -15,6 +16,7 @@ interface UseWordsProps {
 
 export const useWords = ({ words = [] }: UseWordsProps) => {
   const userID = useSelector(getUserID)
+  const isLoadingUpdate = useSelector(getLoading).updateLibraryWord?.isLoading
 
   const normalizedWords = useMemo(() => {
     let formattedWords = words;
@@ -32,7 +34,7 @@ export const useWords = ({ words = [] }: UseWordsProps) => {
     getLibraryWords(userID)
   }
 
-  const handleClickUpdate = async (wordID: number, word: WordForm) => {
+  const handleSubmitUpdate = async (word: WordForm, wordID: number):Promise<Word[] | null>  => {
 		const normalizedWord = getNormalizeWord(word)
 
 		const response = await updateLibraryWord({
@@ -46,11 +48,14 @@ export const useWords = ({ words = [] }: UseWordsProps) => {
 		}
 
 		getLibraryWords(userID)
+
+    return response
 	}
 
   return {
     normalizedWords,
     handleClickPin,
-    handleClickUpdate,
+    handleSubmitUpdate,
+    isLoadingUpdate,
   };
 };

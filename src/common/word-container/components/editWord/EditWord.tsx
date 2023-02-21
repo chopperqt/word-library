@@ -9,21 +9,21 @@ import {
   WordID,
 } from "models/Library.models"
 
-import type { UserID } from "models/Auth.models"
-
 interface EditProps extends Pick<Word, 'word' | 'translate' | 'pined'> {
-  userID: UserID
   wordID: WordID
   isLoading: boolean
+  onSubmit: (word: WordForm, wordID: number) => Promise<Word[] | null>
+  shouldCloseAfterSubmit?: boolean
 }
 
 const Edit = ({
   word,
   translate = [],
   pined = false,
-  userID,
   wordID,
-  isLoading = false
+  isLoading = false,
+  onSubmit,
+  shouldCloseAfterSubmit = true,
 }: EditProps) => {
   const {
     control,
@@ -39,10 +39,10 @@ const Edit = ({
     isOpened,
     handleUpdateWord,
   } = useModalWord({
-    userID,
+    onSubmit,
     wordID,
-    word,
     reset,
+    shouldCloseAfterSubmit,
   })
 
   return (

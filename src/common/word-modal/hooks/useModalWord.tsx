@@ -1,30 +1,24 @@
 import { useEffect, useState } from "react"
 
-import {
-  createLibraryWord,
-  getLibraryWords,
-  updateLibraryWord,
-} from "api/library.api"
 import type {
+  Word,
   WordForm,
   WordID,
 } from "models/Library.models"
-import { getNormalizeWord } from "../helpers/getNormalizeWord"
-
 import type { UserID } from "models/Auth.models"
 
-
 interface UseModalWordProps {
-  userID: UserID,
   wordID?: WordID,
-  word?: string
+  userID?: UserID
   reset?: () => void
-  setFocus?: () => void
+  onSubmit: (word: WordForm, wordID: number) => Promise<Word[] | null>
+  shouldCloseAfterSubmit?: boolean
 }
 const useModalWord = ({
-  userID,
   wordID,
   reset = () => { },
+  onSubmit,
+  shouldCloseAfterSubmit
 }: UseModalWordProps) => {
   const [isOpened, setOpened] = useState<boolean>(false)
 
@@ -37,39 +31,36 @@ const useModalWord = ({
   }
 
   const handleCreateWord = async (word: WordForm) => {
-    const normalizedWord = getNormalizeWord(word)
+    // const normalizedWord = getNormalizeWord(word)
 
-    const response = await createLibraryWord({
-      ...normalizedWord,
-      userID,
-    })
+    // const response = await createLibraryWord({
+    //   ...normalizedWord,
+    //   userID,
+    // })
 
-    if (response === null) {
-      return null
-    }
+    // if (response === null) {
+    //   return null
+    // }
 
-    getLibraryWords(userID)
+    //getLibraryWords(userID)
     handleClose()
   }
 
   const handleUpdateWord = async (word: WordForm) => {
     if (!wordID) {
-      return null
+      return
     }
 
-    const normalizedWord = getNormalizeWord(word)
-
-    const response = await updateLibraryWord({
-      ...normalizedWord,
-      wordID,
-      userID,
-    })
+    const response = await onSubmit(word, wordID)
 
     if (response === null) {
-      return null
+      return
     }
 
-    getLibraryWords(userID)
+    if (!shouldCloseAfterSubmit) {
+      return
+    }
+
     handleClose()
   }
 
