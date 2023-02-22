@@ -6,8 +6,10 @@ import { getUserID } from "services/user/User.store";
 import { getLoading } from "services/loading/Loading.store";
 import { clearSearch, getSearchWords } from "services/search/Search.store";
 import { getNormalizeWord } from "common/word-modal/helpers/getNormalizeWord";
+import { getAmountOfPages, getPage } from "services/pagination/Pagination.store";
 
 import  type{ Word, WordForm } from "models/Library.models";
+import { usePagination } from "helpers/usePagination";
 
 const useSearch = () => {
 	const dispatch = useDispatch()
@@ -17,8 +19,17 @@ const useSearch = () => {
 	const isLoading = useSelector(getLoading).searchWord?.isLoading
 	const isLoadingUpdate = useSelector(getLoading).updateLibraryWord?.isLoading
 	const isLoadingDelete = useSelector(getLoading).deleteLibraryWords?.isLoading
+	const page = useSelector(getPage)
+	const amountOfPages = useSelector(getAmountOfPages)
 
 	const [value, setValue] = useState('')
+
+	const {
+		to,
+	} = usePagination({
+		page,
+		amountOfPages,
+	})
 
 	const handleChangeValue = (value: string) => {
 		setValue(value)
@@ -70,6 +81,7 @@ const useSearch = () => {
 		}
 
 		getLibraryWords(userID)
+		setValue('')
 
 		return response
 	}
@@ -80,6 +92,9 @@ const useSearch = () => {
 		if (response === null) {
 			return null
 		}
+
+		getLibraryWords(userID, 0, to)
+		setValue('')
 
 		return response as Word[]
 	}

@@ -8,6 +8,8 @@ import { getNormalizeWord } from "common/word-modal/helpers/getNormalizeWord";
 
 import type { Word, WordForm } from "models/Library.models";
 import { getLoading } from "services/loading/Loading.store";
+import { getAmountOfPages, getPage } from "services/pagination/Pagination.store";
+import { usePagination } from "helpers/usePagination";
 
 
 interface UseWordsProps {
@@ -18,6 +20,13 @@ export const useWords = ({ words = [] }: UseWordsProps) => {
   const userID = useSelector(getUserID)
   const isLoadingUpdate = useSelector(getLoading).updateLibraryWord?.isLoading
   const isLoadingDelete = useSelector(getLoading).deleteLibraryWords?.isLoading
+  const page = useSelector(getPage)
+  const amountOfPages = useSelector(getAmountOfPages)
+
+  const { to } = usePagination({
+    page,
+    amountOfPages
+  })
 
   const normalizedWords = useMemo(() => {
     let formattedWords = words;
@@ -52,7 +61,7 @@ export const useWords = ({ words = [] }: UseWordsProps) => {
 			return null
 		}
 
-		getLibraryWords(userID)
+		getLibraryWords(userID, 0, to)
 
     return response
 	}
@@ -64,7 +73,7 @@ export const useWords = ({ words = [] }: UseWordsProps) => {
       return null
     }
 
-    await getLibraryWords(userID)
+    getLibraryWords(userID, 0, to)
 
     return response as Word[]
   }

@@ -31,6 +31,7 @@ const Delete = ({
     <>
       <button
         onClick={handleOpen}
+        type="button"
       >
         <Icon
           icon={IconsList.cross}

@@ -50,6 +50,7 @@ const Edit = ({
       <button
         onClick={handleOpen}
         className="mr-1"
+        type="button"
       >
         <Icon
           icon={IconsList.editOutline}

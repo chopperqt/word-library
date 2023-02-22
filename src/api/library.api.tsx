@@ -8,7 +8,7 @@ import type {
 } from "models/Library.models"
 import type { UserID } from "models/Auth.models"
 import { store } from "services/stores"
-import { setWords } from "services/library/Library.store"
+import { setWords, updateWords } from "services/library/Library.store"
 import { loadingController } from "helpers/loadingController"
 import { setAmountOfPages } from "services/pagination/Pagination.store"
 import { setSearchWords } from 'services/search/Search.store'
@@ -125,13 +125,20 @@ export const getLibraryWords = async (userID: UserID, from:number = 0, to:number
 
   const amountOfPages = Math.round(count / 70)
 
-  store.dispatch(setWords(data))
+  if (from === 0) {
+    store.dispatch(setWords(data))
+  } else {
+    store.dispatch(updateWords(data))
+  }
+
   store.dispatch(setAmountOfPages(amountOfPages))
 
   handleSetSuccess()
 
   return data
 }
+
+
 
 export const deleteLibraryWords = async (userID: UserID, word: string) => {
   const {

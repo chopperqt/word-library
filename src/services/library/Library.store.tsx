@@ -21,13 +21,17 @@ const LibraryStore = createSlice({
   initialState,
   reducers: {
     setWords: (state, action: PayloadAction<Word[]>) => {
-      state.words = [...state.words, ...action.payload]
+      state.words = action.payload
     },
+    updateWords: (state, action: PayloadAction<Word[]>) => {
+      state.words = [...state.words, ...action.payload]
+    }
   }
 })
 
 export const {
   setWords,
+  updateWords,
 } = LibraryStore.actions
 
 export const getWords = createSelector(
