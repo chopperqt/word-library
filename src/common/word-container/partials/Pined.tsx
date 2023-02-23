@@ -10,21 +10,28 @@ const Pined = ({
   onClick,
   isDisabled = false
 }: PinedProps) => {
+  const disabled = isDisabled && !isPined
+  let className = 'w-3 h-3 '
+
   let icon = IconsList.starOutline
 
   if (isPined) {
     icon = IconsList.starFill
   }
 
+  if (disabled) {
+    className = className + ' fill-blue-100 hover:fill-blue-100'
+  }
+
   return (
     <button
-      className='mr-1'
+      className="mr-1"
       onClick={onClick}
-      disabled={isDisabled && !isPined}
+      disabled={disabled}
     >
       <Icon
         icon={icon}
-        className="w-3 h-3"
+        className={className}
       />
     </button>
   )
