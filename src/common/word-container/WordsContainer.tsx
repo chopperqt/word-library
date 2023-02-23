@@ -4,31 +4,30 @@ import Delete from './partials/Delete'
 import ExtraWords from './partials/ExtraWords'
 
 import type { Word, WordForm } from 'models/Library.models'
-import type { UserID } from 'models/Auth.models'
 
 interface WordsContainerProps {
   amountOfWords: number
   words: Word[]
   letter: string
   color?: string
-  userID: UserID
   onClickPin: (word: string, isPined: boolean) => void
   onSubmitUpdate: (word: WordForm, wordID?: number) => Promise<Word[] | null>
   onClickDelete: (word: string) => Promise<Word[] | null>
   isLoadingUpdate: boolean
   isLoadingDelete: boolean
+  isDisabledPin: boolean
 }
 const WordsContainer = ({
   amountOfWords,
   words = [],
   letter,
   color = 'bg-sky-700',
-  userID,
   onClickPin,
   onSubmitUpdate,
   onClickDelete,
   isLoadingUpdate = false,
   isLoadingDelete = false,
+  isDisabledPin = false,
 }: WordsContainerProps) => {
   if (!words.length) {
     return null
@@ -60,6 +59,7 @@ const WordsContainer = ({
             <Pined
               onClick={() => onClickPin(wordName, pined)}
               isPined={pined}
+              isDisabled={isDisabledPin}
             />
             <Edit
               onSubmit={onSubmitUpdate}

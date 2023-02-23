@@ -4,15 +4,13 @@ import { useSelector } from "react-redux";
 import WordsContainer from "common/word-container/WordsContainer";
 import { useWords } from "pages/library/hooks/useWords";
 import { WordsLayout } from "pages/library/partials/WordsLayout";
-import { getUserID } from "services/user/User.store";
 import { getWords } from "services/library/Library.store";
 
 import type { Word } from "models/Library.models";
 
 const Words = () => {
   const words = useSelector(getWords);
-  const userID = useSelector(getUserID);
-
+  
   const { 
     normalizedWords, 
     handleClickPin, 
@@ -20,6 +18,7 @@ const Words = () => {
     handleDeleteWord, 
     isLoadingUpdate,
     isLoadingDelete,
+    isDisabledPin,
   } = useWords({ words });
 
   if (!normalizedWords.length) {
@@ -45,12 +44,12 @@ const Words = () => {
               onClickPin={handleClickPin}
               onClickDelete={handleDeleteWord}
               key={key}
-              userID={userID}
               letter={key}
               amountOfWords={amountOfWords}
               words={words}
               isLoadingUpdate={!!isLoadingUpdate}
               isLoadingDelete={!!isLoadingDelete}
+              isDisabledPin={isDisabledPin}
             />
           );
         })}

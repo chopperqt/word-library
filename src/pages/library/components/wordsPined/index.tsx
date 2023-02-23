@@ -5,19 +5,27 @@ import WordsContainer from "common/word-container/WordsContainer";
 import { useWords } from "pages/library/hooks/useWords";
 import ResetPin from "pages/library/partials/ResetPin";
 import { getPinWords } from "services/library/Library.store";
-import { getUserID } from "services/user/User.store";
 
 const WordsPined = () => {
-  const words = useSelector(getPinWords);
-  const userID = useSelector(getUserID);
+  const words = useSelector(getPinWords)
 
-  const { normalizedWords, handleClickPin, handleDeleteWord, handleSubmitUpdate, isLoadingDelete, isLoadingUpdate } = useWords({ words });
+  const { 
+    normalizedWords, 
+    handleClickPin, 
+    handleDeleteWord, 
+    handleSubmitUpdate, 
+    isLoadingDelete, 
+    isLoadingUpdate,
+    isDisabledPin,
+  } = useWords({
+    words,
+  });
 
   if (!words.length) {
     return null;
   }
 
-  const title = `Pined(${words.length})`;
+  const title = `Pined(${words.length}/10)`;
 
   return (
     <React.Fragment>
@@ -34,21 +42,21 @@ const WordsPined = () => {
               return null;
             }
 
-            console.log("i am here", words);
+            const [letter, word ] = words
 
-            return (
-              <WordsContainer
+            return ( 
+              <WordsContainer                
+                key={key}
                 onClickDelete={handleDeleteWord}
                 onSubmitUpdate={handleSubmitUpdate}
                 onClickPin={handleClickPin}
-                key={key}
-                userID={userID}
-                letter={key}
+                letter={letter}
                 amountOfWords={amountOfWords}
-                words={words}
+                words={word}
                 color="bg-indigo-700"
                 isLoadingDelete={!!isLoadingDelete}
                 isLoadingUpdate={!!isLoadingUpdate}
+                isDisabledPin={isDisabledPin}
               />
             );
           }

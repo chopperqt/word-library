@@ -5,12 +5,12 @@ import { normalizeWords } from "helpers/normalizeWords";
 import { deleteLibraryWords, getLibraryWords, updateLibraryWord, updatePin } from "api/library.api";
 import { getUserID } from "services/user/User.store";
 import { getNormalizeWord } from "common/word-modal/helpers/getNormalizeWord";
-
-import type { Word, WordForm } from "models/Library.models";
 import { getLoading } from "services/loading/Loading.store";
 import { getAmountOfPages, getPage } from "services/pagination/Pagination.store";
 import { usePagination } from "helpers/usePagination";
 
+import type { Word, WordForm } from "models/Library.models";
+import { getPinWords } from "services/library/Library.store";
 
 interface UseWordsProps {
   words: Word[];
@@ -22,6 +22,15 @@ export const useWords = ({ words = [] }: UseWordsProps) => {
   const isLoadingDelete = useSelector(getLoading).deleteLibraryWords?.isLoading
   const page = useSelector(getPage)
   const amountOfPages = useSelector(getAmountOfPages)
+  const pinedWords = useSelector(getPinWords)
+
+  const isDisabledPin = useMemo(() => {
+    if (pinedWords.length === 10) {
+      return true
+    }
+
+    return false
+  }, [pinedWords])
 
   const { to } = usePagination({
     page,
@@ -35,7 +44,7 @@ export const useWords = ({ words = [] }: UseWordsProps) => {
   }, [words]);
 
   const handleClickPin = async (word: string, isPined:boolean) => {
-    const response = await updatePin(word, !isPined, userID)
+    const response = await updatePin(userID, !isPined,word)
 
     if (response === null) {
       return
@@ -85,5 +94,7 @@ export const useWords = ({ words = [] }: UseWordsProps) => {
     handleDeleteWord,
     isLoadingUpdate,
     isLoadingDelete,
+    isDisabledPin,
+    userID,
   };
 };

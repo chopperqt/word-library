@@ -2,11 +2,13 @@ import Icon, { IconsList } from "components/icon/Icon"
 
 interface PinedProps {
   isPined: boolean
+  isDisabled?: boolean
   onClick: () => void
 }
 const Pined = ({
   isPined,
   onClick,
+  isDisabled = false
 }: PinedProps) => {
   let icon = IconsList.starOutline
 
@@ -18,6 +20,7 @@ const Pined = ({
     <button
       className='mr-1'
       onClick={onClick}
+      disabled={isDisabled && !isPined}
     >
       <Icon
         icon={icon}
