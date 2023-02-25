@@ -18,8 +18,6 @@ export const useObserver = ({
 			}
 	
 			if (!entry[0].isIntersecting) {
-				console.log('enter')
-	
 				return
 			}
 	

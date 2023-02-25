@@ -1,15 +1,15 @@
 import { useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-import { deleteLibraryWords, getLibraryWords, searchWord, updateLibraryWord, updatePin } from "api/library.api";
+import { deleteLibraryWords, getLibraryPinWords, getLibraryWords, searchWord, updateLibraryWord, updatePin } from "api/library.api";
 import { getUserID } from "services/user/User.store";
 import { getLoading } from "services/loading/Loading.store";
 import { clearSearch, getSearchWords } from "services/search/Search.store";
 import { getNormalizeWord } from "common/word-modal/helpers/getNormalizeWord";
 import { getAmountOfPages, getPage } from "services/pagination/Pagination.store";
+import { usePagination } from "helpers/usePagination";
 
 import  type{ Word, WordForm } from "models/Library.models";
-import { usePagination } from "helpers/usePagination";
 
 const useSearch = () => {
 	const dispatch = useDispatch()
@@ -54,13 +54,15 @@ const useSearch = () => {
 	}, [searchWords, value])
 
 	const handleClickPin = (word: string, isPined: boolean) => {
-		const response = updatePin(userID, isPined, word)
+		const response = updatePin(userID, !isPined, word)
 
 		if (response === null) {
 			return
 		}
 
+		getLibraryPinWords(userID)
 		getLibraryWords(userID)
+		setValue('')
 	}
 
 	const handleSubmitUpdate = async (word: WordForm, wordID?: number):Promise<Word[] | null> => {
@@ -80,6 +82,7 @@ const useSearch = () => {
 			return null
 		}
 
+		getLibraryPinWords(userID)
 		getLibraryWords(userID)
 		setValue('')
 
@@ -93,6 +96,7 @@ const useSearch = () => {
 			return null
 		}
 
+		getLibraryPinWords(userID)
 		getLibraryWords(userID, 0, to)
 		setValue('')
 

@@ -1,5 +1,3 @@
-import { useEffect } from "react"
-
 import TextField from "common/text-field/TextField"
 import Button from "components/button"
 import InputMulti, { Option } from "components/input-multi"
@@ -15,6 +13,7 @@ const TOGGLER_TEXT = 'Add to bookmarks'
 
 interface WordModalProps {
   isOpened: boolean
+  isDisabledPin?: boolean
   onClose: () => void
   onSubmit: () => void
   control: any
@@ -39,6 +38,7 @@ const WordModal = ({
   isUpdate = false,
   translate = [],
   word,
+  isDisabledPin = false,
 }: WordModalProps) => {
   let text = isUpdate
     ? UPDATE_TEXT
@@ -74,6 +74,7 @@ const WordModal = ({
           defaultValue={translate}
         />
         <Toggle
+          isDisabled={isDisabledPin}
           text={TOGGLER_TEXT}
           name="pined"
           control={control}

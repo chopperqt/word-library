@@ -8,7 +8,7 @@ import type {
 } from "models/Library.models"
 import type { UserID } from "models/Auth.models"
 import { store } from "services/stores"
-import { setWords, updateWords } from "services/library/Library.store"
+import { setPinedWords, setWords, updateWords } from "services/library/Library.store"
 import { loadingController } from "helpers/loadingController"
 import { setAmountOfPages } from "services/pagination/Pagination.store"
 import { setSearchWords } from 'services/search/Search.store'
@@ -21,7 +21,8 @@ export type LibraryRequests =
   'updateLibraryWord' |
   'updatePin' |
   'deleteLibraryWords' |
-  'searchWord'
+  'searchWord' |
+  'getLibraryPinWords'
 
 export const createLibraryWord = async (wordData: CreateWord): Promise<Word[] | null> => {
   const {
@@ -103,8 +104,6 @@ export const getLibraryWords = async (userID: UserID, from:number = 0, to:number
 
   handleSetPending()
 
-  console.log(from ,to)
-
   const {
     data,
     error,
@@ -132,6 +131,37 @@ export const getLibraryWords = async (userID: UserID, from:number = 0, to:number
   }
 
   store.dispatch(setAmountOfPages(amountOfPages))
+
+  handleSetSuccess()
+
+  return data
+}
+
+export const getLibraryPinWords = async (userID: UserID):Promise<Word[] | null> => {
+  const { 
+    handleSetError,
+    handleSetPending,
+    handleSetSuccess,
+  } = loadingController('getLibraryPinWords')
+
+  handleSetPending()
+
+  const { data, error } = await supabase
+    .from(LIBRARY_TABLE)
+    .select('*')
+    .limit(15)
+    .match({
+      userID,
+      pined: true,
+    })
+
+  if (error) {
+    handleSetError()
+
+    return null
+  }
+
+  store.dispatch(setPinedWords(data))
 
   handleSetSuccess()
 

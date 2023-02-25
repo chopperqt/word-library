@@ -3,15 +3,12 @@ import {
   useEffect,
   ChangeEvent,
   useMemo,
-  useRef,
-  useCallback,
   useLayoutEffect,
 } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useLocation, useNavigate } from 'react-router-dom'
 
-import { getLibraryWords } from 'api/library.api'
-import { useObserver } from 'helpers/useObserver'
+import { getLibraryPinWords, getLibraryWords } from 'api/library.api'
 import { usePagination } from 'helpers/usePagination'
 import { getAmountOfPages, getPage, handleIncreasePage, setPage } from 'services/pagination/Pagination.store'
 
@@ -27,8 +24,6 @@ interface UseLibraryProps {
 const useLibrary = ({
   userID,
   words,
-  isFetched = false,
-  isLoading = false,
 }: UseLibraryProps) => {
   const { pathname, search } = useLocation()
   const searchParams = new URLSearchParams(search)
@@ -53,9 +48,11 @@ const useLibrary = ({
 
     navigate(`${pathname}?${searchParams.toString()}`)
 
+    getLibraryPinWords(userID)
+
     if (!words.length) {
       getLibraryWords(userID, 0, to)
-
+      
       return
     }
 
@@ -63,6 +60,8 @@ const useLibrary = ({
   }, [page, userID])
 
   useLayoutEffect(() => {
+    window.document.title = 'Library'
+
     if (!currentPage) {
       return
     }

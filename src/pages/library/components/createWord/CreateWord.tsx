@@ -26,6 +26,7 @@ const CreateWord = () => {
     isLoading,
     userID,
     words,
+    isDisabledPin,
   } = useCreateWord()
 
   const {
@@ -62,6 +63,7 @@ const CreateWord = () => {
         control={control}
         isLoading={isLoading}
         words={words}
+        isDisabledPin={isDisabledPin}
       />
     </React.Fragment>
   )

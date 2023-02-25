@@ -2,15 +2,16 @@ import { useSelector } from "react-redux";
 import { useMemo } from "react";
 
 import { normalizeWords } from "helpers/normalizeWords";
-import { deleteLibraryWords, getLibraryWords, updateLibraryWord, updatePin } from "api/library.api";
+import { deleteLibraryWords, getLibraryPinWords, getLibraryWords, updateLibraryWord, updatePin } from "api/library.api";
 import { getUserID } from "services/user/User.store";
 import { getNormalizeWord } from "common/word-modal/helpers/getNormalizeWord";
 import { getLoading } from "services/loading/Loading.store";
 import { getAmountOfPages, getPage } from "services/pagination/Pagination.store";
 import { usePagination } from "helpers/usePagination";
+import { getPinWords } from "services/library/Library.store";
 
 import type { Word, WordForm } from "models/Library.models";
-import { getPinWords } from "services/library/Library.store";
+
 
 interface UseWordsProps {
   words: Word[];
@@ -25,7 +26,7 @@ export const useWords = ({ words = [] }: UseWordsProps) => {
   const pinedWords = useSelector(getPinWords)
 
   const isDisabledPin = useMemo(() => {
-    if (pinedWords.length === 10) {
+    if (pinedWords.length >= 15) {
       return true
     }
 
@@ -50,6 +51,7 @@ export const useWords = ({ words = [] }: UseWordsProps) => {
       return
     }
 
+    getLibraryPinWords(userID)
     getLibraryWords(userID)
   }
 
@@ -70,6 +72,7 @@ export const useWords = ({ words = [] }: UseWordsProps) => {
 			return null
 		}
 
+    getLibraryPinWords(userID)
 		getLibraryWords(userID, 0, to)
 
     return response
@@ -83,6 +86,7 @@ export const useWords = ({ words = [] }: UseWordsProps) => {
     }
 
     getLibraryWords(userID, 0, to)
+    getLibraryPinWords(userID)
 
     return response as Word[]
   }

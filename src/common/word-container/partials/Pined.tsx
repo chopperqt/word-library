@@ -28,6 +28,7 @@ const Pined = ({
       className="mr-1"
       onClick={onClick}
       disabled={disabled}
+      type="button"
     >
       <Icon
         icon={icon}

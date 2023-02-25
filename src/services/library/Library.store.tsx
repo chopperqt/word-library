@@ -10,10 +10,12 @@ import type { Word } from 'models/Library.models'
 
 export interface Library {
   words: Word[]
+  pinedWords: Word[]
 }
 
 const initialState: Library = {
   words: [],
+  pinedWords: []
 }
 
 const LibraryStore = createSlice({
@@ -23,6 +25,9 @@ const LibraryStore = createSlice({
     setWords: (state, action: PayloadAction<Word[]>) => {
       state.words = action.payload
     },
+    setPinedWords: (state, action: PayloadAction<Word[]>) => {
+      state.pinedWords = action.payload
+    },
     updateWords: (state, action: PayloadAction<Word[]>) => {
       state.words = [...state.words, ...action.payload]
     }
@@ -31,6 +36,7 @@ const LibraryStore = createSlice({
 
 export const {
   setWords,
+  setPinedWords,
   updateWords,
 } = LibraryStore.actions
 
@@ -40,10 +46,8 @@ export const getWords = createSelector(
 )
 
 export const getPinWords = createSelector(
-  (state: RootState) => state.LibraryStore.words,
-  (words) => {
-    return words.filter((word) => word.pined)
-  }
+  (state: RootState) => state.LibraryStore.pinedWords,
+  (words) => words
 )
 
 export const getOnlyWords = createSelector(

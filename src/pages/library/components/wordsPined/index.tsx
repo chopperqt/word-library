@@ -25,7 +25,7 @@ const WordsPined = () => {
     return null;
   }
 
-  const title = `Pined(${words.length}/10)`;
+  const title = `Pined(${words.length}/15)`;
 
   return (
     <React.Fragment>
