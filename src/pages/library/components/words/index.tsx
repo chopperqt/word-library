@@ -4,18 +4,22 @@ import { useSelector } from "react-redux";
 import WordsContainer from "common/word-container/WordsContainer";
 import { useWords } from "pages/library/hooks/useWords";
 import { WordsLayout } from "pages/library/partials/WordsLayout";
-import { getWords } from "services/library/Library.store";
+import { getAmountOfWords, getWords } from "services/library/Library.store";
 
 import type { Word } from "models/Library.models";
+import type { LibraryProps } from "pages/library/Library";
 
-const Words = () => {
+type WordsProps = LibraryProps;
+
+const Words = ({ width, height }: WordsProps) => {
   const words = useSelector(getWords);
-  
-  const { 
-    normalizedWords, 
-    handleClickPin, 
-    handleSubmitUpdate, 
-    handleDeleteWord, 
+  const amountOfWords = useSelector(getAmountOfWords);
+
+  const {
+    normalizedWords,
+    handleClickPin,
+    handleSubmitUpdate,
+    handleDeleteWord,
     isLoadingUpdate,
     isLoadingDelete,
     isDisabledPin,
@@ -25,7 +29,7 @@ const Words = () => {
     return null;
   }
 
-  const title = `Library(${words.length})`;
+  const title = `Library(${words.length}/${amountOfWords})`;
 
   return (
     <React.Fragment>
@@ -41,15 +45,15 @@ const Words = () => {
           return (
             <WordsContainer
               onSubmitUpdate={handleSubmitUpdate}
-              onClickPin={handleClickPin}
               onClickDelete={handleDeleteWord}
+              onClickPin={handleClickPin}
               key={key}
-              letter={key}
               amountOfWords={amountOfWords}
-              words={words}
+              letter={key}
               isLoadingUpdate={!!isLoadingUpdate}
-              isLoadingDelete={!!isLoadingDelete}
+              words={words}
               isDisabledPin={isDisabledPin}
+              isLoadingDelete={!!isLoadingDelete}
             />
           );
         })}

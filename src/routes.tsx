@@ -1,9 +1,19 @@
-import Library from "pages/library/Library"
-import SignIn from "pages/sign-in/SignIn"
-import { Links } from "helpers/links"
-import { Navigate } from "react-router-dom"
+import { lazy, Suspense } from "react";
+
+import { Links } from "helpers/links";
+import { Navigate } from "react-router-dom";
+import Home from "pages/home/Home";
+import { AutoSizer } from "react-virtualized";
+
+const Library = lazy(() => import("pages/library/Library"));
+const SignIn = lazy(() => import("pages/sign-in/SignIn"));
 
 export const routesNoAuth = [
+  {
+    path: Links.main,
+    element: <Home />,
+    index: true,
+  },
   {
     path: Links.library,
     element: <Navigate to={Links.signIn} />,
@@ -11,7 +21,11 @@ export const routesNoAuth = [
   },
   {
     path: Links.signIn,
-    element: <SignIn />,
+    element: (
+      <Suspense fallback="">
+        <SignIn />
+      </Suspense>
+    ),
     index: false,
   },
   {
@@ -20,16 +34,22 @@ export const routesNoAuth = [
     index: false,
   },
   {
-    path: Links.main,
+    path: Links.signIn,
     element: <Navigate to={Links.signIn} />,
-    index: true,
+    index: false,
   },
-]
+];
 
 export const routesWithAuth = [
   {
     path: Links.library,
-    element: <Library />,
+    element: (
+      <Suspense fallback="">
+        <AutoSizer disableWidth>
+          {({ width, height }) => <Library width={width} height={height} />}
+        </AutoSizer>
+      </Suspense>
+    ),
     index: false,
   },
   {
@@ -47,4 +67,4 @@ export const routesWithAuth = [
     element: <Navigate to={Links.library} />,
     index: false,
   },
-]
+];
