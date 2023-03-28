@@ -4,104 +4,97 @@ import {
   ChangeEvent,
   useMemo,
   useLayoutEffect,
-} from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { useLocation, useNavigate } from 'react-router-dom'
+} from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useLocation, useNavigate } from "react-router-dom";
 
-import { getLibraryPinWords, getLibraryWords } from 'api/library.api'
-import { usePagination } from 'helpers/usePagination'
-import { getAmountOfPages, getPage, handleIncreasePage, setPage } from 'services/pagination/Pagination.store'
+import { getLibraryPinWords, getLibraryWords } from "api/library.api";
+import { usePagination } from "helpers/usePagination";
+import {
+  getAmountOfPages,
+  getPage,
+  handleIncreasePage,
+} from "services/pagination/Pagination.store";
 
-import type { UserID } from 'models/Auth.models'
-import type { Word } from 'models/Library.models'
+import type { UserID } from "models/Auth.models";
+import type { Word } from "models/Library.models";
 
 interface UseLibraryProps {
-  userID: UserID
-  words: Word[]
-  isFetched?: boolean
-  isLoading?: boolean
+  userID: UserID;
+  words: Word[];
+  isFetched?: boolean;
+  isLoading?: boolean;
 }
-const useLibrary = ({
-  userID,
-  words,
-}: UseLibraryProps) => {
-  const { pathname, search } = useLocation()
-  const searchParams = new URLSearchParams(search)
-  const currentPage = searchParams.get('page')
+const useLibrary = ({ userID, words }: UseLibraryProps) => {
+  const { pathname, search } = useLocation();
+  const searchParams = new URLSearchParams(search);
+  const currentPage = searchParams.get("page");
 
-  const page = useSelector(getPage)
-  const amountOfPages = useSelector(getAmountOfPages)
-  const dispatch = useDispatch()
-  const [value, setValue] = useState<string>('')
-  const navigate = useNavigate()
-  const { from, to, isLastPage, } = usePagination({
-    page: +page,
+  const pageFromStore = useSelector(getPage);
+  const page = currentPage ? +currentPage : pageFromStore;
+  const amountOfPages = useSelector(getAmountOfPages);
+  const dispatch = useDispatch();
+  const [value, setValue] = useState<string>("");
+  const navigate = useNavigate();
+  const { from, to, isLastPage } = usePagination({
+    page,
     amountOfPages,
-  })
+  });
 
   useEffect(() => {
-    if (!userID) {
-      return
-    }
-
-    searchParams.set('page', page.toString())
-
-    navigate(`${pathname}?${searchParams.toString()}`)
-
-    getLibraryPinWords(userID)
-
-    if (!words.length) {
-      getLibraryWords(userID, 0, to)
-      
-      return
-    }
-
-    getLibraryWords(userID, from, to)
-  }, [page, userID])
+    // if (currentPage && +currentPage === page) {
+    //   return;
+    // }
+    // searchParams.set("page", page.toString());
+    // navigate(`${pathname}?${searchParams.toString()}`);
+    // getLibraryPinWords(userID);
+    // if (!words.length) {
+    //   getLibraryWords(userID, 0, to);
+    //   return;
+    // }
+    // getLibraryWords(userID, from, to);
+  }, [page]);
 
   useLayoutEffect(() => {
-    window.document.title = 'Library'
+    window.document.title = "Library";
 
-    if (!currentPage) {
-      return
+    if (!words.length) {
+      getLibraryWords(userID, 0, to);
+
+      return;
     }
 
-    dispatch(setPage(+currentPage))
-  }, [])
+    getLibraryWords(userID, from, to);
+  }, []);
 
   const wordsSearched = useMemo(() => {
     if (value.length < 2) {
-      return
+      return;
     }
 
-    return words.filter(({
-      word,
-      translate,
-    }) => {
-      const formattedWord = (word + translate.join('')).toLowerCase().replaceAll(' ', '')
-      const formattedValue = value.toLowerCase().replaceAll(' ', '')
+    return words.filter(({ word, translate }) => {
+      const formattedWord = (word + translate.join(""))
+        .toLowerCase()
+        .replaceAll(" ", "");
+      const formattedValue = value.toLowerCase().replaceAll(" ", "");
 
-      return formattedWord.includes(formattedValue)
-    })
-  }, [
-    value,
-    words,
-  ])
+      return formattedWord.includes(formattedValue);
+    });
+  }, [value, words]);
 
   const isNothingFound = useMemo(() => {
-    return wordsSearched?.length === 0 && value.length !== 0 && value.length > 2
-  }, [
-    wordsSearched,
-    value,
-  ])
+    return (
+      wordsSearched?.length === 0 && value.length !== 0 && value.length > 2
+    );
+  }, [wordsSearched, value]);
 
   const handleChangeValue = (e: ChangeEvent<HTMLInputElement>) => {
-    setValue(e.target.value)
-  }
+    setValue(e.target.value);
+  };
 
   const handleGetMoreWords = () => {
-    dispatch(handleIncreasePage())
-  }
+    dispatch(handleIncreasePage());
+  };
 
   return {
     value,
@@ -110,7 +103,7 @@ const useLibrary = ({
     isNothingFound,
     handleGetMoreWords,
     isLastPage,
-  }
-}
+  };
+};
 
-export default useLibrary
+export default useLibrary;
