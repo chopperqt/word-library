@@ -5,16 +5,12 @@ import {
   useMemo,
   useLayoutEffect,
 } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 
 import { getLibraryPinWords, getLibraryWords } from "api/library.api";
 import { usePagination } from "helpers/usePagination";
-import {
-  getAmountOfPages,
-  getPage,
-  handleIncreasePage,
-} from "services/pagination/Pagination.store";
+import { getAmountOfPages } from "services/pagination/Pagination.store";
 
 import type { UserID } from "models/Auth.models";
 import type { Word } from "models/Library.models";
@@ -30,10 +26,8 @@ const useLibrary = ({ userID, words }: UseLibraryProps) => {
   const searchParams = new URLSearchParams(search);
   const currentPage = searchParams.get("page");
 
-  const pageFromStore = useSelector(getPage);
-  const page = currentPage ? +currentPage : pageFromStore;
+  const page = currentPage ? +currentPage : 1;
   const amountOfPages = useSelector(getAmountOfPages);
-  const dispatch = useDispatch();
   const [value, setValue] = useState<string>("");
   const navigate = useNavigate();
   const { from, to, isLastPage } = usePagination({
@@ -41,22 +35,10 @@ const useLibrary = ({ userID, words }: UseLibraryProps) => {
     amountOfPages,
   });
 
-  useEffect(() => {
-    // if (currentPage && +currentPage === page) {
-    //   return;
-    // }
-    // searchParams.set("page", page.toString());
-    // navigate(`${pathname}?${searchParams.toString()}`);
-    // getLibraryPinWords(userID);
-    // if (!words.length) {
-    //   getLibraryWords(userID, 0, to);
-    //   return;
-    // }
-    // getLibraryWords(userID, from, to);
-  }, [page]);
-
   useLayoutEffect(() => {
     window.document.title = "Library";
+
+    getLibraryPinWords(userID);
 
     if (!words.length) {
       getLibraryWords(userID, 0, to);
@@ -65,7 +47,7 @@ const useLibrary = ({ userID, words }: UseLibraryProps) => {
     }
 
     getLibraryWords(userID, from, to);
-  }, []);
+  }, [currentPage]);
 
   const wordsSearched = useMemo(() => {
     if (value.length < 2) {
@@ -93,7 +75,9 @@ const useLibrary = ({ userID, words }: UseLibraryProps) => {
   };
 
   const handleGetMoreWords = () => {
-    dispatch(handleIncreasePage());
+    searchParams.set("page", (+page + 1).toString());
+
+    navigate(`${pathname}?${searchParams.toString()}`);
   };
 
   return {

@@ -7,14 +7,14 @@ import ResetPin from "pages/library/partials/ResetPin";
 import { getPinWords } from "services/library/Library.store";
 
 const WordsPined = () => {
-  const words = useSelector(getPinWords)
+  const words = useSelector(getPinWords);
 
-  const { 
-    normalizedWords, 
-    handleClickPin, 
-    handleDeleteWord, 
-    handleSubmitUpdate, 
-    isLoadingDelete, 
+  const {
+    normalizedWords,
+    handleClickPin,
+    handleDeleteWord,
+    handleSubmitUpdate,
+    isLoadingDelete,
     isLoadingUpdate,
     isDisabledPin,
   } = useWords({
@@ -42,10 +42,10 @@ const WordsPined = () => {
               return null;
             }
 
-            const [letter, word ] = words
+            const [letter, word] = words;
 
-            return ( 
-              <WordsContainer                
+            return (
+              <WordsContainer
                 key={key}
                 onClickDelete={handleDeleteWord}
                 onSubmitUpdate={handleSubmitUpdate}
