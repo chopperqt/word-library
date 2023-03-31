@@ -1,5 +1,6 @@
 import React from "react";
 import { useSelector } from "react-redux";
+import { Typography } from "antd";
 
 import WordsContainer from "common/word-container/WordsContainer";
 import { useWords } from "pages/library/hooks/useWords";
@@ -8,6 +9,8 @@ import { getAmountOfWords, getWords } from "services/library/Library.store";
 
 import type { Word } from "models/Library.models";
 import type { LibraryProps } from "pages/library/Library";
+
+const { Title } = Typography;
 
 type WordsProps = LibraryProps;
 
@@ -33,7 +36,9 @@ const Words = ({ width, height }: WordsProps) => {
 
   return (
     <React.Fragment>
-      <div className="text-2xl mt-5 font-bold">{title}</div>
+      <Title level={2} className="mt-5">
+        {title}
+      </Title>
       <WordsLayout>
         {normalizedWords.map(([key, words]: [key: string, words: Word[]]) => {
           const amountOfWords = words.length;

@@ -1,19 +1,16 @@
-import { useForm } from "react-hook-form"
+import { Button } from "antd";
+import { useForm } from "react-hook-form";
+import { EditOutlined } from "@ant-design/icons";
 
-import WordModal, { useModalWord } from "common/word-modal"
-import { getNormalizeOptionWord } from "common/word-modal/helpers/getNormalizeOptionWord"
-import Icon, { IconsList } from "components/icon/Icon"
-import {
-  Word,
-  WordForm,
-  WordID,
-} from "models/Library.models"
+import WordModal, { useModalWord } from "common/word-modal";
+import { getNormalizeOptionWord } from "common/word-modal/helpers/getNormalizeOptionWord";
+import { Word, WordForm, WordID } from "models/Library.models";
 
-interface EditProps extends Pick<Word, 'word' | 'translate' | 'pined'> {
-  wordID: WordID
-  isLoading: boolean
-  onSubmit: (word: WordForm, wordID?: number) => Promise<Word[] | null>
-  shouldCloseAfterSubmit?: boolean
+interface EditProps extends Pick<Word, "word" | "translate" | "pined"> {
+  wordID: WordID;
+  isLoading: boolean;
+  onSubmit: (word: WordForm, wordID?: number) => Promise<Word[] | null>;
+  shouldCloseAfterSubmit?: boolean;
 }
 
 const Edit = ({
@@ -30,33 +27,26 @@ const Edit = ({
     reset,
     handleSubmit: formSubmit,
   } = useForm<WordForm>({
-    mode: 'onChange',
-  })
+    mode: "onChange",
+  });
 
-  const {
-    handleOpen,
-    handleClose,
-    isOpened,
-    handleSubmit,
-  } = useModalWord({
+  const { handleOpen, handleClose, isOpened, handleSubmit } = useModalWord({
     onSubmit,
     wordID,
     reset,
     shouldCloseAfterSubmit,
-  })
+  });
 
   return (
     <>
-      <button
+      <Button
         onClick={handleOpen}
-        className="mr-1"
-        type="button"
-      >
-        <Icon
-          icon={IconsList.editOutline}
-          className="w-3 h-3"
-        />
-      </button>
+        className="mr-1 flex justify-center items-center"
+        type="text"
+        shape="circle"
+        icon={<EditOutlined />}
+        size="small"
+      />
       <WordModal
         isUpdate={true}
         isOpened={isOpened}
@@ -69,7 +59,7 @@ const Edit = ({
         pined={pined}
       />
     </>
-  )
-}
+  );
+};
 
-export default Edit
+export default Edit;

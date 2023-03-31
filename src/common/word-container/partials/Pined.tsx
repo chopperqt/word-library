@@ -1,41 +1,31 @@
-import Icon, { IconsList } from "components/icon/Icon"
+import { Button } from "antd";
+import { StarOutlined, StarFilled } from "@ant-design/icons";
 
 interface PinedProps {
-  isPined: boolean
-  isDisabled?: boolean
-  onClick: () => void
+  isPined: boolean;
+  isDisabled?: boolean;
+  onClick: () => void;
 }
-const Pined = ({
-  isPined,
-  onClick,
-  isDisabled = false
-}: PinedProps) => {
-  const disabled = isDisabled && !isPined
-  let className = 'w-3 h-3 '
+const Pined = ({ isPined, onClick, isDisabled = false }: PinedProps) => {
+  const disabled = isDisabled && !isPined;
 
-  let icon = IconsList.starOutline
+  let Icon = StarOutlined;
 
   if (isPined) {
-    icon = IconsList.starFill
-  }
-
-  if (disabled) {
-    className = className + ' fill-blue-100 hover:fill-blue-100'
+    Icon = StarFilled;
   }
 
   return (
-    <button
-      className="mr-1"
+    <Button
+      className="mr-1 flex justify-center items-center"
+      shape="circle"
       onClick={onClick}
       disabled={disabled}
-      type="button"
-    >
-      <Icon
-        icon={icon}
-        className={className}
-      />
-    </button>
-  )
-}
+      type="text"
+      size="small"
+      icon={<Icon />}
+    />
+  );
+};
 
-export default Pined
+export default Pined;

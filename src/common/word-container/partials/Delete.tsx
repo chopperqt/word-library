@@ -1,43 +1,37 @@
-import AgreementModal, { useAgreementModal } from "common/agreement-modal"
-import Icon, { IconsList } from "components/icon/Icon"
+import { DeleteOutlined } from "@ant-design/icons";
+import { Button } from "antd";
 
-import type { Word } from "models/Library.models"
+import AgreementModal, { useAgreementModal } from "common/agreement-modal";
+
+import type { Word } from "models/Library.models";
 
 interface DeleteProps {
-  isLoading?:boolean
-  onClick: () => Promise<Word[] | null>
+  isLoading?: boolean;
+  onClick: () => Promise<Word[] | null>;
 }
-const Delete = ({
-  isLoading = false,
-  onClick,
-}: DeleteProps) => {
-  const {
-    handleClose,
-    handleOpen,
-    isOpened,
-  } = useAgreementModal()
+const Delete = ({ isLoading = false, onClick }: DeleteProps) => {
+  const { handleClose, handleOpen, isOpened } = useAgreementModal();
 
   const handleDelete = async () => {
-    const response = await onClick()
+    const response = await onClick();
 
     if (response === null) {
-      return
+      return;
     }
 
-    handleClose()
-  }
+    handleClose();
+  };
 
   return (
     <>
-      <button
+      <Button
         onClick={handleOpen}
-        type="button"
-      >
-        <Icon
-          icon={IconsList.cross}
-          className="w-3 h-3 mr-2"
-        />
-      </button>
+        className="flex justify-center items-center"
+        type="text"
+        size="small"
+        shape="circle"
+        icon={<DeleteOutlined />}
+      />
       <AgreementModal
         isLoading={isLoading}
         isOpened={isOpened}
@@ -45,7 +39,7 @@ const Delete = ({
         onClick={handleDelete}
       />
     </>
-  )
-}
+  );
+};
 
-export default Delete
+export default Delete;

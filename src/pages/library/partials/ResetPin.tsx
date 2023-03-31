@@ -1,13 +1,17 @@
-import Icon, { IconsList } from "components/icon/Icon";
+import { Button } from "antd";
+import { ReloadOutlined } from "@ant-design/icons";
 
 const ResetPin = () => {
   return (
     <>
-      <button className="flex items-center ml-2 h-full w-full mt-1">
-        <Icon icon={IconsList.refresh} />
-      </button>
+      <Button
+        className="flex items-center justify-center ml-2"
+        shape="circle"
+        type="ghost"
+        icon={<ReloadOutlined />}
+      />
     </>
   );
-}
+};
 
 export default ResetPin;

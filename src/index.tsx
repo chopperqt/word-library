@@ -7,6 +7,7 @@ import App from "./App";
 import { store } from "./services/stores";
 
 import "./index.css";
+import "antd/dist/reset.css";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement

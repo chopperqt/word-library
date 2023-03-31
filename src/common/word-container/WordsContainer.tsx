@@ -1,4 +1,5 @@
-import { useRef, useState } from "react";
+import { useRef } from "react";
+import { Typography } from "antd";
 import { CellMeasurerCache, List, CellMeasurer } from "react-virtualized";
 
 import Edit from "./components/editWord/EditWord";
@@ -8,6 +9,7 @@ import ExtraWords from "./partials/ExtraWords";
 
 import type { Word, WordForm } from "models/Library.models";
 
+const { Text } = Typography;
 interface WordsContainerProps {
   amountOfWords: number;
   words: Word[];
@@ -79,31 +81,33 @@ const WordsContainer = ({
                   style={style}
                 >
                   <div key={key} style={style} className="flex items-center">
-                    <Pined
-                      onClick={() => onClickPin(wordName, pined)}
-                      isPined={pined}
-                      isDisabled={isDisabledPin}
-                    />
-                    <Edit
-                      onSubmit={onSubmitUpdate}
-                      wordID={id}
-                      word={wordName}
-                      translate={translate}
-                      pined={pined}
-                      isLoading={isLoadingUpdate}
-                    />
-                    <Delete
-                      onClick={() => onClickDelete(wordName)}
-                      isLoading={isLoadingDelete}
-                    />
-                    <div>{wordName}</div>
-                    <div>&nbsp;—&nbsp;</div>
                     <div className="flex">
+                      <Pined
+                        onClick={() => onClickPin(wordName, pined)}
+                        isPined={pined}
+                        isDisabled={isDisabledPin}
+                      />
+                      <Edit
+                        onSubmit={onSubmitUpdate}
+                        wordID={id}
+                        word={wordName}
+                        translate={translate}
+                        pined={pined}
+                        isLoading={isLoadingUpdate}
+                      />
+                      <Delete
+                        onClick={() => onClickDelete(wordName)}
+                        isLoading={isLoadingDelete}
+                      />
+                    </div>
+
+                    <Text className="flex">
+                      {wordName}&nbsp;—&nbsp;
                       {!!translate?.[0] && translate[0]}
                       {translate?.length > 1 && (
                         <ExtraWords words={translate} />
                       )}
-                    </div>
+                    </Text>
                   </div>
                 </CellMeasurer>
               );
@@ -118,29 +122,30 @@ const WordsContainer = ({
 
             return (
               <div key={id} className="flex items-center">
-                <Pined
-                  onClick={() => onClickPin(wordName, pined)}
-                  isPined={pined}
-                  isDisabled={isDisabledPin}
-                />
-                <Edit
-                  onSubmit={onSubmitUpdate}
-                  wordID={id}
-                  word={wordName}
-                  translate={translate}
-                  pined={pined}
-                  isLoading={isLoadingUpdate}
-                />
-                <Delete
-                  onClick={() => onClickDelete(wordName)}
-                  isLoading={isLoadingDelete}
-                />
-                <div>{wordName}</div>
-                <div>&nbsp;—&nbsp;</div>
                 <div className="flex">
+                  <Pined
+                    onClick={() => onClickPin(wordName, pined)}
+                    isPined={pined}
+                    isDisabled={isDisabledPin}
+                  />
+                  <Edit
+                    onSubmit={onSubmitUpdate}
+                    wordID={id}
+                    word={wordName}
+                    translate={translate}
+                    pined={pined}
+                    isLoading={isLoadingUpdate}
+                  />
+                  <Delete
+                    onClick={() => onClickDelete(wordName)}
+                    isLoading={isLoadingDelete}
+                  />
+                </div>
+                <Text className="flex">
+                  {wordName}&nbsp;—&nbsp;
                   {!!translate?.[0] && translate[0]}
                   {translate?.length > 1 && <ExtraWords words={translate} />}
-                </div>
+                </Text>
               </div>
             );
           })}

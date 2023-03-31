@@ -1,38 +1,39 @@
-import ExtraWordsModal from "components/extra-words-modal/ExtraWordsModal"
-import { useState } from "react"
+import { Button } from "antd";
+import { useState } from "react";
+
+import ExtraWordsModal from "components/extra-words-modal/ExtraWordsModal";
 
 interface ExtraWordsProps {
-  words: string[]
+  words: string[];
 }
-const ExtraWords = ({
-  words = [],
-}: ExtraWordsProps) => {
-  const [isOpened, setOpened] = useState(false)
+const ExtraWords = ({ words = [] }: ExtraWordsProps) => {
+  const [isOpened, setOpened] = useState(false);
 
   const handleOpen = () => {
-    setOpened(true)
-  }
+    setOpened(true);
+  };
 
   const handleClose = () => {
-    setOpened(false)
-  }
+    setOpened(false);
+  };
 
   return (
     <>
-      <button
+      <Button
         onClick={handleOpen}
         className="ml-1 underline text-sky-700 hover:text-sky-500"
-        type="button"
+        type="link"
+        size="small"
       >
         &nbsp;+{words.length - 1}
-      </button>
+      </Button>
       <ExtraWordsModal
         words={words}
         isOpened={isOpened}
         onClose={handleClose}
       />
     </>
-  )
-}
+  );
+};
 
-export default ExtraWords
+export default ExtraWords;

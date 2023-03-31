@@ -1,13 +1,13 @@
-import React from "react"
+import React from "react";
+import { Button } from "antd";
 
-import Button from "components/button"
-import WordModal, { useModalWord } from "common/word-modal"
-import { useForm } from "react-hook-form"
-import { WordForm } from "models/Library.models"
-import Icon, { IconsList } from "components/icon/Icon"
-import useCreateWord from "pages/library/hooks/useCreateWord"
+import WordModal, { useModalWord } from "common/word-modal";
+import { useForm } from "react-hook-form";
+import { WordForm } from "models/Library.models";
+import Icon, { IconsList } from "components/icon/Icon";
+import useCreateWord from "pages/library/hooks/useCreateWord";
 
-const ADD_TEXT = 'Add'
+const ADD_TEXT = "Add";
 
 const CreateWord = () => {
   const {
@@ -15,35 +15,26 @@ const CreateWord = () => {
     handleSubmit: formSubmit,
     control,
   } = useForm<WordForm>({
-    mode: 'onChange',
+    mode: "onChange",
     defaultValues: {
-      translate: []
-    }
-  })
+      translate: [],
+    },
+  });
 
-  const {
-    onSubmit,
-    isLoading,
-    userID,
-    words,
-    isDisabledPin,
-  } = useCreateWord()
+  const { onSubmit, isLoading, userID, words, isDisabledPin } = useCreateWord();
 
-  const {
-    handleClose,
-    handleOpen,
-    isOpened,
-    handleSubmit,
-  } = useModalWord({
+  const { handleClose, handleOpen, isOpened, handleSubmit } = useModalWord({
     shouldCloseAfterSubmit: true,
     userID,
     reset,
     onSubmit,
-  })
+  });
 
   return (
     <React.Fragment>
       <Button
+        size="large"
+        type="primary"
         className="whitespace-nowrap"
         onClick={handleOpen}
       >
@@ -51,9 +42,7 @@ const CreateWord = () => {
           className="block md:hidden fill-white w-5 h-5 hover:fill-white"
           icon={IconsList.plusCircle}
         />
-        <div className="hidden md:block">
-          {ADD_TEXT}
-        </div>
+        <div className="hidden md:block">{ADD_TEXT}</div>
       </Button>
       <WordModal
         isCheckUniqueWord={true}
@@ -66,7 +55,7 @@ const CreateWord = () => {
         isDisabledPin={isDisabledPin}
       />
     </React.Fragment>
-  )
-}
+  );
+};
 
-export default CreateWord
+export default CreateWord;

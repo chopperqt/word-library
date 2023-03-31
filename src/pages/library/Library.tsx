@@ -1,5 +1,6 @@
 import React, { lazy, Suspense } from "react";
 import { useSelector } from "react-redux";
+import { Button } from "antd";
 
 import EmptyContent from "./components/empty/EmptyContent";
 import useLibrary from "./hooks/useLibrary";
@@ -15,7 +16,6 @@ import Preloader from "./partials/Preloader";
 import supabase from "api/client";
 import Logout from "./partials/Logout";
 import WordsPined from "./components/wordsPined";
-import Button from "components/button";
 
 const Search = lazy(() => import("./components/search"));
 
@@ -74,7 +74,12 @@ const Library = ({ width, height }: LibraryProps) => {
       </div>
       {!isLastPage && (
         <div className="w-full h-[100px] flex items-center justify-center">
-          <Button onClick={handleGetMoreWords} loading={isLoading}>
+          <Button
+            onClick={handleGetMoreWords}
+            loading={isLoading}
+            size="large"
+            type="primary"
+          >
             {BUTTON_TEXT}
           </Button>
         </div>

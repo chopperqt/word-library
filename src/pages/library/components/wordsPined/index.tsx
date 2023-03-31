@@ -1,10 +1,13 @@
 import React from "react";
 import { useSelector } from "react-redux";
+import { Typography } from "antd";
 
 import WordsContainer from "common/word-container/WordsContainer";
 import { useWords } from "pages/library/hooks/useWords";
 import ResetPin from "pages/library/partials/ResetPin";
 import { getPinWords } from "services/library/Library.store";
+
+const { Title } = Typography;
 
 const WordsPined = () => {
   const words = useSelector(getPinWords);
@@ -30,7 +33,7 @@ const WordsPined = () => {
   return (
     <React.Fragment>
       <div className="flex items-center">
-        <div className="text-2xl font-bold">{title}</div>
+        <Title level={2}>{title}</Title>
         <ResetPin />
       </div>
       <div className="flex justify-start items-start gap-3 flex-wrap">

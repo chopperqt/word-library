@@ -1,37 +1,36 @@
 import { useDispatch } from "react-redux";
+import { Button } from "antd";
+import { LogoutOutlined } from "@ant-design/icons";
 
 import { logOut } from "api/auth.api";
-import Icon, { IconsList } from "components/icon/Icon";
 import { clearUser } from "services/user/User.store";
 import AgreementModal, { useAgreementModal } from "common/agreement-modal";
 
 const Logout = () => {
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
-  const {
-    handleClose,
-    handleOpen,
-    isOpened,
-  } = useAgreementModal()
+  const { handleClose, handleOpen, isOpened } = useAgreementModal();
 
   const handleLogout = async () => {
-    const response = await logOut()
+    const response = await logOut();
 
     if (response) {
-      return
+      return;
     }
 
-    dispatch(clearUser())
-  }
+    dispatch(clearUser());
+  };
 
   return (
     <>
-      <button
-        className="text-black right-10 bottom-10 text-xl"
+      <Button
         onClick={handleOpen}
-      >
-        <Icon icon={IconsList.logout} />
-      </button>
+        className="flex items-center justify-center"
+        size="large"
+        type="primary"
+        danger
+        icon={<LogoutOutlined />}
+      />
       <AgreementModal
         isOpened={isOpened}
         onClose={handleClose}
@@ -39,6 +38,6 @@ const Logout = () => {
       />
     </>
   );
-}
+};
 
 export default Logout;
