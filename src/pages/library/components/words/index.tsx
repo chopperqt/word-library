@@ -36,7 +36,7 @@ const Words = ({ width, height }: WordsProps) => {
 
   return (
     <React.Fragment>
-      <Title level={2} className="mt-5">
+      <Title level={3} className="mt-5 mb-0">
         {title}
       </Title>
       <WordsLayout>

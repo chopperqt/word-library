@@ -9,7 +9,6 @@ import Words from "./components/words";
 import { getLoading } from "services/loading/Loading.store";
 import { getUserID } from "services/user/User.store";
 import ErrorContent from "./partials/ErrorContent";
-import CreateWord from "./components/createWord/CreateWord";
 import Skeleton from "components/Skeleton";
 import Spin from "components/spin";
 import Preloader from "./partials/Preloader";
@@ -18,6 +17,7 @@ import Logout from "./partials/Logout";
 import WordsPined from "./components/wordsPined";
 
 const Search = lazy(() => import("./components/search"));
+const CreateWord = lazy(() => import("./components/createWord/CreateWord"));
 
 const BUTTON_TEXT = "More...";
 
@@ -67,7 +67,9 @@ const Library = ({ width, height }: LibraryProps) => {
           <Suspense fallback={<Skeleton height={40} />}>
             <Search />
           </Suspense>
-          <CreateWord />
+          <Suspense fallback={<Skeleton height={40} width={61} />}>
+            <CreateWord />
+          </Suspense>
         </div>
         <WordsPined />
         <Words width={width} height={height} />

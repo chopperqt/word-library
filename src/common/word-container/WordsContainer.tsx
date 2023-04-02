@@ -1,6 +1,7 @@
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Typography } from "antd";
 import { CellMeasurerCache, List, CellMeasurer } from "react-virtualized";
+import { debounce } from "lodash-es";
 
 import Edit from "./components/editWord/EditWord";
 import Pined from "./partials/Pined";
@@ -35,14 +36,41 @@ const WordsContainer = ({
   isDisabledPin = false,
 }: WordsContainerProps) => {
   const wrapRef = useRef<HTMLDivElement | null>(null);
-  const wrapperWidth = wrapRef.current?.clientWidth;
-  const hasWrapperWidth = !!wrapperWidth && wrapperWidth > 0;
+
   const cache = useRef(
     new CellMeasurerCache({
       defaultHeight: 24,
       fixedWidth: true,
     })
   );
+
+  const [width, setWidth] = useState(0);
+
+  const handleResizeList = debounce(() => {
+    setWidth(wrapRef.current?.clientWidth || 0);
+
+    if (wrapRef.current === null) {
+      return;
+    }
+
+    if (wrapRef.current?.clientWidth === 0) {
+      return;
+    }
+
+    setWidth(wrapRef.current.clientWidth);
+  }, 500);
+
+  useEffect(() => {
+    window.addEventListener("resize", handleResizeList);
+  }, []);
+
+  useEffect(() => {
+    if (!wrapRef.current?.className) {
+      return;
+    }
+
+    setWidth(wrapRef.current.clientWidth);
+  }, [wrapRef.current?.className]);
 
   if (!words.length) {
     return null;
@@ -61,12 +89,12 @@ const WordsContainer = ({
           </div>
         </div>
         <div className="h-0.5 w-full bg-gray-50" />
-        {hasWrapperWidth && words.length > 13 && (
+        {width > 100 && words.length > 13 && (
           <List
             height={300}
             rowCount={words.length}
             rowHeight={cache.current.rowHeight}
-            width={wrapperWidth || 0}
+            width={width}
             deferredMeasurementCache={cache.current}
             className="px-5 py-1"
             rowRenderer={({ key, index, style, parent }) => {

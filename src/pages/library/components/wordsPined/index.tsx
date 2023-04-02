@@ -33,7 +33,9 @@ const WordsPined = () => {
   return (
     <React.Fragment>
       <div className="flex items-center">
-        <Title level={2}>{title}</Title>
+        <Title level={3} className="mb-0">
+          {title}
+        </Title>
         <ResetPin />
       </div>
       <div className="flex justify-start items-start gap-3 flex-wrap">

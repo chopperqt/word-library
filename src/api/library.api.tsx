@@ -1,77 +1,62 @@
-import { debounce } from 'lodash-es'
+import { debounce } from "lodash-es";
 
-import supabase from "./client"
-import type {
-  CreateWord,
-  UpdateWord,
-  Word,
-} from "models/Library.models"
-import type { UserID } from "models/Auth.models"
-import { store } from "services/stores"
-import { setAmountOfWords, setPinedWords, setWords, updateWords } from "services/library/Library.store"
-import { loadingController } from "helpers/loadingController"
-import { setAmountOfPages } from "services/pagination/Pagination.store"
-import { setSearchWords } from 'services/search/Search.store'
+import supabase from "./client";
+import type { CreateWord, UpdateWord, Word } from "models/Library.models";
+import type { UserID } from "models/Auth.models";
+import { store } from "services/stores";
+import {
+  setAmountOfWords,
+  setPinedWords,
+  setWords,
+  updateWords,
+} from "services/library/Library.store";
+import { loadingController } from "helpers/loadingController";
+import { setAmountOfPages } from "services/pagination/Pagination.store";
+import { setSearchWords } from "services/search/Search.store";
 
-const LIBRARY_TABLE = 'library'
+const LIBRARY_TABLE = "library";
 
 export type LibraryRequests =
-  'createLibraryWord' |
-  'getLibraryWords' |
-  'updateLibraryWord' |
-  'updatePin' |
-  'deleteLibraryWords' |
-  'searchWord' |
-  'getLibraryPinWords'
+  | "createLibraryWord"
+  | "getLibraryWords"
+  | "updateLibraryWord"
+  | "updatePin"
+  | "deleteLibraryWords"
+  | "searchWord"
+  | "getLibraryPinWords";
 
-export const createLibraryWord = async (wordData: CreateWord): Promise<Word[] | null> => {
-  const {
-    handleSetError,
-    handleSetPending,
-    handleSetSuccess,
-  } = loadingController('createLibraryWord')
+export const createLibraryWord = async (
+  wordData: CreateWord
+): Promise<Word[] | null> => {
+  const { handleSetError, handleSetPending, handleSetSuccess } =
+    loadingController("createLibraryWord");
 
-  handleSetPending()
+  handleSetPending();
 
-  const {
-    data,
-    error,
-  } = await supabase
-    .from(LIBRARY_TABLE)
-    .insert(wordData)
+  const { data, error } = await supabase.from(LIBRARY_TABLE).insert(wordData);
 
   if (error || !data) {
-    handleSetError()
+    handleSetError();
 
-    return null
+    return null;
   }
 
-  handleSetSuccess()
+  handleSetSuccess();
 
-  return data
-}
+  return data;
+};
 
-export const updateLibraryWord = async (wordData: UpdateWord): Promise<Word[] | null> => {
-  const {
-    handleSetError,
-    handleSetPending,
-    handleSetSuccess,
-  } = loadingController('updateLibraryWord')
+export const updateLibraryWord = async (
+  wordData: UpdateWord
+): Promise<Word[] | null> => {
+  const { handleSetError, handleSetPending, handleSetSuccess } =
+    loadingController("updateLibraryWord");
 
-  handleSetPending()
+  handleSetPending();
 
-  const {
-    pined,
-    translate,
-    word,
-    userID,
-    wordID,
-  } = wordData
+  const { pined, translate, word, userID, wordID } = wordData;
 
-  const {
-    data,
-    error,
-  } = await supabase
+  const { data, error } = await supabase
     .from(LIBRARY_TABLE)
     .update({
       pined,
@@ -81,143 +66,123 @@ export const updateLibraryWord = async (wordData: UpdateWord): Promise<Word[] | 
     .match({
       userID,
       id: wordID,
-    })
-
+    });
 
   if (error || !data) {
-    handleSetError()
+    handleSetError();
 
-    return null
+    return null;
   }
 
-  handleSetSuccess()
+  handleSetSuccess();
 
-  return data
-}
+  return data;
+};
 
-export const getLibraryWords = async (userID: UserID, from:number = 0, to:number = 70): Promise<Word[] | null> => {
-  const {
-    handleSetError,
-    handleSetPending,
-    handleSetSuccess,
-  } = loadingController('getLibraryWords')
+export const getLibraryWords = async (
+  userID: UserID,
+  from: number = 0,
+  to: number = 70
+): Promise<Word[] | null> => {
+  const { handleSetError, handleSetPending, handleSetSuccess } =
+    loadingController("getLibraryWords");
 
-  handleSetPending()
+  handleSetPending();
 
-  const {
-    data,
-    error,
-    count,
-  } = await supabase
+  const { data, error, count } = await supabase
     .from(LIBRARY_TABLE)
-    .select('*', { count: 'exact' })
+    .select("*", { count: "exact" })
     .limit(70)
-    .order('word')
+    .order("word")
     .range(from, to)
-    .match({ userID })
+    .match({ userID });
 
   if (error || !data || !count) {
-    handleSetError()
+    handleSetError();
 
-    return null
+    return null;
   }
 
-  const amountOfPages = Math.round(count / 70)
-
-  console.log(amountOfPages)
+  const amountOfPages = Math.round(count / 70);
 
   if (from === 0) {
-    store.dispatch(setWords(data))
+    store.dispatch(setWords(data));
   } else {
-    store.dispatch(updateWords(data))
+    store.dispatch(updateWords(data));
   }
 
-  store.dispatch(setAmountOfWords(count))
-  store.dispatch(setAmountOfPages(amountOfPages))
+  store.dispatch(setAmountOfWords(count));
+  store.dispatch(setAmountOfPages(amountOfPages));
 
-  handleSetSuccess()
+  handleSetSuccess();
 
-  return data
-}
+  return data;
+};
 
-export const getLibraryPinWords = async (userID: UserID):Promise<Word[] | null> => {
-  const { 
-    handleSetError,
-    handleSetPending,
-    handleSetSuccess,
-  } = loadingController('getLibraryPinWords')
+export const getLibraryPinWords = async (
+  userID: UserID
+): Promise<Word[] | null> => {
+  const { handleSetError, handleSetPending, handleSetSuccess } =
+    loadingController("getLibraryPinWords");
 
-  handleSetPending()
+  handleSetPending();
 
   const { data, error } = await supabase
     .from(LIBRARY_TABLE)
-    .select('*')
+    .select("*")
     .limit(15)
     .match({
       userID,
       pined: true,
-    })
+    });
 
   if (error) {
-    handleSetError()
+    handleSetError();
 
-    return null
+    return null;
   }
 
-  store.dispatch(setPinedWords(data))
+  store.dispatch(setPinedWords(data));
 
-  handleSetSuccess()
+  handleSetSuccess();
 
-  return data
-}
-
-
+  return data;
+};
 
 export const deleteLibraryWords = async (userID: UserID, word: string) => {
-  const {
-    handleSetError,
-    handleSetPending,
-    handleSetSuccess,
-  } = loadingController('deleteLibraryWords')
+  const { handleSetError, handleSetPending, handleSetSuccess } =
+    loadingController("deleteLibraryWords");
 
-  handleSetPending()
+  handleSetPending();
 
-  const {
-    data,
-    error,
-  } = await supabase
-    .from(LIBRARY_TABLE)
-    .delete()
-    .match({
-      userID,
-      word,
-    })
+  const { data, error } = await supabase.from(LIBRARY_TABLE).delete().match({
+    userID,
+    word,
+  });
 
   if (error || !data) {
-    handleSetError()
+    handleSetError();
 
-    return
+    return;
   }
 
-  handleSetSuccess()
+  handleSetSuccess();
 
   // TODO нужно посмотреть что вернут запрос и добавить тип который возвращает фукнция
-  return data
-}
+  return data;
+};
 
-export const updatePin = async (userID: UserID, pined: boolean, word: string): Promise<Word[] | null> => {
-  const {
-    handleSetError,
-    handleSetPending,
-    handleSetSuccess,
-  } = loadingController('updatePin')
+export const updatePin = async (
+  userID: UserID,
+  pined: boolean,
+  word: string
+): Promise<Word[] | null> => {
+  const { handleSetError, handleSetPending, handleSetSuccess } =
+    loadingController("updatePin");
 
-  handleSetPending()
+  handleSetPending();
 
-  const {
-    data,
-    error
-  } = await supabase
+  const { data, error } = await supabase
     .from(LIBRARY_TABLE)
     .update({
       pined,
@@ -225,44 +190,43 @@ export const updatePin = async (userID: UserID, pined: boolean, word: string): P
     .match({
       userID,
       word,
-    })
+    });
 
   if (error) {
-    handleSetError()
+    handleSetError();
 
-    return null
+    return null;
   }
 
-  handleSetSuccess()
+  handleSetSuccess();
 
-  return data
+  return data;
+};
 
-}
+export const searchWord = debounce(
+  async (userID: UserID, word: string): Promise<Word[] | null> => {
+    const { handleSetError, handleSetPending, handleSetSuccess } =
+      loadingController("searchWord");
 
-export const searchWord = debounce(async (userID: UserID, word: string):Promise<Word[] | null> => {
-  const {
-    handleSetError,
-    handleSetPending,
-    handleSetSuccess,
-  } = loadingController('searchWord')
+    handleSetPending();
 
-  handleSetPending()
+    const { data, error } = await supabase
+      .from(LIBRARY_TABLE)
+      .select("*")
+      .match({ userID })
+      .textSearch("word", word);
 
-  const {data, error} = await supabase
-    .from(LIBRARY_TABLE)
-    .select('*')
-    .match({userID})
-    .textSearch('word', word)
+    if (error) {
+      handleSetError();
 
-  if (error) {
-    handleSetError()
-    
-    return null
-  }
+      return null;
+    }
 
-  store.dispatch(setSearchWords(data))
+    store.dispatch(setSearchWords(data));
 
-  handleSetSuccess()
+    handleSetSuccess();
 
-  return data
-}, 600)
+    return data;
+  },
+  600
+);
