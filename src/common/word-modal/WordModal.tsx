@@ -1,4 +1,4 @@
-import { Button } from "antd";
+import { Button, Form, Input, Select } from "antd";
 
 import TextField from "common/text-field/TextField";
 import InputMulti, { Option } from "components/input-multi";
@@ -50,6 +50,19 @@ const WordModal = ({
         onSubmit={onSubmit}
         data-testid="word-modal-form"
       >
+        <Input
+          name="word"
+          placeholder={ENGLISH_PLACEHOLDER_TEXT}
+          required={true}
+          value={word}
+          size="large"
+        />
+        <Select
+          size="large"
+          mode="tags"
+          placeholder={RUSSIA_PLACEHOLDER_TEXT}
+          showArrow={false}
+        />
         <TextField
           isCheckUniqueWord={isCheckUniqueWord}
           name="word"

@@ -2,9 +2,9 @@ import { lazy, Suspense } from "react";
 
 import { Links } from "helpers/links";
 import { Navigate } from "react-router-dom";
-import Home from "pages/home/Home";
 import { AutoSizer } from "react-virtualized";
 
+const Home = lazy(() => import("pages/home/Home"));
 const Library = lazy(() => import("pages/library/Library"));
 const SignIn = lazy(() => import("pages/sign-in/SignIn"));
 
