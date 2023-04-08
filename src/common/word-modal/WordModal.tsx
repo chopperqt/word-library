@@ -1,4 +1,4 @@
-import { Button, Form, Input, Select } from "antd";
+import { Button, Form, Input, Select, Switch, Typography } from "antd";
 
 import TextField from "common/text-field/TextField";
 import InputMulti, { Option } from "components/input-multi";
@@ -6,11 +6,13 @@ import ModalContainer from "components/ModalContainer";
 import Toggle from "components/Toggle";
 import { UNACCEPTABLE_SYMBOL_TEXT } from "helpers/texts";
 
-const ENGLISH_PLACEHOLDER_TEXT = "Example";
-const RUSSIA_PLACEHOLDER_TEXT = "Пример";
+import { FormFields } from "./constants";
+
+const { Text } = Typography;
+
 const ADD_TEXT = "Add";
 const UPDATE_TEXT = "Update";
-const TOGGLER_TEXT = "Add to bookmarks";
+const TOGGLER_TEXT = "Need to bookmark ?";
 
 interface WordModalProps {
   isOpened: boolean;
@@ -51,19 +53,19 @@ const WordModal = ({
         data-testid="word-modal-form"
       >
         <Input
-          name="word"
-          placeholder={ENGLISH_PLACEHOLDER_TEXT}
+          {...FormFields.word}
           required={true}
           value={word}
           size="large"
+          pattern="/^[a-zA-Z\s]+$/"
         />
-        <Select
-          size="large"
-          mode="tags"
-          placeholder={RUSSIA_PLACEHOLDER_TEXT}
-          showArrow={false}
-        />
-        <TextField
+        <Select {...FormFields.translate} size="large" mode="tags" />
+        <div className="flex gap-x-1 justify-between">
+          <Text>{TOGGLER_TEXT}</Text>
+          <Switch checked={true} />
+        </div>
+
+        {/* <TextField
           isCheckUniqueWord={isCheckUniqueWord}
           name="word"
           control={control}
@@ -75,20 +77,20 @@ const WordModal = ({
             value: /^[a-zA-Z\s]+$/,
             message: UNACCEPTABLE_SYMBOL_TEXT,
           }}
-        />
-        <InputMulti
+        /> */}
+        {/* <InputMulti
           name="translate"
           control={control}
           placeholder={RUSSIA_PLACEHOLDER_TEXT}
           defaultValue={translate}
-        />
-        <Toggle
+        /> */}
+        {/* <Toggle
           isDisabled={isDisabledPin}
           text={TOGGLER_TEXT}
           name="pined"
           control={control}
           defaultChecked={pined}
-        />
+        /> */}
         <Button loading={isLoading} type="primary" size="large">
           {text}
         </Button>
