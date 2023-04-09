@@ -1,9 +1,6 @@
-import { useForm } from "react-hook-form";
-
 import Button from "components/button";
 import WordModal, { useModalWord } from "common/word-modal";
 import Preloader from "../../partials/Preloader";
-import { WordForm } from "models/Library.models";
 import useEmpty from "pages/library/hooks/useEmpty";
 
 const NO_WORDS_TEXT = "Welcome to the Word Library";
@@ -11,19 +8,10 @@ const DESCRIPTION_TEXT = "Add your first word";
 const ADD_TEXT = "Add word";
 
 const Empty = () => {
-  const {
-    control,
-    handleSubmit: formSubmit,
-    reset,
-  } = useForm<WordForm>({
-    mode: "onChange",
-  });
-
   const { userID, isLoading, onSubmit } = useEmpty();
 
   const { isOpened, handleClose, handleOpen, handleSubmit } = useModalWord({
     userID,
-    reset,
     onSubmit,
   });
 
@@ -36,7 +24,6 @@ const Empty = () => {
         {ADD_TEXT}
       </Button>
       <WordModal
-        control={control}
         onSubmit={handleSubmit}
         isOpened={isOpened}
         onClose={handleClose}

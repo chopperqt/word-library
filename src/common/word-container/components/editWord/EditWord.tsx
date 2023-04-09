@@ -3,7 +3,6 @@ import { useForm } from "react-hook-form";
 import { EditOutlined } from "@ant-design/icons";
 
 import WordModal, { useModalWord } from "common/word-modal";
-import { getNormalizeOptionWord } from "common/word-modal/helpers/getNormalizeOptionWord";
 import { Word, WordForm, WordID } from "models/Library.models";
 
 interface EditProps extends Pick<Word, "word" | "translate" | "pined"> {
@@ -22,18 +21,9 @@ const Edit = ({
   onSubmit,
   shouldCloseAfterSubmit = true,
 }: EditProps) => {
-  const {
-    control,
-    reset,
-    handleSubmit: formSubmit,
-  } = useForm<WordForm>({
-    mode: "onChange",
-  });
-
   const { handleOpen, handleClose, isOpened, handleSubmit } = useModalWord({
     onSubmit,
     wordID,
-    reset,
     shouldCloseAfterSubmit,
   });
 
@@ -51,11 +41,10 @@ const Edit = ({
         isUpdate={true}
         isOpened={isOpened}
         onClose={handleClose}
-        control={control}
         onSubmit={handleSubmit}
         isLoading={isLoading}
         word={word}
-        translate={translate.map(getNormalizeOptionWord)}
+        translate={translate}
         pined={pined}
       />
     </>

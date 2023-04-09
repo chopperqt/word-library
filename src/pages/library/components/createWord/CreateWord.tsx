@@ -2,32 +2,24 @@ import React from "react";
 import { Button } from "antd";
 
 import WordModal, { useModalWord } from "common/word-modal";
-import { useForm } from "react-hook-form";
-import { WordForm } from "models/Library.models";
 import Icon, { IconsList } from "components/icon/Icon";
 import useCreateWord from "pages/library/hooks/useCreateWord";
 
 const ADD_TEXT = "Add";
 
 const CreateWord = () => {
-  const { reset, control } = useForm<WordForm>({
-    mode: "onChange",
-    defaultValues: {
-      translate: [],
-    },
-  });
-
-  const { onSubmit, isLoading, userID, words, isDisabledPin } = useCreateWord();
+  const { onSubmit, isLoading, userID, words, isDisabledPin, contextHolder } =
+    useCreateWord();
 
   const { handleClose, handleOpen, isOpened, handleSubmit } = useModalWord({
     shouldCloseAfterSubmit: true,
     userID,
-    reset,
     onSubmit,
   });
 
   return (
     <React.Fragment>
+      {contextHolder}
       <Button
         size="large"
         type="primary"
@@ -45,7 +37,6 @@ const CreateWord = () => {
         onSubmit={handleSubmit}
         isOpened={isOpened}
         onClose={handleClose}
-        control={control}
         isLoading={isLoading}
         words={words}
         isDisabledPin={isDisabledPin}

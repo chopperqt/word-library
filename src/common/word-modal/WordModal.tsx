@@ -1,30 +1,24 @@
 import { Button, Form, Input, Select, Switch, Typography } from "antd";
 
-import TextField from "common/text-field/TextField";
-import InputMulti, { Option } from "components/input-multi";
 import ModalContainer from "components/ModalContainer";
-import Toggle from "components/Toggle";
-import { FIELD_REQUIRED_TEXT, UNACCEPTABLE_SYMBOL_TEXT } from "helpers/texts";
-
-import { useEffect } from "react";
-
 import type { WordForm } from "models/Library.models";
 
-import { Fields, FormFields } from "./constants";
+import { FormFields } from "./constants";
 
 const { Text } = Typography;
 
 const ADD_TEXT = "Add";
 const UPDATE_TEXT = "Update";
 const TOGGLER_TEXT = "Need to bookmark ?";
+const PLACEHOLDER_WORD_TEXT = "Example";
+const PLACEHOLDER_TRANSLATE_TEXT = "Пример";
 
 interface WordModalProps {
   isOpened: boolean;
   isDisabledPin?: boolean;
   onClose: () => void;
   onSubmit: (data: WordForm) => void;
-  control: any;
-  translate?: Option[];
+  translate?: string[];
   pined?: boolean;
   isCheckUniqueWord?: boolean;
   isLoading?: boolean;
@@ -39,7 +33,6 @@ const WordModal = ({
   isOpened,
   pined = false,
   isCheckUniqueWord = false,
-  control,
   isLoading = false,
   words = [],
   isUpdate = false,
@@ -59,42 +52,14 @@ const WordModal = ({
         data-testid="word-modal-form"
       >
         <Form.Item {...FormFields.word}>
-          <Input size="large" placeholder="Example" />
+          <Input size="large" placeholder={PLACEHOLDER_TRANSLATE_TEXT} />
         </Form.Item>
-        <Form.Item
-          name={[Fields.translate]}
-          rules={[
-            {
-              required: true,
-              type: "array",
-              message: "This field is required!",
-            },
-
-            {
-              pattern: /^[а-яА-ЯёЁ\s]+$/,
-              type: "array",
-              message: UNACCEPTABLE_SYMBOL_TEXT,
-            },
-            () => ({
-              validator(_, value: string[]) {
-                let error = "";
-
-                value?.forEach((word) => {
-                  if (word.match(/^[а-яА-ЯёЁ\s]+$/) === null) {
-                    error = "Unacceptable symbol!";
-                  }
-                });
-
-                if (error) {
-                  return Promise.reject(new Error(error));
-                }
-
-                return Promise.resolve();
-              },
-            }),
-          ]}
-        >
-          <Select size="large" mode="tags" placeholder="Пример" />
+        <Form.Item {...FormFields.translate}>
+          <Select
+            size="large"
+            mode="tags"
+            placeholder={PLACEHOLDER_WORD_TEXT}
+          />
         </Form.Item>
 
         <div className="flex gap-x-1 justify-between">

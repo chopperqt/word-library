@@ -17,6 +17,7 @@ import {
 
 import type { Word, WordForm } from "models/Library.models";
 import { useMemo } from "react";
+import { message } from "antd";
 
 const useCreateWord = () => {
   const userID = useSelector(getUserID);
@@ -25,6 +26,8 @@ const useCreateWord = () => {
   const page = useSelector(getPage);
   const amountOfPages = useSelector(getAmountOfPages);
   const pinedWords = useSelector(getPinWords);
+
+  const [messageApi, contextHolder] = message.useMessage();
 
   const { to } = usePagination({
     page,
@@ -38,6 +41,13 @@ const useCreateWord = () => {
 
     return false;
   }, [pinedWords]);
+
+  const handleErrorMessage = () => {
+    messageApi.error({
+      type: "error",
+      content: "Something wend wrong!",
+    });
+  };
 
   const onSubmit = async (data: WordForm): Promise<Word[] | null> => {
     console.log(data);
@@ -53,7 +63,11 @@ const useCreateWord = () => {
       userID,
     });
 
+    console.log("response: ", response);
+
     if (response === null) {
+      handleErrorMessage();
+
       return null;
     }
 
@@ -64,6 +78,7 @@ const useCreateWord = () => {
   };
 
   return {
+    contextHolder,
     onSubmit,
     words,
     isLoading,

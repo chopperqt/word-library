@@ -4,177 +4,150 @@ import {
   render,
   screen,
   waitFor,
-} from '@testing-library/react'
-import { useForm } from 'react-hook-form'
+} from "@testing-library/react";
+import { useForm } from "react-hook-form";
 
-import '@testing-library/jest-dom/extend-expect'
+import "@testing-library/jest-dom/extend-expect";
 
-import WordModal from '../WordModal'
-import type { WordForm } from 'models/Library.models'
+import WordModal from "../WordModal";
+import type { WordForm } from "models/Library.models";
 
-afterEach(cleanup)
+afterEach(cleanup);
 
-it('WordModal render correctly', () => {
+it("WordModal render correctly", () => {
   const Component = () => {
-    const {
-      control,
-    } = useForm<WordForm>({
-      mode: 'onChange',
-    })
+    const { control } = useForm<WordForm>({
+      mode: "onChange",
+    });
 
-    return (
-      <WordModal
-        control={control}
-        isOpened={true}
-        onClose={() => { }}
-        onSubmit={() => { }}
-      />
-    )
-  }
+    return <WordModal isOpened={true} onClose={() => {}} onSubmit={() => {}} />;
+  };
 
-  render((
-    <Component />
-  ))
-})
+  render(<Component />);
+});
 
-describe('Test button text', () => {
-  it('Add button text', () => {
+describe("Test button text", () => {
+  it("Add button text", () => {
     const Component = () => {
-      const {
-        control,
-      } = useForm<WordForm>({
-        mode: 'onChange',
-      })
+      const { control } = useForm<WordForm>({
+        mode: "onChange",
+      });
 
       return (
         <WordModal
-          control={control}
           isOpened={true}
-          onClose={() => { }}
-          onSubmit={() => { }}
+          onClose={() => {}}
+          onSubmit={() => {}}
           isUpdate={false}
         />
-      )
-    }
+      );
+    };
 
-    render(<Component />)
+    render(<Component />);
 
-    expect(screen.getByText('Add')).toBeTruthy()
-  })
+    expect(screen.getByText("Add")).toBeTruthy();
+  });
 
-  it('Update button text', () => {
+  it("Update button text", () => {
     const Component = () => {
-      const {
-        control,
-      } = useForm<WordForm>({
-        mode: 'onChange',
-      })
+      const { control } = useForm<WordForm>({
+        mode: "onChange",
+      });
 
       return (
         <WordModal
-          control={control}
           isOpened={true}
           isUpdate={true}
-          onClose={() => { }}
-          onSubmit={() => { }}
+          onClose={() => {}}
+          onSubmit={() => {}}
         />
-      )
-    }
+      );
+    };
 
-    render(<Component />)
+    render(<Component />);
 
-    expect(screen.getByText('Update')).toBeTruthy()
-  })
-})
+    expect(screen.getByText("Update")).toBeTruthy();
+  });
+});
 
-describe('Check component clicks', () => {
-  const handleSubmit = jest.fn()
-  const handleClose = jest.fn()
+describe("Check component clicks", () => {
+  const handleSubmit = jest.fn();
+  const handleClose = jest.fn();
 
   const Component = () => {
-    const {
-      control,
-    } = useForm<WordForm>({
-      mode: 'onChange',
-    })
+    const { control } = useForm<WordForm>({
+      mode: "onChange",
+    });
 
-    handleSubmit.mockImplementation(event => {
-      event.preventDefault()
-    })
+    handleSubmit.mockImplementation((event) => {
+      event.preventDefault();
+    });
 
     return (
       <WordModal
-        control={control}
         isOpened={true}
         onClose={handleClose}
         onSubmit={handleSubmit}
       />
-    )
-  }
+    );
+  };
 
-  it('Click submit', async () => {
-    render(<Component />)
+  it("Click submit", async () => {
+    render(<Component />);
 
-    const submitButton = screen.getByText('Add')
+    const submitButton = screen.getByText("Add");
 
-    fireEvent.click(submitButton)
+    fireEvent.click(submitButton);
 
-    await waitFor(() => expect(handleSubmit).toBeCalled())
-  })
+    await waitFor(() => expect(handleSubmit).toBeCalled());
+  });
 
-  it('Click close modal', () => {
-    render(<Component />)
+  it("Click close modal", () => {
+    render(<Component />);
 
-    const form = screen.getByTestId('word-modal-form')
+    const form = screen.getByTestId("word-modal-form");
 
     fireEvent.keyDown(form, {
       key: "Escape",
       code: "Escape",
       keyCode: 27,
-      charCode: 27
+      charCode: 27,
     });
 
-    expect(handleClose).toBeCalled()
-  })
-})
+    expect(handleClose).toBeCalled();
+  });
+});
 
-describe('Check fields errors', () => {
-  const handleSubmit = jest.fn()
+describe("Check fields errors", () => {
+  const handleSubmit = jest.fn();
 
   const Component = () => {
-    const {
-      control,
-    } = useForm<WordForm>({
-      mode: 'onChange',
-    })
+    const { control } = useForm<WordForm>({
+      mode: "onChange",
+    });
 
     return (
-      <WordModal
-        control={control}
-        isOpened={true}
-        onClose={() => { }}
-        onSubmit={handleSubmit}
-      />
-    )
-  }
+      <WordModal isOpened={true} onClose={() => {}} onSubmit={handleSubmit} />
+    );
+  };
 
-  it('Check word required message', async () => {
-    render(<Component />)
+  it("Check word required message", async () => {
+    render(<Component />);
 
-    fireEvent.change(screen.getByTestId('text-field'), {
+    fireEvent.change(screen.getByTestId("text-field"), {
       target: {
-        value: 'test',
-      }
-    })
+        value: "test",
+      },
+    });
 
-    fireEvent.change(screen.getByTestId('text-field'), {
+    fireEvent.change(screen.getByTestId("text-field"), {
       target: {
-        value: '',
-      }
-    })
+        value: "",
+      },
+    });
 
-    const error = await screen.findByText('Field is required!')
+    const error = await screen.findByText("Field is required!");
 
-    expect(error).toBeInTheDocument()
-  })
-})
+    expect(error).toBeInTheDocument();
+  });
+});
