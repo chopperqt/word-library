@@ -4,9 +4,13 @@ import TextField from "common/text-field/TextField";
 import InputMulti, { Option } from "components/input-multi";
 import ModalContainer from "components/ModalContainer";
 import Toggle from "components/Toggle";
-import { UNACCEPTABLE_SYMBOL_TEXT } from "helpers/texts";
+import { FIELD_REQUIRED_TEXT, UNACCEPTABLE_SYMBOL_TEXT } from "helpers/texts";
 
-import { FormFields } from "./constants";
+import { useEffect } from "react";
+
+import type { WordForm } from "models/Library.models";
+
+import { Fields, FormFields } from "./constants";
 
 const { Text } = Typography;
 
@@ -18,7 +22,7 @@ interface WordModalProps {
   isOpened: boolean;
   isDisabledPin?: boolean;
   onClose: () => void;
-  onSubmit: () => void;
+  onSubmit: (data: WordForm) => void;
   control: any;
   translate?: Option[];
   pined?: boolean;
@@ -43,58 +47,72 @@ const WordModal = ({
   word,
   isDisabledPin = false,
 }: WordModalProps) => {
+  const [form] = Form.useForm();
   let text = isUpdate ? UPDATE_TEXT : ADD_TEXT;
 
   return (
     <ModalContainer isOpened={isOpened} onClose={onClose}>
-      <form
-        className="w-full max-w-2xl flex flex-col gap-3"
-        onSubmit={onSubmit}
+      <Form
+        form={form}
+        className="w-full max-w-2xl flex flex-col"
+        onFinish={onSubmit}
         data-testid="word-modal-form"
       >
-        <Input
-          {...FormFields.word}
-          required={true}
-          value={word}
-          size="large"
-          pattern="/^[a-zA-Z\s]+$/"
-        />
-        <Select {...FormFields.translate} size="large" mode="tags" />
+        <Form.Item {...FormFields.word}>
+          <Input size="large" placeholder="Example" />
+        </Form.Item>
+        <Form.Item
+          name={[Fields.translate]}
+          rules={[
+            {
+              required: true,
+              type: "array",
+              message: "This field is required!",
+            },
+
+            {
+              pattern: /^[а-яА-ЯёЁ\s]+$/,
+              type: "array",
+              message: UNACCEPTABLE_SYMBOL_TEXT,
+            },
+            () => ({
+              validator(_, value: string[]) {
+                let error = "";
+
+                value?.forEach((word) => {
+                  if (word.match(/^[а-яА-ЯёЁ\s]+$/) === null) {
+                    error = "Unacceptable symbol!";
+                  }
+                });
+
+                if (error) {
+                  return Promise.reject(new Error(error));
+                }
+
+                return Promise.resolve();
+              },
+            }),
+          ]}
+        >
+          <Select size="large" mode="tags" placeholder="Пример" />
+        </Form.Item>
+
         <div className="flex gap-x-1 justify-between">
           <Text>{TOGGLER_TEXT}</Text>
-          <Switch checked={true} />
+          <Form.Item name={["pined"]} valuePropName="checked">
+            <Switch checkedChildren="Yes" unCheckedChildren="No" />
+          </Form.Item>
         </div>
-
-        {/* <TextField
-          isCheckUniqueWord={isCheckUniqueWord}
-          name="word"
-          control={control}
-          placeholder={ENGLISH_PLACEHOLDER_TEXT}
-          isRequired={true}
-          words={words}
-          value={word}
-          pattern={{
-            value: /^[a-zA-Z\s]+$/,
-            message: UNACCEPTABLE_SYMBOL_TEXT,
-          }}
-        /> */}
-        {/* <InputMulti
-          name="translate"
-          control={control}
-          placeholder={RUSSIA_PLACEHOLDER_TEXT}
-          defaultValue={translate}
-        /> */}
-        {/* <Toggle
-          isDisabled={isDisabledPin}
-          text={TOGGLER_TEXT}
-          name="pined"
-          control={control}
-          defaultChecked={pined}
-        /> */}
-        <Button loading={isLoading} type="primary" size="large">
+        <Button
+          loading={isLoading}
+          type="primary"
+          size="large"
+          className="w-full"
+          htmlType="submit"
+        >
           {text}
         </Button>
-      </form>
+      </Form>
     </ModalContainer>
   );
 };

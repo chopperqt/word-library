@@ -10,11 +10,7 @@ import useCreateWord from "pages/library/hooks/useCreateWord";
 const ADD_TEXT = "Add";
 
 const CreateWord = () => {
-  const {
-    reset,
-    handleSubmit: formSubmit,
-    control,
-  } = useForm<WordForm>({
+  const { reset, control } = useForm<WordForm>({
     mode: "onChange",
     defaultValues: {
       translate: [],
@@ -46,7 +42,7 @@ const CreateWord = () => {
       </Button>
       <WordModal
         isCheckUniqueWord={true}
-        onSubmit={formSubmit(handleSubmit)}
+        onSubmit={handleSubmit}
         isOpened={isOpened}
         onClose={handleClose}
         control={control}

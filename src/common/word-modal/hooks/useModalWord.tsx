@@ -1,66 +1,59 @@
-import { useEffect, useState } from "react"
+import { useEffect, useState } from "react";
 
-import type {
-  Word,
-  WordForm,
-  WordID,
-} from "models/Library.models"
-import type { UserID } from "models/Auth.models"
+import type { Word, WordForm, WordID } from "models/Library.models";
+import type { UserID } from "models/Auth.models";
 
 interface UseModalWordProps {
-  wordID?: WordID,
-  userID?: UserID
-  reset?: () => void
-  onSubmit: (word: WordForm, wordID?: number) => Promise<Word[] | null>
-  shouldCloseAfterSubmit?: boolean
+  wordID?: WordID;
+  userID?: UserID;
+  reset?: () => void;
+  onSubmit: (word: WordForm, wordID?: number) => Promise<Word[] | null>;
+  shouldCloseAfterSubmit?: boolean;
 }
 const useModalWord = ({
   wordID,
-  reset = () => { },
+  reset = () => {},
   onSubmit,
-  shouldCloseAfterSubmit
+  shouldCloseAfterSubmit,
 }: UseModalWordProps) => {
-  const [isOpened, setOpened] = useState<boolean>(false)
+  const [isOpened, setOpened] = useState<boolean>(false);
 
   const handleClose = async () => {
-    setOpened(false)
-  }
+    setOpened(false);
+  };
 
   const handleOpen = () => {
-    setOpened(true)
-  }
+    setOpened(true);
+  };
 
   const handleSubmit = async (word: WordForm) => {
-    const response = await onSubmit(word, wordID)
+    const response = await onSubmit(word, wordID);
 
     if (response === null) {
-      return
+      return;
     }
 
     if (!shouldCloseAfterSubmit) {
-      return
+      return;
     }
 
-    handleClose()
-  }
+    handleClose();
+  };
 
   useEffect(() => {
     if (isOpened) {
-      return
+      return;
     }
 
-    reset()
-  }, [
-    reset,
-    isOpened,
-  ])
+    reset();
+  }, [reset, isOpened]);
 
   return {
     isOpened,
     handleClose,
     handleOpen,
     handleSubmit,
-  }
-}
+  };
+};
 
-export default useModalWord
+export default useModalWord;

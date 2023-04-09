@@ -1,29 +1,27 @@
-import type { Option } from "components/input-multi"
-import type { UserID } from "./Auth.models"
+import type { UserID } from "./Auth.models";
 
 export interface Word {
-  id: number
-  userID: UserID
-  word: string
-  translate: string[]
-  pined: boolean
-  createdAt: Date | string
+  id: number;
+  userID: UserID;
+  word: string;
+  translate: string[];
+  pined: boolean;
+  createdAt: Date | string;
 }
 
-export type WordID = Word['id']
+export type WordID = Word["id"];
 
 export interface WordForm {
-  word: Word['word']
-  translate: Option[]
-  pined: Word['pined']
+  word: Word["word"];
+  translate: string[];
+  pined: Word["pined"];
 }
 
-export interface CreateWord extends Pick<WordForm, 'pined' | 'word'> {
-  userID: UserID
-  translate: Word['translate']
+export interface CreateWord extends Pick<WordForm, "pined" | "word"> {
+  userID: UserID;
+  translate: Word["translate"];
 }
 
 export interface UpdateWord extends CreateWord {
-  wordID: WordID
+  wordID: WordID;
 }
-
