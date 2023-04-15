@@ -1,16 +1,21 @@
 import { DeleteOutlined } from "@ant-design/icons";
 import { Button } from "antd";
 
-import AgreementModal, { useAgreementModal } from "common/agreement-modal";
+import { ConfirmationModal } from "common/confirmation-modal";
+import { useModal } from "helpers/useModal";
 
 import type { Word } from "models/Library.models";
+
+const CONFIRMATION_TEXT = 'Are you sure?'
+const ACCEPT_TEXT = 'Delete'
+const CANCEL_TEXT = 'Cancel'
 
 interface DeleteProps {
   isLoading?: boolean;
   onClick: () => Promise<Word[] | null>;
 }
 const Delete = ({ isLoading = false, onClick }: DeleteProps) => {
-  const { handleClose, handleOpen, isOpened } = useAgreementModal();
+  const { handleClose, handleOpen, isOpened } = useModal();
 
   const handleDelete = async () => {
     const response = await onClick();
@@ -32,11 +37,14 @@ const Delete = ({ isLoading = false, onClick }: DeleteProps) => {
         shape="circle"
         icon={<DeleteOutlined />}
       />
-      <AgreementModal
+      <ConfirmationModal
         isLoading={isLoading}
         isOpened={isOpened}
         onClose={handleClose}
         onClick={handleDelete}
+        text={CONFIRMATION_TEXT}
+        textAccept={ACCEPT_TEXT}
+        textCancel={CANCEL_TEXT}
       />
     </>
   );

@@ -78,7 +78,7 @@ export const useWords = ({ words = [] }: UseWordsProps) => {
     return response
 	}
 
-  const handleDeleteWord = async (word: string):Promise<Word[] | null> => {
+  const handleClickDelete = async (word: string):Promise<Word[] | null> => {
     const response = await deleteLibraryWords(userID, word)
 
     if (response === null) {
@@ -95,7 +95,7 @@ export const useWords = ({ words = [] }: UseWordsProps) => {
     normalizedWords,
     handleClickPin,
     handleSubmitUpdate,
-    handleDeleteWord,
+    handleClickDelete,
     isLoadingUpdate,
     isLoadingDelete,
     isDisabledPin,

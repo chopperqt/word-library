@@ -7,7 +7,7 @@ import {
 
 import '@testing-library/jest-dom/extend-expect'
 
-import AgreementModal from '../AgreementModal'
+import AgreementModal from '../ConfirmationModal'
 
 afterEach(cleanup)
 

@@ -4,12 +4,17 @@ import { LogoutOutlined } from "@ant-design/icons";
 
 import { logOut } from "api/auth.api";
 import { clearUser } from "services/user/User.store";
-import AgreementModal, { useAgreementModal } from "common/agreement-modal";
+import { ConfirmationModal } from "common/confirmation-modal";
+import { useModal } from "helpers/useModal";
+
+const CONFIRMATION_TEXT = 'Are you sure you want to do this?'
+const ACCEPT_TEXT = 'Logout'
+const CANCEL_TEXT = 'Cancel'
 
 const Logout = () => {
   const dispatch = useDispatch();
 
-  const { handleClose, handleOpen, isOpened } = useAgreementModal();
+  const { handleClose, handleOpen, isOpened } = useModal();
 
   const handleLogout = async () => {
     const response = await logOut();
@@ -31,7 +36,10 @@ const Logout = () => {
         danger
         icon={<LogoutOutlined />}
       />
-      <AgreementModal
+      <ConfirmationModal
+        text={CONFIRMATION_TEXT}
+        textAccept={ACCEPT_TEXT}
+        textCancel={CANCEL_TEXT}
         isOpened={isOpened}
         onClose={handleClose}
         onClick={handleLogout}

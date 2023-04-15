@@ -18,14 +18,20 @@ import {
 import type { Word, WordForm } from "models/Library.models";
 import { useMemo } from "react";
 import { message } from "antd";
+import { useLocation } from "react-router-dom";
 
 const useCreateWord = () => {
+  const { search } = useLocation()
+  const searchParams = new URLSearchParams(search)
+  const currentPage = searchParams.get("page")
+
   const userID = useSelector(getUserID);
   const isLoading = useSelector(getLoading).createLibraryWord?.isLoading;
   const words = useSelector(getOnlyWords);
-  const page = useSelector(getPage);
   const amountOfPages = useSelector(getAmountOfPages);
   const pinedWords = useSelector(getPinWords);
+
+  const page = currentPage ?  +currentPage : 1
 
   const [messageApi, contextHolder] = message.useMessage();
 
@@ -49,9 +55,14 @@ const useCreateWord = () => {
     });
   };
 
-  const onSubmit = async (data: WordForm): Promise<Word[] | null> => {
-    console.log(data);
+  const handleSuccessMessage = (word: string) => {
+    messageApi.success({
+      type: "success",
+      content: `${word}, create success.`
+    })
+  }
 
+  const onSubmit = async (data: WordForm): Promise<Word[] | null> => {
     if (!userID) {
       return null;
     }
@@ -63,8 +74,6 @@ const useCreateWord = () => {
       userID,
     });
 
-    console.log("response: ", response);
-
     if (response === null) {
       handleErrorMessage();
 
@@ -73,6 +82,7 @@ const useCreateWord = () => {
 
     getLibraryPinWords(userID);
     getLibraryWords(userID, 0, to);
+    handleSuccessMessage(normalizedWord.word)
 
     return response;
   };

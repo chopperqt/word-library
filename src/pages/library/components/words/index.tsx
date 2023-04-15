@@ -8,13 +8,10 @@ import { WordsLayout } from "pages/library/partials/WordsLayout";
 import { getAmountOfWords, getWords } from "services/library/Library.store";
 
 import type { Word } from "models/Library.models";
-import type { LibraryProps } from "pages/library/Library";
 
 const { Title } = Typography;
 
-type WordsProps = LibraryProps;
-
-const Words = ({ width, height }: WordsProps) => {
+const Words = () => {
   const words = useSelector(getWords);
   const amountOfWords = useSelector(getAmountOfWords);
 
@@ -22,7 +19,7 @@ const Words = ({ width, height }: WordsProps) => {
     normalizedWords,
     handleClickPin,
     handleSubmitUpdate,
-    handleDeleteWord,
+    handleClickDelete,
     isLoadingUpdate,
     isLoadingDelete,
     isDisabledPin,
@@ -50,7 +47,7 @@ const Words = ({ width, height }: WordsProps) => {
           return (
             <WordsContainer
               onSubmitUpdate={handleSubmitUpdate}
-              onClickDelete={handleDeleteWord}
+              onClickDelete={handleClickDelete}
               onClickPin={handleClickPin}
               key={key}
               amountOfWords={amountOfWords}

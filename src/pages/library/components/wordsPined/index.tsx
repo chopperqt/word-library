@@ -15,7 +15,7 @@ const WordsPined = () => {
   const {
     normalizedWords,
     handleClickPin,
-    handleDeleteWord,
+    handleClickDelete,
     handleSubmitUpdate,
     isLoadingDelete,
     isLoadingUpdate,
@@ -52,7 +52,7 @@ const WordsPined = () => {
             return (
               <WordsContainer
                 key={key}
-                onClickDelete={handleDeleteWord}
+                onClickDelete={handleClickDelete}
                 onSubmitUpdate={handleSubmitUpdate}
                 onClickPin={handleClickPin}
                 letter={letter}

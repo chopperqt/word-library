@@ -2,15 +2,16 @@ import React, { lazy, Suspense } from "react";
 import { useSelector } from "react-redux";
 import { Button } from "antd";
 
+import Spin from "components/spin";
+import Skeleton from "components/Skeleton";
+import { getUserID } from "services/user/User.store";
+import { getLoading } from "services/loading/Loading.store";
+
 import EmptyContent from "./components/empty/EmptyContent";
 import useLibrary from "./hooks/useLibrary";
 import { getWords } from "services/library/Library.store";
 import Words from "./components/words";
-import { getLoading } from "services/loading/Loading.store";
-import { getUserID } from "services/user/User.store";
 import ErrorContent from "./partials/ErrorContent";
-import Skeleton from "components/Skeleton";
-import Spin from "components/spin";
 import Preloader from "./partials/Preloader";
 import supabase from "api/client";
 import Logout from "./partials/Logout";
@@ -72,7 +73,7 @@ const Library = ({ width, height }: LibraryProps) => {
           </Suspense>
         </div>
         <WordsPined />
-        <Words width={width} height={height} />
+        <Words />
       </div>
       {!isLastPage && (
         <div className="w-full h-[100px] flex items-center justify-center">

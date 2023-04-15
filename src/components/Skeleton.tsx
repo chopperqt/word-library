@@ -3,15 +3,20 @@ interface SkeletonProps {
   width?: number;
 }
 const Skeleton = ({ height, width }: SkeletonProps) => {
-  let formattedWidth = "w-full";
-
-  if (!!width) {
-    formattedWidth = `w-[${width.toString()}px]`;
+  let styles:{[key: string]: string} = {
+    height: `${height}px`
   }
 
-  const className = `flex ${formattedWidth} bg-neutral-300 rounded-[8px]`;
+  if (width) {
+    styles = {
+      ...styles,
+      width: `${width}px`,
+    }
+  }
 
-  return <div className={className} style={{ height: `${height}px` }} />;
+  const className = `flex w-full bg-neutral-300 rounded-[8px]`;
+
+  return <div className={className} style={styles} />;
 };
 
 export default Skeleton;

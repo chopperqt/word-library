@@ -46,8 +46,6 @@ const useLibrary = ({ userID, words }: UseLibraryProps) => {
       return;
     }
 
-    console.log('from: ', from, ' to: ', to)
-
     getLibraryWords(userID, from, to);
   }, [currentPage]);
 
