@@ -1,26 +1,24 @@
-
 interface UsePagination {
-	page: number
-	amountOfPages: number
+  page: number;
+  amountOfPages: number;
 }
 
-export const usePagination = ({
-	page,
-	amountOfPages
-}:UsePagination) => {
-	const isLastPage = page >= amountOfPages
+export const usePagination = ({ page, amountOfPages }: UsePagination) => {
+  const isLastPage = page - 1 >= amountOfPages;
 
-	let from = (page - 1) * 69 + 1
-
-	if (page < 2) {
-		from = 0
-	}
-
-	const to = page * 69
-
-	return {
-		isLastPage,
-		from,
-		to,
-	};
-}
+  if (page < 2) {
+    return {
+      from: 0,
+      to: 70,
+      isLastPage,
+    }
+  }
+  const to = page * 70 + (page - 1);
+  const from = to - 70;
+  
+  return {
+    isLastPage,
+    from,
+    to,
+  };
+};

@@ -27,7 +27,7 @@ export const FormFields = {
     name: [Fields.translate],
     rules: [
       {
-        require: true,
+        required: true,
         message: "This field is required!",
       },
       {
