@@ -4,11 +4,12 @@ import {
   ChangeEvent,
   useMemo,
   useLayoutEffect,
+  useCallback,
 } from "react";
 import { useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 
-import { getLibraryPinWords, getLibraryWords } from "api/library.api";
+import { getLibraryPinWords, getLibraryWords, getLibraryWordsByPagination } from "api/library.api";
 import { usePagination } from "helpers/usePagination";
 import { getAmountOfPages } from "services/pagination/Pagination.store";
 
@@ -47,7 +48,7 @@ const useLibrary = ({ userID, words }: UseLibraryProps) => {
     }
 
     getLibraryWords(userID, from, to);
-  }, [currentPage]);
+  }, []);
 
   const wordsSearched = useMemo(() => {
     if (value.length < 2) {
@@ -74,11 +75,13 @@ const useLibrary = ({ userID, words }: UseLibraryProps) => {
     setValue(e.target.value);
   };
 
-  const handleGetMoreWords = () => {
+  const handleGetMoreWords = useCallback(() => {
     searchParams.set("page", (+page + 1).toString());
 
     navigate(`${pathname}?${searchParams.toString()}`);
-  };
+
+    getLibraryWordsByPagination(userID, from + 70, to + 70)
+  }, [currentPage])
 
   return {
     value,

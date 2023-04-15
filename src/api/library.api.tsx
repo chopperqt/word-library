@@ -23,7 +23,8 @@ export type LibraryRequests =
   | "updatePin"
   | "deleteLibraryWords"
   | "searchWord"
-  | "getLibraryPinWords";
+  | "getLibraryPinWords"
+  | "getLibraryWordsByPagination";
 
 export const createLibraryWord = async (
   wordData: CreateWord
@@ -79,13 +80,13 @@ export const updateLibraryWord = async (
   return data;
 };
 
-export const getLibraryWords = async (
+export const getWords = (controller: LibraryRequests) => async (
   userID: UserID,
   from: number = 0,
   to: number = 70
 ): Promise<Word[] | null> => {
   const { handleSetError, handleSetPending, handleSetSuccess } =
-    loadingController("getLibraryWords");
+    loadingController(controller);
 
   handleSetPending();
 
@@ -230,3 +231,7 @@ export const searchWord = debounce(
   },
   600
 );
+
+export const getLibraryWords = getWords('getLibraryWords')
+
+export const getLibraryWordsByPagination = getWords('getLibraryWordsByPagination')

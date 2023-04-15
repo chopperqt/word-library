@@ -33,6 +33,7 @@ const Library = ({ width, height }: LibraryProps) => {
   const isFetched = useSelector(getLoading).getLibraryWords?.isFetched;
   const isError = useSelector(getLoading).getLibraryWords?.isError;
   const isLoading = useSelector(getLoading).getLibraryWords?.isLoading;
+  const isLoadingMoreWords = useSelector(getLoading).getLibraryWordsByPagination?.isLoading;
   const user = supabase?.auth?.user();
   const hasWords = !!words.length;
 
@@ -79,7 +80,7 @@ const Library = ({ width, height }: LibraryProps) => {
         <div className="w-full h-[100px] flex items-center justify-center">
           <Button
             onClick={handleGetMoreWords}
-            loading={isLoading}
+            loading={isLoadingMoreWords}
             size="large"
             type="primary"
           >
