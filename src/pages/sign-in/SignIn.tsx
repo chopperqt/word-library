@@ -1,10 +1,9 @@
 import { useSelector } from "react-redux"
+import { Button, Form, Input, Typography } from "antd"
 
-import TextField from "common/text-field/TextField"
-import Button from "components/button/Button"
 import useSignIn from "./hooks/useSignIn"
 import {
-  Fields,
+  FormFields,
   LINK_TEXT,
   SIGN_IN_TEXT,
   LOGIN_TEXT,
@@ -13,46 +12,46 @@ import {
 import Link from "components/link"
 import { getLoading } from "services/loading/Loading.store"
 
+const { Text } = Typography
+
 const SignIn = () => {
   const isLoading = useSelector(getLoading).signIn?.isLoading
+
+  const [form] = Form.useForm()
+
   const {
     handleSubmit,
-    control,
-  } = useSignIn()
+    contextHolder,
+    isDisabled,
+  } = useSignIn({
+    form,
+  })
 
   return (
     <div className="w-full flex justify-center items-center h-screen text-center">
-      <div className="container bg-white p-3 rounded-md shadow-lg">
+      {contextHolder}
+      <div className="w-4/5 sm:w-[450px] bg-white p-3 rounded-md shadow-lg">
         <div className="flex justify-between  items-center text-2xl">
-          <div className={LINE_STYLES} />
-          <div className="mr-3 ml-3 whitespace-nowrap" >{SIGN_IN_TEXT}</div>
+          <Text className="mr-3 ml-3 text-[22px] whitespace-nowrap" >{SIGN_IN_TEXT}</Text>
           <div className={LINE_STYLES} />
         </div>
-        <form
-          onSubmit={handleSubmit}
+        <Form
+          form={form}
+          onFinish={handleSubmit}
           className="mt-5"
         >
-          {
-            Fields.map(({
-              name,
-              placeholder,
-              type,
-            }) => (
-              <TextField
-                key={name}
-                name={name}
-                placeholder={placeholder}
-                control={control}
-                isRequired={true}
-                type={type}
-                className="mt-1"
-              />
-            ))
-          }
+          <Form.Item {...FormFields.login.item}>
+            <Input {...FormFields.login.input} size="large" />
+          </Form.Item>
+          <Form.Item {...FormFields.password.item}>
+            <Input.Password {...FormFields.password.input} size="large" />
+          </Form.Item>
           <div className="flex justify-center">
             <Button
-              loading={isLoading}
-              type="submit"
+              loading={isLoading || isDisabled}
+              htmlType="submit"
+              type="primary"
+              size="large"
               className="mb-3 mt-3"
             >
               {LOGIN_TEXT}
@@ -62,7 +61,7 @@ const SignIn = () => {
             text={LINK_TEXT}
             to="/sign-up"
           />
-        </form >
+        </Form >
       </div>
     </div>
   )

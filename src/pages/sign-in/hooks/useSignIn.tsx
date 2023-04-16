@@ -1,39 +1,62 @@
-import { useForm } from "react-hook-form"
-
-import type { SignInField } from "models/Auth.models"
 import { signIn } from "api/auth.api"
 import { useDispatch } from "react-redux"
 import { setUser } from "services/user/User.store"
-import { WRONG_AUTH_TEXT } from "helpers/texts"
 
-const useSignIn = () => {
+import type { SignInField } from "models/Auth.models"
+import { FormInstance, message } from "antd"
+import { useMessage } from "helpers/useMessage"
+import { useState } from "react"
+
+const SUCCESS_TEXT = 'Logged success.'
+
+interface UseSignInProps {
+  form: FormInstance<any>
+}
+
+const useSignIn = ({
+  form,
+}:UseSignInProps) => {
+  const { 
+    contextHolder, 
+    handleShowSuccess, 
+  } = useMessage()
+
   const dispatch = useDispatch()
-  const {
-    control,
-    handleSubmit: submitForm,
-    setError,
-    reset,
-  } = useForm<SignInField>()
 
-  const handleSubmit = submitForm(async (data: SignInField) => {
+  const [isDisabled, setDisabled] = useState(false)
+ 
+  const handleError = () => {
+    form.setFields([
+      {
+        name: 'password',
+        errors: ['Invalid login credentials'],
+        value: '',
+      }
+
+    ])
+  }
+
+  const handleSubmit = async (data: SignInField) => {
     const user = await signIn(data)
 
     if (!user) {
-      reset()
+      handleError()
 
-      setError('password', {
-        message: WRONG_AUTH_TEXT,
-      })
-
-      return
+      return 
     }
 
-    dispatch(setUser(user))
-  })
+    setDisabled(true)
+    handleShowSuccess(SUCCESS_TEXT)
+
+    setTimeout(() => {
+      dispatch(setUser(user))
+    }, 2000)
+  }
 
   return {
-    control,
+    contextHolder,
     handleSubmit,
+    isDisabled,
   }
 }
 

@@ -1,4 +1,3 @@
-import { useEffect } from "react"
 import { useController } from "react-hook-form"
 
 import Input from "components/Input"

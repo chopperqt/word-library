@@ -1,15 +1,50 @@
-export const Fields = [
-  {
-    name: 'login',
-    placeholder: 'Login',
-    type: 'input',
+export const Fields = {
+  login: 'login',
+  password: 'password'
+}
+
+type Field = 'login' | 'password'
+
+type FormFieldsProps = Record<Field, { item: any, input: any }>
+
+export const FormFields:FormFieldsProps = {
+  login: {
+    item: {
+      name: Fields.login,
+      rules: [
+        {
+          pattern: /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
+          message: 'Email is incorrect!'
+        },
+        {
+          required: true,
+          message: 'This field is required!'
+        },
+      ]
+    },
+    input: {
+      placeholder: 'Login'
+    }
   },
-  {
-    name: 'password',
-    placeholder: 'Password',
-    type: 'password',
-  }
-]
+  password: {
+    item: {
+      name: Fields.password,
+      rules: [
+        {
+          pattern: /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}/,
+          message: 'Password is incorrect!'
+        },
+        {
+          required: true,
+          message: 'This field is required!'
+        },
+      ]
+    },
+    input: {
+      placeholder: 'Password'
+    }
+  },
+}
 
 export const SIGN_IN_TEXT = 'Sign in'
 export const LOGIN_TEXT = 'Login'
