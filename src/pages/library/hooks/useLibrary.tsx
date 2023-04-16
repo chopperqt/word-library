@@ -3,7 +3,6 @@ import {
   useEffect,
   ChangeEvent,
   useMemo,
-  useLayoutEffect,
   useCallback,
 } from "react";
 import { useSelector } from "react-redux";
@@ -36,18 +35,26 @@ const useLibrary = ({ userID, words }: UseLibraryProps) => {
     amountOfPages,
   });
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     window.document.title = "Library";
 
     getLibraryPinWords(userID);
 
     if (!words.length) {
-      getLibraryWords(userID, 0, to);
+      getLibraryWords({
+        userID, 
+        from: 0, 
+        to
+      });
 
       return;
     }
 
-    getLibraryWords(userID, from, to);
+    getLibraryWords({
+      userID, 
+      from, 
+      to
+    });
   }, []);
 
   const wordsSearched = useMemo(() => {
@@ -75,12 +82,20 @@ const useLibrary = ({ userID, words }: UseLibraryProps) => {
     setValue(e.target.value);
   };
 
-  const handleGetMoreWords = useCallback(() => {
+  const handleSetPage = () => {
     searchParams.set("page", (+page + 1).toString());
 
     navigate(`${pathname}?${searchParams.toString()}`);
+  }
 
-    getLibraryWordsByPagination(userID, from + 70, to + 70)
+  const handleGetMoreWords = useCallback(() => {
+    handleSetPage()
+
+    getLibraryWordsByPagination({
+      userID, 
+      from,
+      to,
+    })
   }, [currentPage])
 
   return {

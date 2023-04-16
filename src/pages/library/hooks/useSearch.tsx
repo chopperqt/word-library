@@ -61,7 +61,7 @@ const useSearch = () => {
 		}
 
 		getLibraryPinWords(userID)
-		getLibraryWords(userID)
+		getLibraryWords({userID})
 		setValue('')
 	}
 
@@ -83,7 +83,7 @@ const useSearch = () => {
 		}
 
 		getLibraryPinWords(userID)
-		getLibraryWords(userID)
+		getLibraryWords({userID})
 		setValue('')
 
 		return response
@@ -97,7 +97,11 @@ const useSearch = () => {
 		}
 
 		getLibraryPinWords(userID)
-		getLibraryWords(userID, 0, to)
+		getLibraryWords({
+			userID, 
+			from: 0, 
+			to
+		})
 		setValue('')
 
 		return response as Word[]

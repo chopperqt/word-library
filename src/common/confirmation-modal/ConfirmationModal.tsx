@@ -34,7 +34,6 @@ export const ConfirmationModal = ({
         <Button
           type="primary"
           size="large"
-          disabled={isLoading}
           onClick={onClick}
           loading={isLoading}
         >

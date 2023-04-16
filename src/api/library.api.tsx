@@ -80,11 +80,17 @@ export const updateLibraryWord = async (
   return data;
 };
 
-export const getWords = (controller: LibraryRequests) => async (
-  userID: UserID,
-  from: number = 0,
-  to: number = 70
-): Promise<Word[] | null> => {
+interface GetWords {
+  userID: UserID
+  from?: number
+  to?: number
+}
+
+export const getWords = (controller: LibraryRequests) => async ({
+  userID,
+  from = 0,
+  to = 70
+}:GetWords): Promise<Word[] | null> => {
   const { handleSetError, handleSetPending, handleSetSuccess } =
     loadingController(controller);
 
@@ -93,10 +99,11 @@ export const getWords = (controller: LibraryRequests) => async (
   const { data, error, count } = await supabase
     .from(LIBRARY_TABLE)
     .select("*", { count: "exact" })
-    .limit(70)
     .order("word")
     .range(from, to)
+    .limit(70)
     .match({ userID });
+    
 
   if (error || !data || !count) {
     handleSetError();

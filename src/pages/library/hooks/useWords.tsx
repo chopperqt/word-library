@@ -52,7 +52,7 @@ export const useWords = ({ words = [] }: UseWordsProps) => {
     }
 
     getLibraryPinWords(userID)
-    getLibraryWords(userID)
+    getLibraryWords({userID})
   }
 
   const handleSubmitUpdate = async (word: WordForm, wordID?: number):Promise<Word[] | null>  => {
@@ -73,7 +73,11 @@ export const useWords = ({ words = [] }: UseWordsProps) => {
 		}
 
     getLibraryPinWords(userID)
-		getLibraryWords(userID, 0, to)
+		getLibraryWords({
+      userID, 
+      from: 0, 
+      to
+    })
 
     return response
 	}
@@ -85,7 +89,11 @@ export const useWords = ({ words = [] }: UseWordsProps) => {
       return null
     }
 
-    getLibraryWords(userID, 0, to)
+    getLibraryWords({
+      userID, 
+      from: 0, 
+      to
+    })
     getLibraryPinWords(userID)
 
     return response as Word[]

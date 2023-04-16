@@ -81,7 +81,11 @@ const useCreateWord = () => {
     }
 
     getLibraryPinWords(userID);
-    getLibraryWords(userID, 0, to);
+    getLibraryWords({
+      userID, 
+      from: 0, 
+      to
+    });
     handleSuccessMessage(normalizedWord.word)
 
     return response;

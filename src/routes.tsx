@@ -46,7 +46,7 @@ export const routesWithAuth = [
     element: (
       <Suspense fallback="">
         <AutoSizer disableWidth>
-          {({ width, height }) => <Library width={width} height={height} />}
+          {() => <Library  />}
         </AutoSizer>
       </Suspense>
     ),

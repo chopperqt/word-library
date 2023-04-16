@@ -27,7 +27,7 @@ export interface LibraryProps {
   height: number;
 }
 
-const Library = ({ width, height }: LibraryProps) => {
+const Library = () => {
   const words = useSelector(getWords);
   const userID = useSelector(getUserID);
   const isFetched = useSelector(getLoading).getLibraryWords?.isFetched;
