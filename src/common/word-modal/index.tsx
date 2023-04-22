@@ -1,4 +1,4 @@
-import WordModal from './WordModal'
+import {WordModal} from './WordModal'
 import useModalWord from './hooks/useModalWord'
 
 export {

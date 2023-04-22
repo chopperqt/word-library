@@ -6,11 +6,12 @@ import { deleteLibraryWords, getLibraryPinWords, getLibraryWords, updateLibraryW
 import { getUserID } from "services/user/User.store";
 import { getNormalizeWord } from "common/word-modal/helpers/getNormalizeWord";
 import { getLoading } from "services/loading/Loading.store";
-import { getAmountOfPages, getPage } from "services/pagination/Pagination.store";
+import { getAmountOfPages } from "services/pagination/Pagination.store";
 import { usePagination } from "helpers/usePagination";
 import { getPinWords } from "services/library/Library.store";
 
 import type { Word, WordForm } from "models/Library.models";
+import { ParamsController } from "helpers/paramsController";
 
 
 interface UseWordsProps {
@@ -18,10 +19,13 @@ interface UseWordsProps {
 }
 
 export const useWords = ({ words = [] }: UseWordsProps) => {
+  const { getParam } = ParamsController()
+
+  const page = getParam('page') || 1
+
   const userID = useSelector(getUserID)
   const isLoadingUpdate = useSelector(getLoading).updateLibraryWord?.isLoading
   const isLoadingDelete = useSelector(getLoading).deleteLibraryWords?.isLoading
-  const page = useSelector(getPage)
   const amountOfPages = useSelector(getAmountOfPages)
   const pinedWords = useSelector(getPinWords)
 
@@ -34,7 +38,7 @@ export const useWords = ({ words = [] }: UseWordsProps) => {
   }, [pinedWords])
 
   const { to } = usePagination({
-    page,
+    page: +page,
     amountOfPages
   })
 
@@ -85,7 +89,7 @@ export const useWords = ({ words = [] }: UseWordsProps) => {
   const handleClickDelete = async (word: string):Promise<Word[] | null> => {
     const response = await deleteLibraryWords(userID, word)
 
-    if (response === null) {
+    if (!response) {
       return null
     }
 

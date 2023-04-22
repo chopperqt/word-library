@@ -10,13 +10,12 @@ export const usePagination = ({ page, amountOfPages }: UsePagination) => {
     return {
       from: 0,
       to: 69,
-      isLastPage,
     };
   }
-  const to = page * 69 + page;
-  const from = to - 70;
 
-  console.log("to", to);
+  const to = page * 70 - 1;
+  const from = to - 69;
+
 
   return {
     isLastPage,

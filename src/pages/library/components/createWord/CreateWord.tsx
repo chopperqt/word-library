@@ -33,7 +33,6 @@ const CreateWord = () => {
         <div className="hidden md:block">{ADD_TEXT}</div>
       </Button>
       <WordModal
-        isCheckUniqueWord={true}
         onSubmit={handleSubmit}
         isOpened={isOpened}
         onClose={handleClose}

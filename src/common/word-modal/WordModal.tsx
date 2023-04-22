@@ -22,7 +22,7 @@ interface WordModalProps {
   word?: string;
 }
 
-const WordModal = ({
+export const WordModal = ({
   onClose,
   onSubmit,
   isOpened,
@@ -56,5 +56,3 @@ const WordModal = ({
     </ModalContainer>
   );
 };
-
-export default WordModal;

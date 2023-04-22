@@ -9,8 +9,6 @@ export const getPaginationRange = (page: number) => {
   const to = page * 70 - 1;
   const from = to - 69;
 
-  console.log("to: ", page * 70 + page);
-
   return {
     to,
     from,

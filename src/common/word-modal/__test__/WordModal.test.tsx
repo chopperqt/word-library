@@ -9,7 +9,7 @@ import { useForm } from "react-hook-form";
 
 import "@testing-library/jest-dom/extend-expect";
 
-import WordModal from "../WordModal";
+import {WordModal} from "../WordModal";
 import type { WordForm } from "models/Library.models";
 
 afterEach(cleanup);
