@@ -1,24 +1,18 @@
-import { Button, Form, Input, Select, Switch, Typography } from "antd";
-
-import ModalContainer from "components/ModalContainer";
-import type { WordForm } from "models/Library.models";
 import { useMemo } from "react";
 
-import { FormFields, Fields } from "./constants";
+import { WordForm } from "common/word-form";
+import ModalContainer from "components/ModalContainer";
 
-const { Text } = Typography;
+import type { WordForm as IWordForm } from "models/Library.models";
 
 const ADD_TEXT = "Add";
 const UPDATE_TEXT = "Update";
-const TOGGLER_TEXT = "Need to bookmark ?";
-const PLACEHOLDER_WORD_TEXT = "Example";
-const PLACEHOLDER_TRANSLATE_TEXT = "Пример";
 
 interface WordModalProps {
   isOpened: boolean;
   isDisabledPin?: boolean;
   onClose: () => void;
-  onSubmit: (data: WordForm) => void;
+  onSubmit: (data: IWordForm) => void;
   translate?: string[];
   pined?: boolean;
   isCheckUniqueWord?: boolean;
@@ -35,54 +29,30 @@ const WordModal = ({
   pined = false,
   isCheckUniqueWord = false,
   isLoading = false,
-  words = [],
   isUpdate = false,
   translate = [],
   word,
   isDisabledPin = false,
 }: WordModalProps) => {
-  const [form] = Form.useForm();
   let text = isUpdate ? UPDATE_TEXT : ADD_TEXT;
+
+  const initialValues = useMemo(() => {
+    return {
+      pined,
+      translate,
+      word,
+    }
+  }, [translate, word, pined])
 
   return (
     <ModalContainer isOpened={isOpened} onClose={onClose}>
-      <Form
-        form={form}
-        className="w-full max-w-2xl flex flex-col"
-        onFinish={onSubmit}
-        data-testid="word-modal-form"
-      >
-        <Form.Item {...FormFields.word}>
-          <Input 
-            defaultValue={word} 
-            size="large" 
-            placeholder={PLACEHOLDER_TRANSLATE_TEXT} 
-          />
-        </Form.Item>
-        <Form.Item {...FormFields.translate}>
-          <Select
-            size="large"
-            mode="tags"
-            placeholder={PLACEHOLDER_WORD_TEXT}
-          />
-        </Form.Item>
-
-        <div className="flex gap-x-1 justify-between">
-          <Text>{TOGGLER_TEXT}</Text>
-          <Form.Item name={["pined"]} valuePropName="checked">
-            <Switch checkedChildren="Yes" unCheckedChildren="No" />
-          </Form.Item>
-        </div>
-        <Button
-          loading={isLoading}
-          type="primary"
-          size="large"
-          className="w-full"
-          htmlType="submit"
-        >
-          {text}
-        </Button>
-      </Form>
+      <WordForm  
+        buttonText={text}
+        onSubmit={onSubmit}
+        isLoading={isLoading}
+        initialValues={initialValues}
+        isDisabledPin={isDisabledPin}
+      />
     </ModalContainer>
   );
 };
