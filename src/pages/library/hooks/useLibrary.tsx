@@ -3,7 +3,6 @@ import {
   useEffect,
   ChangeEvent,
   useMemo,
-  useCallback,
 } from "react";
 import { useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -14,6 +13,7 @@ import { getAmountOfPages } from "services/pagination/Pagination.store";
 
 import type { UserID } from "models/Auth.models";
 import type { Word } from "models/Library.models";
+import { getPaginationRange } from "helpers/getPaginationRange";
 
 interface UseLibraryProps {
   userID: UserID;
@@ -82,21 +82,22 @@ const useLibrary = ({ userID, words }: UseLibraryProps) => {
     setValue(e.target.value);
   };
 
-  const handleSetPage = () => {
+  const handleGetMoreWords = () => {
     searchParams.set("page", (+page + 1).toString());
 
     navigate(`${pathname}?${searchParams.toString()}`);
-  }
 
-  const handleGetMoreWords = useCallback(() => {
-    handleSetPage()
+    const { 
+      from, 
+      to,
+    } = getPaginationRange(page + 1)
 
     getLibraryWordsByPagination({
       userID, 
-      from,
+      from, 
       to,
     })
-  }, [currentPage])
+  }
 
   return {
     value,

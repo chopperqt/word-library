@@ -33,7 +33,8 @@ const Library = () => {
   const isFetched = useSelector(getLoading).getLibraryWords?.isFetched;
   const isError = useSelector(getLoading).getLibraryWords?.isError;
   const isLoading = useSelector(getLoading).getLibraryWords?.isLoading;
-  const isLoadingMoreWords = useSelector(getLoading).getLibraryWordsByPagination?.isLoading;
+  const isLoadingMoreWords =
+    useSelector(getLoading).getLibraryWordsByPagination?.isLoading;
   const user = supabase?.auth?.user();
   const hasWords = !!words.length;
 
@@ -65,13 +66,13 @@ const Library = () => {
       {isLoading && <Preloader />}
       <div className="flex flex-col p-5 gap-5">
         <div className="flex gap-3">
-          {user?.id && <Logout />}
           <Suspense fallback={<Skeleton height={40} />}>
             <Search />
           </Suspense>
           <Suspense fallback={<Skeleton height={40} width={61} />}>
             <CreateWord />
           </Suspense>
+          {user?.id && <Logout />}
         </div>
         <WordsPined />
         <Words />

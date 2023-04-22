@@ -2,8 +2,9 @@ import { Button, Form, Input, Select, Switch, Typography } from "antd";
 
 import ModalContainer from "components/ModalContainer";
 import type { WordForm } from "models/Library.models";
+import { useMemo } from "react";
 
-import { FormFields } from "./constants";
+import { FormFields, Fields } from "./constants";
 
 const { Text } = Typography;
 
@@ -52,7 +53,11 @@ const WordModal = ({
         data-testid="word-modal-form"
       >
         <Form.Item {...FormFields.word}>
-          <Input size="large" placeholder={PLACEHOLDER_TRANSLATE_TEXT} />
+          <Input 
+            defaultValue={word} 
+            size="large" 
+            placeholder={PLACEHOLDER_TRANSLATE_TEXT} 
+          />
         </Form.Item>
         <Form.Item {...FormFields.translate}>
           <Select

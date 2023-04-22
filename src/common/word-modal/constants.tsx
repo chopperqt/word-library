@@ -7,6 +7,7 @@ const TRANSLATE_PATTERN = /^[а-яА-ЯёЁ\s]+$/;
 export const Fields = {
   word: "word",
   translate: "translate",
+  pined: 'pined',
 };
 
 export const FormFields = {
@@ -30,20 +31,20 @@ export const FormFields = {
         required: true,
         message: "This field is required!",
       },
-      {
-        pattern: TRANSLATE_PATTERN,
-        message: "Unacceptable symbol!",
-      },
       () => ({
         validator(_: RuleObject, value: string[]) {
           let error = "";
 
+          if (!value.length) {
+            return Promise.resolve()
+          }
+
           value?.forEach((tag) => {
             if (tag.match(TAG_PATTERN)?.length) {
-              return;
+              return Promise.resolve()
             }
 
-            error = "Unacceptable symbol!";
+            error = `${tag} is unacceptable symbol!`;
           });
 
           if (error) {

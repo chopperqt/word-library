@@ -81,51 +81,47 @@ export const updateLibraryWord = async (
 };
 
 interface GetWords {
-  userID: UserID
-  from?: number
-  to?: number
+  userID: UserID;
+  from?: number;
+  to?: number;
 }
 
-export const getWords = (controller: LibraryRequests) => async ({
-  userID,
-  from = 0,
-  to = 70
-}:GetWords): Promise<Word[] | null> => {
-  const { handleSetError, handleSetPending, handleSetSuccess } =
-    loadingController(controller);
+export const getWords =
+  (controller: LibraryRequests) =>
+  async ({ userID, from = 0, to = 70 }: GetWords): Promise<Word[] | null> => {
+    const { handleSetError, handleSetPending, handleSetSuccess } =
+      loadingController(controller);
 
-  handleSetPending();
+    handleSetPending();
 
-  const { data, error, count } = await supabase
-    .from(LIBRARY_TABLE)
-    .select("*", { count: "exact" })
-    .order("word")
-    .range(from, to)
-    .limit(70)
-    .match({ userID });
-    
+    const { data, error, count } = await supabase
+      .from(LIBRARY_TABLE)
+      .select("*", { count: "exact" })
+      .match({ userID })
+      .order("word")
+      .range(from, to);
 
-  if (error || !data || !count) {
-    handleSetError();
+    if (error || !data || !count) {
+      handleSetError();
 
-    return null;
-  }
+      return null;
+    }
 
-  const amountOfPages = Math.round(count / 70);
+    const amountOfPages = Math.round(count / 70);
 
-  if (from === 0) {
-    store.dispatch(setWords(data));
-  } else {
-    store.dispatch(updateWords(data));
-  }
+    if (from === 0) {
+      store.dispatch(setWords(data));
+    } else {
+      store.dispatch(updateWords(data));
+    }
 
-  store.dispatch(setAmountOfWords(count));
-  store.dispatch(setAmountOfPages(amountOfPages));
+    store.dispatch(setAmountOfWords(count));
+    store.dispatch(setAmountOfPages(amountOfPages));
 
-  handleSetSuccess();
+    handleSetSuccess();
 
-  return data;
-};
+    return data;
+  };
 
 export const getLibraryPinWords = async (
   userID: UserID
@@ -239,6 +235,8 @@ export const searchWord = debounce(
   600
 );
 
-export const getLibraryWords = getWords('getLibraryWords')
+export const getLibraryWords = getWords("getLibraryWords");
 
-export const getLibraryWordsByPagination = getWords('getLibraryWordsByPagination')
+export const getLibraryWordsByPagination = getWords(
+  "getLibraryWordsByPagination"
+);
