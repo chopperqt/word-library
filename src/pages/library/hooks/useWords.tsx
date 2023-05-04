@@ -30,11 +30,7 @@ export const useWords = ({ words = [] }: UseWordsProps) => {
   const pinedWords = useSelector(getPinWords)
 
   const isDisabledPin = useMemo(() => {
-    if (pinedWords.length >= 15) {
-      return true
-    }
-
-    return false
+    return pinedWords.length >= 15
   }, [pinedWords])
 
   const { to } = usePagination({

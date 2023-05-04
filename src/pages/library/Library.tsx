@@ -65,7 +65,7 @@ const Library = () => {
     <React.Fragment>
       {isLoading && <Preloader />}
       <div className="flex flex-col p-5 gap-5">
-        <div className="flex gap-3">
+        <div className="flex gap-3 p-[15px] rounded-lg bg-slate-100">
           <Suspense fallback={<Skeleton height={40} />}>
             <Search />
           </Suspense>
