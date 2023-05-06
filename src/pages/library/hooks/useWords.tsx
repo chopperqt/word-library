@@ -2,7 +2,14 @@ import { useSelector } from "react-redux";
 import { useMemo } from "react";
 
 import { normalizeWords } from "helpers/normalizeWords";
-import { deleteLibraryWords, getLibraryPinWords, getLibraryWords, updateLibraryWord, updatePin } from "api/library.api";
+import {
+  deleteLibraryWords,
+  getLibraryPinWords,
+  getLibraryWords,
+  getLibraryWordsWithoutLoading,
+  updateLibraryWord,
+  updatePin,
+} from "api/library.api";
 import { getUserID } from "services/user/User.store";
 import { getNormalizeWord } from "common/word-modal/helpers/getNormalizeWord";
 import { getLoading } from "services/loading/Loading.store";
@@ -12,31 +19,34 @@ import { getPinWords } from "services/library/Library.store";
 
 import type { Word, WordForm } from "models/Library.models";
 import { ParamsController } from "helpers/paramsController";
-
+import { useMessage } from "helpers/useMessage";
+import { log } from "console";
 
 interface UseWordsProps {
   words: Word[];
 }
 
 export const useWords = ({ words = [] }: UseWordsProps) => {
-  const { getParam } = ParamsController()
+  const { getParam } = ParamsController();
 
-  const page = getParam('page') || 1
+  const page = getParam("page") || 1;
 
-  const userID = useSelector(getUserID)
-  const isLoadingUpdate = useSelector(getLoading).updateLibraryWord?.isLoading
-  const isLoadingDelete = useSelector(getLoading).deleteLibraryWords?.isLoading
-  const amountOfPages = useSelector(getAmountOfPages)
-  const pinedWords = useSelector(getPinWords)
+  const userID = useSelector(getUserID);
+  const isLoadingUpdate = useSelector(getLoading).updateLibraryWord?.isLoading;
+  const isLoadingDelete = useSelector(getLoading).deleteLibraryWords?.isLoading;
+  const amountOfPages = useSelector(getAmountOfPages);
+  const pinedWords = useSelector(getPinWords);
+
+  const { messageApi, contextHolder, handleShowSuccess } = useMessage();
 
   const isDisabledPin = useMemo(() => {
-    return pinedWords.length >= 15
-  }, [pinedWords])
+    return pinedWords.length >= 15;
+  }, [pinedWords]);
 
   const { to } = usePagination({
     page: +page,
-    amountOfPages
-  })
+    amountOfPages,
+  });
 
   const normalizedWords = useMemo(() => {
     let formattedWords = words;
@@ -44,60 +54,84 @@ export const useWords = ({ words = [] }: UseWordsProps) => {
     return Object.entries(normalizeWords(formattedWords));
   }, [words]);
 
-  const handleClickPin = async (word: string, isPined:boolean) => {
-    const response = await updatePin(userID, !isPined,word)
+  const handleClickPin = async (word: string, isPined: boolean) => {
+    let successText = `${word} pin.`;
+    let content = `Pinning...`;
+
+    if (isPined) {
+      successText = `${word} was unpined.`;
+      content = `Unpinning...`;
+    }
+
+    messageApi
+      .open({
+        type: "loading",
+        content,
+      })
+      .then(async () => {
+        const response = await updatePin(userID, !isPined, word);
+
+        if (response === null) {
+          return;
+        }
+
+        handleShowSuccess(successText);
+
+        getLibraryPinWords(userID);
+        getLibraryWordsWithoutLoading({
+          userID,
+          from: 0,
+          to,
+        });
+      });
+  };
+
+  const handleSubmitUpdate = async (
+    word: WordForm,
+    wordID?: number
+  ): Promise<Word[] | null> => {
+    if (!wordID) {
+      return null;
+    }
+
+    const normalizedWord = getNormalizeWord(word);
+
+    const response = await updateLibraryWord({
+      ...normalizedWord,
+      wordID,
+      userID,
+    });
 
     if (response === null) {
-      return
+      return null;
     }
 
-    getLibraryPinWords(userID)
-    getLibraryWords({userID})
-  }
+    getLibraryPinWords(userID);
+    getLibraryWords({
+      userID,
+      from: 0,
+      to,
+    });
 
-  const handleSubmitUpdate = async (word: WordForm, wordID?: number):Promise<Word[] | null>  => {
-    if (!wordID) {
-      return null
-    }
+    return response;
+  };
 
-		const normalizedWord = getNormalizeWord(word)
-
-		const response = await updateLibraryWord({
-			...normalizedWord,
-			wordID,
-			userID,
-		})
-
-		if (response === null) {
-			return null
-		}
-
-    getLibraryPinWords(userID)
-		getLibraryWords({
-      userID, 
-      from: 0, 
-      to
-    })
-
-    return response
-	}
-
-  const handleClickDelete = async (word: string):Promise<Word[] | null> => {
-    const response = await deleteLibraryWords(userID, word)
+  const handleClickDelete = async (word: string): Promise<Word[] | null> => {
+    const response = await deleteLibraryWords(userID, word);
 
     if (!response) {
-      return null
+      return null;
     }
 
     getLibraryWords({
-      userID, 
-      from: 0, 
-      to
-    })
-    getLibraryPinWords(userID)
+      userID,
+      from: 0,
+      to,
+    });
+    getLibraryPinWords(userID);
 
-    return response as Word[]
-  }
+    return response as Word[];
+  };
 
   return {
     normalizedWords,
@@ -108,5 +142,6 @@ export const useWords = ({ words = [] }: UseWordsProps) => {
     isLoadingDelete,
     isDisabledPin,
     userID,
+    contextHolder,
   };
 };

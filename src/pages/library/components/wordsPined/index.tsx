@@ -20,6 +20,7 @@ const WordsPined = () => {
     isLoadingDelete,
     isLoadingUpdate,
     isDisabledPin,
+    contextHolder,
   } = useWords({
     words,
   });
@@ -31,7 +32,8 @@ const WordsPined = () => {
   const title = `Pined(${words.length}/15)`;
 
   return (
-    <React.Fragment>
+    <div className="p-[15px] rounded-lg bg-slate-100">
+      {contextHolder}
       <div className="flex items-center">
         <Title level={3} className="mb-0">
           {title}
@@ -67,7 +69,7 @@ const WordsPined = () => {
           }
         )}
       </div>
-    </React.Fragment>
+    </div>
   );
 };
 

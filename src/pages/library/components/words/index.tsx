@@ -23,6 +23,7 @@ const Words = () => {
     isLoadingUpdate,
     isLoadingDelete,
     isDisabledPin,
+    contextHolder,
   } = useWords({ words });
 
   if (!normalizedWords.length) {
@@ -32,8 +33,9 @@ const Words = () => {
   const title = `Library(${words.length}/${amountOfWords})`;
 
   return (
-    <React.Fragment>
-      <Title level={3} className="mt-5 mb-0">
+    <div className="p-[15px] rounded-lg bg-slate-100">
+      {contextHolder}
+      <Title level={3} className="mb-0">
         {title}
       </Title>
       <WordsLayout>
@@ -60,7 +62,7 @@ const Words = () => {
           );
         })}
       </WordsLayout>
-    </React.Fragment>
+    </div>
   );
 };
 
