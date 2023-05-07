@@ -107,11 +107,13 @@ export const useWords = ({ words = [] }: UseWordsProps) => {
     }
 
     getLibraryPinWords(userID);
-    getLibraryWords({
+    getLibraryWordsWithoutLoading({
       userID,
       from: 0,
       to,
     });
+
+    handleShowSuccess(`${word.word} updated.`);
 
     return response;
   };
@@ -123,12 +125,14 @@ export const useWords = ({ words = [] }: UseWordsProps) => {
       return null;
     }
 
-    getLibraryWords({
+    getLibraryWordsWithoutLoading({
       userID,
       from: 0,
       to,
     });
     getLibraryPinWords(userID);
+
+    handleShowSuccess(`${word} deleted.`);
 
     return response as Word[];
   };
