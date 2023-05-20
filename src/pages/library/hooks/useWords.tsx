@@ -55,11 +55,19 @@ export const useWords = ({ words = [] }: UseWordsProps) => {
   }, [words]);
 
   const handleClickPin = async (word: string, isPined: boolean) => {
-    let successText = `${word} pin.`;
+    let successText = (
+      <span>
+        <b>{word}</b> pined.
+      </span>
+    );
     let content = `Pinning...`;
 
     if (isPined) {
-      successText = `${word} was unpined.`;
+      successText = (
+        <span>
+          <b>{word}</b> unpined.
+        </span>
+      );
       content = `Unpinning...`;
     }
 
@@ -113,7 +121,11 @@ export const useWords = ({ words = [] }: UseWordsProps) => {
       to,
     });
 
-    handleShowSuccess(`${word.word} updated.`);
+    handleShowSuccess(
+      <span>
+        <b>{word.word}</b> updated.
+      </span>
+    );
 
     return response;
   };
@@ -132,7 +144,11 @@ export const useWords = ({ words = [] }: UseWordsProps) => {
     });
     getLibraryPinWords(userID);
 
-    handleShowSuccess(`${word} deleted.`);
+    handleShowSuccess(
+      <span>
+        <b>{word}</b> deleted.
+      </span>
+    );
 
     return response as Word[];
   };

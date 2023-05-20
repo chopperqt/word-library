@@ -1,5 +1,5 @@
-import { useCallback } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useCallback } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 
 /**
  * Контроллер удаления, получения, добавления параметров в адресную строку
@@ -18,7 +18,13 @@ export function ParamsController() {
   const setParam = (param: string, value: string) => {
     currentParams.set(param, value);
 
+    console.log(`${pathname}?${currentParams.toString()}`);
+
     navigate(`${pathname}?${currentParams.toString()}`);
+  };
+
+  const setSearch = (params: string) => {
+    navigate(`${pathname}${params}`);
   };
 
   /**
@@ -91,6 +97,7 @@ export function ParamsController() {
     params: search,
     setParam,
     setParams,
+    setSearch,
     getParam,
     getAllParams,
     deleteParam,

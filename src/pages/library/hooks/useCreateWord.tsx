@@ -56,7 +56,11 @@ const useCreateWord = () => {
   const handleSuccessMessage = (word: string) => {
     messageApi.success({
       type: "success",
-      content: `${word}, created.`,
+      content: (
+        <span>
+          <b>${word}</b>, created.
+        </span>
+      ),
     });
   };
 

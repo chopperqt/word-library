@@ -1,19 +1,19 @@
-import {
-  useState,
-  useEffect,
-  ChangeEvent,
-  useMemo,
-} from "react";
+import { useState, useEffect, ChangeEvent, useMemo } from "react";
 import { useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 
-import { getLibraryPinWords, getLibraryWords, getLibraryWordsByPagination } from "api/library.api";
+import {
+  getLibraryPinWords,
+  getLibraryWords,
+  getLibraryWordsByPagination,
+} from "api/library.api";
 import { usePagination } from "helpers/usePagination";
 import { getAmountOfPages } from "services/pagination/Pagination.store";
 
 import type { UserID } from "models/Auth.models";
 import type { Word } from "models/Library.models";
 import { getPaginationRange } from "helpers/getPaginationRange";
+import { ParamsController } from "helpers/paramsController";
 
 interface UseLibraryProps {
   userID: UserID;
@@ -23,6 +23,7 @@ interface UseLibraryProps {
 }
 const useLibrary = ({ userID, words }: UseLibraryProps) => {
   const { pathname, search } = useLocation();
+  const { setParam } = ParamsController();
   const searchParams = new URLSearchParams(search);
   const currentPage = searchParams.get("page");
 
@@ -42,18 +43,18 @@ const useLibrary = ({ userID, words }: UseLibraryProps) => {
 
     if (!words.length) {
       getLibraryWords({
-        userID, 
-        from: 0, 
-        to
+        userID,
+        from: 0,
+        to,
       });
 
       return;
     }
 
     getLibraryWords({
-      userID, 
-      from, 
-      to
+      userID,
+      from,
+      to,
     });
   }, []);
 
@@ -83,21 +84,16 @@ const useLibrary = ({ userID, words }: UseLibraryProps) => {
   };
 
   const handleGetMoreWords = () => {
-    searchParams.set("page", (+page + 1).toString());
+    setParam("page", (page + 1).toString());
 
-    navigate(`${pathname}?${searchParams.toString()}`);
-
-    const { 
-      from, 
-      to,
-    } = getPaginationRange(page + 1)
+    const { from, to } = getPaginationRange(page + 1);
 
     getLibraryWordsByPagination({
-      userID, 
-      from, 
+      userID,
+      from,
       to,
-    })
-  }
+    });
+  };
 
   return {
     value,
