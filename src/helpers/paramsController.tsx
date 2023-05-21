@@ -24,7 +24,7 @@ export function ParamsController() {
   };
 
   const setSearch = (params: string) => {
-    navigate(`${pathname}${params}`);
+    navigate(`/library${params}`);
   };
 
   /**

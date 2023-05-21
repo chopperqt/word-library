@@ -1,28 +1,24 @@
-import { ApiError } from "@supabase/supabase-js"
-import { loadingController } from "helpers/loadingController"
-import { User } from "models/Auth.models"
-import { useDispatch } from "react-redux"
-import { setLoading } from "services/loading/Loading.store"
-import { store } from "services/stores"
-import { setUser } from "services/user/User.store"
-import supabase from "./client"
+import { ApiError } from "@supabase/supabase-js";
+import { loadingController } from "helpers/loadingController";
+import { User } from "models/Auth.models";
+import supabase from "./client";
 
 export type AuthRequests =
-  'loginWithGoogle' |
-  'signUp' |
-  'validateEmail' |
-  'deleteUser' |
-  'login' |
-  'getUser' |
-  'signIn'
+  | "loginWithGoogle"
+  | "signUp"
+  | "validateEmail"
+  | "deleteUser"
+  | "login"
+  | "getUser"
+  | "signIn";
 
-export type UserEmail = string
-export type UserID = string
-export type UserPassword = string
+export type UserEmail = string;
+export type UserID = string;
+export type UserPassword = string;
 
 export interface LoginData {
-  login: string
-  password: string
+  login: string;
+  password: string;
 }
 
 // // FIXED добавить какие данные будут в дате при регистрации
@@ -54,56 +50,43 @@ export const signIn = async ({
   login,
   password,
 }: LoginData): Promise<User | null> => {
-  const {
-    handleSetError,
-    handleSetPending,
-    handleSetSuccess,
-  } = loadingController('signIn')
+  const { handleSetError, handleSetPending, handleSetSuccess } =
+    loadingController("signIn");
 
-  handleSetPending()
+  handleSetPending();
 
-  const {
-    error,
-    user,
-  } = await supabase
-    .auth
-    .signIn({
-      email: login,
-      password,
-    })
+  const { error, user } = await supabase.auth.signIn({
+    email: login,
+    password,
+  });
 
   if (error || !user || !user?.id || !user?.email || !user?.role) {
-    handleSetError()
+    handleSetError();
 
-    return null
+    return null;
   }
 
-  const {
-    id,
-    role,
-    email,
-    user_metadata,
-  } = user
+  const { id, role, email, user_metadata } = user;
 
-  handleSetSuccess()
+  handleSetSuccess();
 
   return {
     id,
     role,
     email,
-    avatarUrl: user_metadata?.avatar_url || '',
-  }
-}
+    avatarUrl: user_metadata?.avatar_url || "",
+  };
+};
 
 export const logOut = async (): Promise<ApiError | null> => {
-  const { error } = await supabase.auth.signOut()
+  const { error } = await supabase.auth.signOut();
 
   if (error) {
-    return error
+    return error;
   }
 
-  return null
-}
+  return null;
+};
 
 // export const signUp = async ({
 //   email,

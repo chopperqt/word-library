@@ -1,23 +1,26 @@
 import React, { useEffect, useLayoutEffect } from "react";
 import { Routes, Route, useLocation } from "react-router-dom";
-
-import { routesNoAuth, routesWithAuth } from "./routes";
 import { useDispatch, useSelector } from "react-redux";
-import { getUserID, setUser } from "./services/user/User.store";
-import supabase from "./api/client";
+
 import { ParamsController } from "helpers/paramsController";
 
-interface BroadcastObject {
-  sync: boolean;
-  search?: string;
-}
+import { routesNoAuth, routesWithAuth } from "./routes";
+import { getUserID, setUser } from "./services/user/User.store";
+import supabase from "./api/client";
+
+const KEY =
+  process.env.REACT_APP_BROADCAST_TOKEN ||
+  "55541b06-611d-478e-b2d7-028bc3d41eff";
+const bc = new BroadcastChannel(KEY);
 
 function App() {
   const dispatch = useDispatch();
   const user = supabase.auth.user();
   const userID = useSelector(getUserID);
-  const bc = new BroadcastChannel("test");
-  const { setSearch } = ParamsController();
+  const { setSearch, getParam } = ParamsController();
+  const location = useLocation();
+
+  const page = getParam("page");
 
   let routes = routesNoAuth;
 
@@ -31,8 +34,6 @@ function App() {
     });
 
     bc.onmessage = (event) => {
-      console.log("Library: ", event.data);
-
       if (event.data?.search) {
         setSearch(event.data.search);
       }
@@ -51,6 +52,17 @@ function App() {
       );
     }
   }, []);
+
+  useEffect(() => {
+    if (!page) {
+      return;
+    }
+
+    bc.postMessage({
+      sync: true,
+      search: location.search,
+    });
+  }, [page]);
 
   return (
     <div className="App">
