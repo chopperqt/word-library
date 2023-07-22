@@ -1,12 +1,11 @@
-import React, { useEffect, useLayoutEffect } from "react";
+import React, { useEffect, useLayoutEffect, useState } from "react";
 import { Routes, Route, useLocation } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 
 import { ParamsController } from "helpers/paramsController";
-
-import { routesNoAuth, routesWithAuth } from "./routes";
-import { getUserID, setUser } from "./services/user/User.store";
-import supabase from "./api/client";
+import supabase from "api/client";
+import { setUser } from "services/user/User.store";
+import { Spin } from "antd";
 
 const KEY =
   process.env.REACT_APP_BROADCAST_TOKEN ||
@@ -15,22 +14,61 @@ const bc = new BroadcastChannel(KEY);
 
 function App() {
   const dispatch = useDispatch();
-  const user = supabase.auth.user();
-  const userID = useSelector(getUserID);
-  const { setSearch, getParam } = ParamsController();
   const location = useLocation();
+
+  const [isFetched, setFetched] = useState(false);
+
+  const { setSearch, getParam } = ParamsController();
+
+  const token = localStorage.getItem("token");
 
   const page = getParam("page");
 
-  let routes = routesNoAuth;
+  const loginUser = async () => {
+    const user = supabase.auth.user();
 
-  if (user?.id) {
-    routes = routesWithAuth;
-  }
+    if (!user || !user?.id) {
+      if (!token) {
+        return;
+      }
+
+      const { session } = await supabase.auth.setSession(token);
+
+      if (!session?.user) return;
+
+      const { id, email, role } = session.user;
+
+      dispatch(
+        setUser({
+          id,
+          email: email || "",
+          role: role || "",
+          avatarUrl: "",
+        })
+      );
+
+      return;
+    }
+
+    if (user?.id === null) return;
+
+    dispatch(
+      setUser({
+        id: user.id,
+        email: user.email || "",
+        role: user.role || "",
+        avatarUrl: "",
+      })
+    );
+  };
+
+  useEffect(() => {
+    loginUser();
+  }, []);
 
   useLayoutEffect(() => {
     bc.postMessage({
-      sync: true,
+      isConnected: true,
     });
 
     bc.onmessage = (event) => {
@@ -41,38 +79,25 @@ function App() {
   }, []);
 
   useEffect(() => {
-    if (user?.id && !userID) {
-      dispatch(
-        setUser({
-          id: user.id,
-          avatarUrl: user.user_metadata.avatar_url,
-          email: user.email as string,
-          role: user!.role as string,
-        })
-      );
-    }
-  }, []);
-
-  useEffect(() => {
     if (!page) {
       return;
     }
 
     bc.postMessage({
-      sync: true,
-      search: location.search,
+      isConnected: true,
+      search: location?.search,
     });
   }, [page]);
 
-  return (
-    <div className="App">
-      <Routes>
-        {routes.map(({ path, element, index }, indexPage) => (
-          <Route key={indexPage} index={index} path={path} element={element} />
-        ))}
-      </Routes>
-    </div>
-  );
+  if (!isFetched) {
+    return (
+      <div className="w-full h-screen flex justify-center items-center">
+        <Spin size="large" />
+      </div>
+    );
+  }
+
+  return <div className="App"></div>;
 }
 
 export default App;

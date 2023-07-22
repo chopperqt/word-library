@@ -4,28 +4,12 @@ import { Links } from "helpers/links";
 import { Navigate } from "react-router-dom";
 import { AutoSizer } from "react-virtualized";
 
-const Home = lazy(() => import("pages/home/Home"));
 const Library = lazy(() => import("pages/library/Library"));
-const SignIn = lazy(() => import("pages/sign-in/SignIn"));
 
 export const routesNoAuth = [
   {
-    path: Links.main,
-    element: <Home />,
-    index: true,
-  },
-  {
     path: Links.library,
     element: <Navigate to={Links.signIn} />,
-    index: false,
-  },
-  {
-    path: Links.signIn,
-    element: (
-      <Suspense fallback="">
-        <SignIn />
-      </Suspense>
-    ),
     index: false,
   },
   {
@@ -45,9 +29,7 @@ export const routesWithAuth = [
     path: Links.library,
     element: (
       <Suspense fallback="">
-        <AutoSizer disableWidth>
-          {() => <Library  />}
-        </AutoSizer>
+        <AutoSizer disableWidth>{() => <Library />}</AutoSizer>
       </Suspense>
     ),
     index: false,
