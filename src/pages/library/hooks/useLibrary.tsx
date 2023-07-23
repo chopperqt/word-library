@@ -22,7 +22,7 @@ interface UseLibraryProps {
   isLoading?: boolean;
 }
 const useLibrary = ({ userID, words }: UseLibraryProps) => {
-  const { pathname, search } = useLocation();
+  const { search } = useLocation();
   const { setParam } = ParamsController();
   const searchParams = new URLSearchParams(search);
   const currentPage = searchParams.get("page");
@@ -30,7 +30,6 @@ const useLibrary = ({ userID, words }: UseLibraryProps) => {
   const page = currentPage ? +currentPage : 1;
   const amountOfPages = useSelector(getAmountOfPages);
   const [value, setValue] = useState<string>("");
-  const navigate = useNavigate();
   const { from, to, isLastPage } = usePagination({
     page,
     amountOfPages,

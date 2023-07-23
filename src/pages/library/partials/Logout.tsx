@@ -6,10 +6,11 @@ import { logOut } from "api/auth.api";
 import { clearUser } from "services/user/User.store";
 import { ConfirmationModal } from "common/confirmation-modal";
 import { useModal } from "helpers/useModal";
+import { bc } from "App";
 
-const CONFIRMATION_TEXT = 'Are you sure you want to do this?'
-const ACCEPT_TEXT = 'Logout'
-const CANCEL_TEXT = 'Cancel'
+const CONFIRMATION_TEXT = "Are you sure you want to do this?";
+const ACCEPT_TEXT = "Logout";
+const CANCEL_TEXT = "Cancel";
 
 const Logout = () => {
   const dispatch = useDispatch();
@@ -22,6 +23,10 @@ const Logout = () => {
     if (response) {
       return;
     }
+
+    bc.postMessage({
+      isLogout: true,
+    });
 
     dispatch(clearUser());
   };

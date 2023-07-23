@@ -1,16 +1,18 @@
 import React, { useEffect, useLayoutEffect, useState } from "react";
-import { Routes, Route, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { useDispatch } from "react-redux";
 
 import { ParamsController } from "helpers/paramsController";
 import supabase from "api/client";
 import { setUser } from "services/user/User.store";
 import { Spin } from "antd";
+import Library from "pages/library/Library";
 
 const KEY =
   process.env.REACT_APP_BROADCAST_TOKEN ||
   "55541b06-611d-478e-b2d7-028bc3d41eff";
-const bc = new BroadcastChannel(KEY);
+
+export const bc = new BroadcastChannel(KEY);
 
 function App() {
   const dispatch = useDispatch();
@@ -47,6 +49,8 @@ function App() {
         })
       );
 
+      setFetched(true);
+
       return;
     }
 
@@ -60,6 +64,8 @@ function App() {
         avatarUrl: "",
       })
     );
+
+    setFetched(true);
   };
 
   useEffect(() => {
@@ -89,6 +95,8 @@ function App() {
     });
   }, [page]);
 
+  console.log("isFetched", isFetched);
+
   if (!isFetched) {
     return (
       <div className="w-full h-screen flex justify-center items-center">
@@ -97,7 +105,11 @@ function App() {
     );
   }
 
-  return <div className="App"></div>;
+  return (
+    <div className="App">
+      <Library />
+    </div>
+  );
 }
 
 export default App;

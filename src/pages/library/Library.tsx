@@ -1,8 +1,7 @@
 import React, { lazy, Suspense } from "react";
 import { useSelector } from "react-redux";
-import { Button } from "antd";
+import { Button, Spin } from "antd";
 
-import Spin from "components/spin";
 import Skeleton from "components/Skeleton";
 import { getUserID } from "services/user/User.store";
 import { getLoading } from "services/loading/Loading.store";
@@ -48,7 +47,7 @@ const Library = () => {
   if (!isFetched) {
     return (
       <div className="flex justify-center items-center w-screen h-screen">
-        <Spin color="indigo" width={90} height={90} />
+        <Spin size="large" />
       </div>
     );
   }
