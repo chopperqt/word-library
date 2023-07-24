@@ -1,6 +1,6 @@
 import { useState, useEffect, ChangeEvent, useMemo } from "react";
 import { useSelector } from "react-redux";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
 import {
   getLibraryPinWords,
@@ -22,24 +22,23 @@ interface UseLibraryProps {
   isLoading?: boolean;
 }
 const useLibrary = ({ userID, words }: UseLibraryProps) => {
-  const { search } = useLocation();
-  const { setParam } = ParamsController();
-  const searchParams = new URLSearchParams(search);
-  const currentPage = searchParams.get("page");
+  const { setParam, getParam } = ParamsController();
 
-  const page = currentPage ? +currentPage : 1;
+  const pageParam = getParam("page");
+
+  const page = pageParam || 1;
   const amountOfPages = useSelector(getAmountOfPages);
   const [value, setValue] = useState<string>("");
+
   const { from, to, isLastPage } = usePagination({
-    page,
+    page: +page,
     amountOfPages,
   });
 
   useEffect(() => {
-    window.document.title = "Library";
-
     getLibraryPinWords(userID);
 
+    console.log(to, page);
     if (!words.length) {
       getLibraryWords({
         userID,
@@ -83,9 +82,9 @@ const useLibrary = ({ userID, words }: UseLibraryProps) => {
   };
 
   const handleGetMoreWords = () => {
-    setParam("page", (page + 1).toString());
+    setParam("page", (+page + 1).toString());
 
-    const { from, to } = getPaginationRange(page + 1);
+    const { from, to } = getPaginationRange(+page + 1);
 
     getLibraryWordsByPagination({
       userID,

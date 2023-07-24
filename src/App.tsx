@@ -1,5 +1,4 @@
 import React, { useEffect, useLayoutEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
 import { useDispatch } from "react-redux";
 
 import { ParamsController } from "helpers/paramsController";
@@ -16,11 +15,11 @@ export const bc = new BroadcastChannel(KEY);
 
 function App() {
   const dispatch = useDispatch();
-  const location = useLocation();
 
   const [isFetched, setFetched] = useState(false);
+  const [isConnected, setConnected] = useState(false);
 
-  const { setSearch, getParam } = ParamsController();
+  const { getParam, setParam } = ParamsController();
 
   const token = localStorage.getItem("token");
 
@@ -33,6 +32,8 @@ function App() {
       if (!token) {
         return;
       }
+
+      console.log("token", token);
 
       const { session } = await supabase.auth.setSession(token);
 
@@ -77,27 +78,29 @@ function App() {
       isConnected: true,
     });
 
+    setConnected(true);
+
     bc.onmessage = (event) => {
-      if (event.data?.search) {
-        setSearch(event.data.search);
+      console.log("word-library-message: ", event.data);
+
+      if (event.data.page) {
+        setParam("page", event.data.page);
       }
     };
   }, []);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (!page) {
       return;
     }
 
     bc.postMessage({
+      page: +page,
       isConnected: true,
-      search: location?.search,
     });
   }, [page]);
 
-  console.log("isFetched", isFetched);
-
-  if (!isFetched) {
+  if (!isConnected || !isFetched || !page) {
     return (
       <div className="w-full h-screen flex justify-center items-center">
         <Spin size="large" />
