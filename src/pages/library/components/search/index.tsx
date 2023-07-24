@@ -1,4 +1,4 @@
-import { Input } from "antd";
+import { Input, Spin } from "antd";
 
 import useSearch from "pages/library/hooks/useSearch";
 import { Word } from "./partials/Word";
@@ -20,6 +20,8 @@ const Search = () => {
     isLoadingUpdate,
   } = useSearch();
 
+  const formattedPrex = isLoading ? <Spin className="flex" /> : "🔍";
+
   return (
     <form className="flex items-center w-full relative">
       <Input
@@ -28,7 +30,7 @@ const Search = () => {
         placeholder={SEARCH_TEXT}
         name="search"
         size="large"
-        prefix="🔍"
+        prefix={formattedPrex}
       />
       {isShowSearchedWord && (
         <div className={SEARCH_STYLES}>
