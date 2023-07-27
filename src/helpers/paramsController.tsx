@@ -18,8 +18,6 @@ export function ParamsController() {
   const setParam = (param: string, value: string) => {
     currentParams.set(param, value);
 
-    console.log(`${pathname}?${currentParams.toString()}`);
-
     navigate(`${pathname}?${currentParams.toString()}`);
   };
 

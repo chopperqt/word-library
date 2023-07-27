@@ -18,24 +18,27 @@ function App() {
 
   const [isFetched, setFetched] = useState(false);
   const [isConnected, setConnected] = useState(false);
+  const [initialPage, setInitialPage] = useState<number | null>(null);
 
   const { getParam, setParam } = ParamsController();
 
-  const token = localStorage.getItem("token");
+  const pageParam = getParam("page");
 
-  const page = getParam("page");
+  const token = localStorage.getItem("token");
 
   const loginUser = async () => {
     const user = supabase.auth.user();
+
+    console.log("user", user);
 
     if (!user || !user?.id) {
       if (!token) {
         return;
       }
 
-      console.log("token", token);
-
       const { session } = await supabase.auth.setSession(token);
+
+      console.log("sessison: ", session);
 
       if (!session?.user) return;
 
@@ -54,8 +57,6 @@ function App() {
 
       return;
     }
-
-    if (user?.id === null) return;
 
     dispatch(
       setUser({
@@ -81,29 +82,41 @@ function App() {
     setConnected(true);
 
     bc.onmessage = (event) => {
-      console.log("word-library-message: ", event.data);
+      console.log("get message from english-wrapper", event.data);
 
       if (event.data.page) {
-        setParam("page", event.data.page);
+        setInitialPage(event.data.page);
       }
     };
   }, []);
 
   useLayoutEffect(() => {
-    if (!page) {
+    if (!pageParam) {
       return;
     }
 
     bc.postMessage({
-      page: +page,
+      page: +pageParam,
       isConnected: true,
     });
-  }, [page]);
+  }, [pageParam]);
 
-  if (!isConnected || !isFetched || !page) {
+  useEffect(() => {
+    if (!initialPage || initialPage === 1) {
+      return;
+    }
+
+    setParam("page", initialPage.toString());
+  }, [initialPage]);
+
+  console.log("isConnected", isConnected);
+  console.log("isFetched", isFetched);
+  console.log("initialPage", initialPage);
+
+  if (!isConnected || !isFetched || !initialPage) {
     return (
       <div className="w-full h-screen flex justify-center items-center">
-        <Spin size="large" />
+        <Spin size="large" tip="The Library is loading" />
       </div>
     );
   }

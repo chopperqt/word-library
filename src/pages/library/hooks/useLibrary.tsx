@@ -38,7 +38,6 @@ const useLibrary = ({ userID, words }: UseLibraryProps) => {
   useEffect(() => {
     getLibraryPinWords(userID);
 
-    console.log(to, page);
     if (!words.length) {
       getLibraryWords({
         userID,
