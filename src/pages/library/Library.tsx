@@ -22,8 +22,7 @@ const CreateWord = lazy(() => import("./components/createWord/CreateWord"));
 const BUTTON_TEXT = "More...";
 
 export interface LibraryProps {
-  width: number;
-  height: number;
+  initialPage: number;
 }
 
 const Library = () => {

@@ -1,6 +1,5 @@
 import { useState, useEffect, ChangeEvent, useMemo } from "react";
 import { useSelector } from "react-redux";
-import { useLocation } from "react-router-dom";
 
 import {
   getLibraryPinWords,
@@ -9,11 +8,12 @@ import {
 } from "api/library.api";
 import { usePagination } from "helpers/usePagination";
 import { getAmountOfPages } from "services/pagination/Pagination.store";
+import { getPaginationRange } from "helpers/getPaginationRange";
+import { ParamsController } from "helpers/paramsController";
 
 import type { UserID } from "models/Auth.models";
 import type { Word } from "models/Library.models";
-import { getPaginationRange } from "helpers/getPaginationRange";
-import { ParamsController } from "helpers/paramsController";
+import { bc } from "App";
 
 interface UseLibraryProps {
   userID: UserID;
@@ -21,14 +21,17 @@ interface UseLibraryProps {
   isFetched?: boolean;
   isLoading?: boolean;
 }
-const useLibrary = ({ userID, words }: UseLibraryProps) => {
+const useLibrary = ({ userID, words, isFetched }: UseLibraryProps) => {
   const { setParam, getParam } = ParamsController();
 
   const pageParam = getParam("page");
 
   const page = pageParam || 1;
   const amountOfPages = useSelector(getAmountOfPages);
+
   const [value, setValue] = useState<string>("");
+
+  console.log("pageParam ----------------------------->", pageParam);
 
   const { from, to, isLastPage } = usePagination({
     page: +page,
@@ -37,7 +40,9 @@ const useLibrary = ({ userID, words }: UseLibraryProps) => {
 
   useEffect(() => {
     getLibraryPinWords(userID);
+  }, []);
 
+  useEffect(() => {
     if (!words.length) {
       getLibraryWords({
         userID,
@@ -81,9 +86,15 @@ const useLibrary = ({ userID, words }: UseLibraryProps) => {
   };
 
   const handleGetMoreWords = () => {
-    setParam("page", (+page + 1).toString());
+    const nextPage = +page + 1;
 
-    const { from, to } = getPaginationRange(+page + 1);
+    setParam("page", nextPage.toString());
+
+    const { from, to } = getPaginationRange(nextPage);
+
+    bc.postMessage({
+      page: nextPage,
+    });
 
     getLibraryWordsByPagination({
       userID,

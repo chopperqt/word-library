@@ -84,30 +84,13 @@ function App() {
     bc.onmessage = (event) => {
       console.log("get message from english-wrapper", event.data);
 
-      if (event.data.page) {
-        setInitialPage(event.data.page);
+      if (event.data.initialPage) {
+        setInitialPage(event.data.initialPage);
+
+        setParam("page", event.data.initialPage);
       }
     };
   }, []);
-
-  useLayoutEffect(() => {
-    if (!pageParam) {
-      return;
-    }
-
-    bc.postMessage({
-      page: +pageParam,
-      isConnected: true,
-    });
-  }, [pageParam]);
-
-  useEffect(() => {
-    if (!initialPage || initialPage === 1) {
-      return;
-    }
-
-    setParam("page", initialPage.toString());
-  }, [initialPage]);
 
   console.log("isConnected", isConnected);
   console.log("isFetched", isFetched);
@@ -116,7 +99,7 @@ function App() {
   if (!isConnected || !isFetched || !initialPage) {
     return (
       <div className="w-full h-screen flex justify-center items-center">
-        <Spin size="large" tip="The Library is loading" />
+        <Spin size="large" />
       </div>
     );
   }
