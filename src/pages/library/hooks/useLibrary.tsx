@@ -12,11 +12,10 @@ import { getAmountOfPages } from "services/pagination/Pagination.store";
 import { getPaginationRange } from "helpers/getPaginationRange";
 import { ParamsController } from "helpers/paramsController";
 
-import type { UserID } from "models/Auth.models";
 import type { WordApi } from "models/Library.models";
 
 interface UseLibraryProps {
-  userID: UserID;
+  userID: string;
   words: WordApi[];
   isFetched?: boolean;
   isLoading?: boolean;

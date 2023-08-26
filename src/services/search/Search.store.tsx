@@ -1,10 +1,13 @@
 import { PayloadAction, createSlice, createSelector } from "@reduxjs/toolkit";
 
 import type { WordApi } from "models/Library.models";
-import type { Search } from "models/Search.model";
 import type { RootState } from "services/stores";
 
-const initialState: Search = {
+interface SearchState {
+  searchWords: WordApi[];
+}
+
+const initialState: SearchState = {
   searchWords: [],
 };
 

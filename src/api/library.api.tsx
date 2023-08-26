@@ -2,12 +2,11 @@ import { debounce } from "lodash-es";
 
 import supabase from "./client";
 import {
-  CreateWord,
-  UpdateWord,
+  WordCreateApi,
+  WordUpdateApi,
   WordApi,
   WordSchema,
 } from "models/Library.models";
-import type { UserID } from "models/Auth.models";
 import { store } from "services/stores";
 import {
   setAmountOfWords,
@@ -34,7 +33,7 @@ export type LibraryRequests =
   | "getLibraryWordsWithoutLoading";
 
 export const createLibraryWord = async (
-  wordData: CreateWord
+  wordData: WordCreateApi
 ): Promise<WordApi[] | null> => {
   const { handleSetError, handleSetPending, handleSetSuccess } =
     loadingController("createLibraryWord");
@@ -55,7 +54,7 @@ export const createLibraryWord = async (
 };
 
 export const updateLibraryWord = async (
-  wordData: UpdateWord
+  wordData: WordUpdateApi
 ): Promise<WordApi[] | null> => {
   const { handleSetError, handleSetPending, handleSetSuccess } =
     loadingController("updateLibraryWord");
@@ -88,7 +87,7 @@ export const updateLibraryWord = async (
 };
 
 interface GetWords {
-  userID: UserID;
+  userID: string;
   from?: number;
   to?: number;
 }
@@ -141,7 +140,7 @@ export const getWords =
   };
 
 export const getLibraryPinWords = async (
-  userID: UserID
+  userID: string
 ): Promise<WordApi[] | null> => {
   const { handleSetError, handleSetPending, handleSetSuccess } =
     loadingController("getLibraryPinWords");
@@ -170,7 +169,7 @@ export const getLibraryPinWords = async (
   return data;
 };
 
-export const deleteLibraryWords = async (userID: UserID, word: string) => {
+export const deleteLibraryWords = async (userID: string, word: string) => {
   const { handleSetError, handleSetPending, handleSetSuccess } =
     loadingController("deleteLibraryWords");
 
@@ -194,7 +193,7 @@ export const deleteLibraryWords = async (userID: UserID, word: string) => {
 };
 
 export const updatePin = async (
-  userID: UserID,
+  userID: string,
   pined: boolean,
   word: string
 ): Promise<WordApi[] | null> => {
@@ -225,7 +224,7 @@ export const updatePin = async (
 };
 
 export const searchWord = debounce(
-  async (userID: UserID, word: string): Promise<WordApi[] | null> => {
+  async (userID: string, word: string): Promise<WordApi[] | null> => {
     const { handleSetError, handleSetPending, handleSetSuccess } =
       loadingController("searchWord");
 
