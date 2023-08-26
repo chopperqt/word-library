@@ -1,14 +1,16 @@
+import { array, boolean, date, number, object, Output, string } from "valibot";
 import type { UserID } from "./Auth.models";
 
-export interface Word {
-  id: number;
-  userID: UserID;
-  word: string;
-  translate: string[];
-  pined: boolean;
-  createdAt: Date | string;
-}
+const WordSchema = object({
+  id: number(),
+  userID: string(),
+  word: string(),
+  translate: array(string()),
+  pined: boolean(),
+  createdAt: date(),
+});
 
+export type Word = Output<typeof WordSchema>;
 export type WordID = Word["id"];
 
 export interface WordForm {
