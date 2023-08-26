@@ -1,16 +1,24 @@
 import React from "react";
+import { DeleteOutlined } from "@ant-design/icons";
 import { useSelector } from "react-redux";
-import { Typography } from "antd";
+import { Button, Typography } from "antd";
 
 import WordsContainer from "common/word-container/WordsContainer";
 import { useWords } from "pages/library/hooks/useWords";
-import ResetPin from "pages/library/partials/ResetPin";
 import { getPinWords } from "services/library/Library.store";
+import { getUserID } from "services/user/User.store";
+import { usePinedWords } from "pages/library/hooks/usePinedWords";
 
 const { Title } = Typography;
 
 const WordsPined = () => {
+  const userId = useSelector(getUserID);
   const words = useSelector(getPinWords);
+
+  const { handleUnpendWords } = usePinedWords({
+    words,
+    userId,
+  });
 
   const {
     normalizedWords,
@@ -38,7 +46,13 @@ const WordsPined = () => {
         <Title level={3} className="mb-0">
           {title}
         </Title>
-        <ResetPin />
+        <Button
+          className="flex mb-[10px] items-center justify-center ml-2"
+          type="primary"
+          icon={<DeleteOutlined />}
+          onClick={handleUnpendWords}
+          danger
+        />
       </div>
       <div className="flex justify-start items-start gap-3 flex-wrap">
         {Object.entries(normalizedWords).map(
