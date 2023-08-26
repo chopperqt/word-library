@@ -4,6 +4,7 @@ import { Button } from "antd";
 import WordModal, { useModalWord } from "common/word-modal";
 import Icon, { IconsList } from "components/icon/Icon";
 import useCreateWord from "pages/library/hooks/useCreateWord";
+import { PlusOutlined } from "@ant-design/icons";
 
 const ADD_TEXT = "Add";
 
@@ -23,14 +24,11 @@ const CreateWord = () => {
       <Button
         size="large"
         type="primary"
-        className="whitespace-nowrap"
+        className="whitespace-nowrap items-center flex"
         onClick={handleOpen}
+        icon={<PlusOutlined />}
       >
-        <Icon
-          className="block md:hidden fill-white w-5 h-5 hover:fill-white"
-          icon={IconsList.plusCircle}
-        />
-        <div className="hidden md:block">{ADD_TEXT}</div>
+        {ADD_TEXT}
       </Button>
       <WordModal
         onSubmit={handleSubmit}

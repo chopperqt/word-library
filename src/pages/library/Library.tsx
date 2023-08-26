@@ -12,8 +12,6 @@ import { getWords } from "services/library/Library.store";
 import Words from "./components/words";
 import ErrorContent from "./partials/ErrorContent";
 import Preloader from "./partials/Preloader";
-import supabase from "api/client";
-import Logout from "./partials/Logout";
 import WordsPined from "./components/wordsPined";
 
 const Search = lazy(() => import("./components/search"));
@@ -33,7 +31,6 @@ const Library = () => {
   const isLoading = useSelector(getLoading).getLibraryWords?.isLoading;
   const isLoadingMoreWords =
     useSelector(getLoading).getLibraryWordsByPagination?.isLoading;
-  const user = supabase?.auth?.user();
   const hasWords = !!words.length;
 
   const { isLastPage, handleGetMoreWords } = useLibrary({
@@ -46,7 +43,7 @@ const Library = () => {
   if (!isFetched) {
     return (
       <div className="flex justify-center items-center w-screen h-screen">
-        <Spin size="large" />
+        <Spin size="large" tip="Loading data" />
       </div>
     );
   }
@@ -70,7 +67,6 @@ const Library = () => {
           <Suspense fallback={<Skeleton height={40} width={61} />}>
             <CreateWord />
           </Suspense>
-          {user?.id && <Logout />}
         </div>
         <WordsPined />
         <Words />
@@ -82,6 +78,7 @@ const Library = () => {
             loading={isLoadingMoreWords}
             size="large"
             type="primary"
+            className="flex items-center"
           >
             {BUTTON_TEXT}
           </Button>

@@ -20,16 +20,12 @@ function App() {
   const [isConnected, setConnected] = useState(false);
   const [initialPage, setInitialPage] = useState<number | null>(null);
 
-  const { getParam, setParam } = ParamsController();
-
-  const pageParam = getParam("page");
+  const { setParam } = ParamsController();
 
   const token = localStorage.getItem("token");
 
   const loginUser = async () => {
     const user = supabase.auth.user();
-
-    console.log("user", user);
 
     if (!user || !user?.id) {
       if (!token) {
@@ -37,8 +33,6 @@ function App() {
       }
 
       const { session } = await supabase.auth.setSession(token);
-
-      console.log("sessison: ", session);
 
       if (!session?.user) return;
 
@@ -74,7 +68,7 @@ function App() {
     loginUser();
   }, []);
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     bc.postMessage({
       isConnected: true,
     });
@@ -82,8 +76,6 @@ function App() {
     setConnected(true);
 
     bc.onmessage = (event) => {
-      console.log("get message from english-wrapper", event.data);
-
       if (event.data.initialPage) {
         setInitialPage(event.data.initialPage);
 
@@ -92,14 +84,10 @@ function App() {
     };
   }, []);
 
-  console.log("isConnected", isConnected);
-  console.log("isFetched", isFetched);
-  console.log("initialPage", initialPage);
-
   if (!isConnected || !isFetched || !initialPage) {
     return (
       <div className="w-full h-screen flex justify-center items-center">
-        <Spin size="large" />
+        <Spin size="large" tip="Loading app" />
       </div>
     );
   }

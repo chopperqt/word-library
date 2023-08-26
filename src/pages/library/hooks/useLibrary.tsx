@@ -31,8 +31,6 @@ const useLibrary = ({ userID, words, isFetched }: UseLibraryProps) => {
 
   const [value, setValue] = useState<string>("");
 
-  console.log("pageParam ----------------------------->", pageParam);
-
   const { from, to, isLastPage } = usePagination({
     page: +page,
     amountOfPages,
@@ -88,13 +86,13 @@ const useLibrary = ({ userID, words, isFetched }: UseLibraryProps) => {
   const handleGetMoreWords = () => {
     const nextPage = +page + 1;
 
-    setParam("page", nextPage.toString());
-
     const { from, to } = getPaginationRange(nextPage);
 
     bc.postMessage({
       page: nextPage,
     });
+
+    setParam("page", nextPage.toString());
 
     getLibraryWordsByPagination({
       userID,
