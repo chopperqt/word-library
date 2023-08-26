@@ -1,5 +1,6 @@
 import { updatePin } from "api/library.api";
 import { Word } from "models/Library.models";
+import { useState } from "react";
 
 interface UsePinedWords {
   words: Word[];
@@ -7,13 +8,26 @@ interface UsePinedWords {
 }
 
 export const usePinedWords = ({ words = [], userId }: UsePinedWords) => {
-  const handleUnpendWords = () => {
-    words.map(({ word }) => {
-      updatePin(userId, false, word);
+  const [isLoading, setLoading] = useState(false);
+
+  const handleUnpendWords = async () => {
+    const deletedWords = words.map(({ word }) => {
+      return updatePin(userId, false, word);
     });
+
+    setLoading(true);
+
+    try {
+      await Promise.all(deletedWords);
+    } catch (e) {
+      setLoading(false);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return {
     handleUnpendWords,
+    isLoading,
   };
 };

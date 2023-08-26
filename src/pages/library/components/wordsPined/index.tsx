@@ -15,7 +15,7 @@ const WordsPined = () => {
   const userId = useSelector(getUserID);
   const words = useSelector(getPinWords);
 
-  const { handleUnpendWords } = usePinedWords({
+  const { handleUnpendWords, isLoading } = usePinedWords({
     words,
     userId,
   });
@@ -51,6 +51,7 @@ const WordsPined = () => {
           type="primary"
           icon={<DeleteOutlined />}
           onClick={handleUnpendWords}
+          loading={isLoading}
           danger
         />
       </div>
