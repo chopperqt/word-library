@@ -5,7 +5,6 @@ import { normalizeWords } from "helpers/normalizeWords";
 import {
   deleteLibraryWords,
   getLibraryPinWords,
-  getLibraryWords,
   getLibraryWordsWithoutLoading,
   updateLibraryWord,
   updatePin,
@@ -16,14 +15,13 @@ import { getLoading } from "services/loading/Loading.store";
 import { getAmountOfPages } from "services/pagination/Pagination.store";
 import { usePagination } from "helpers/usePagination";
 import { getPinWords } from "services/library/Library.store";
-
-import type { Word, WordForm } from "models/Library.models";
 import { ParamsController } from "helpers/paramsController";
 import { useMessage } from "helpers/useMessage";
-import { log } from "console";
+
+import type { WordApi, WordForm } from "models/Library.models";
 
 interface UseWordsProps {
-  words: Word[];
+  words: WordApi[];
 }
 
 export const useWords = ({ words = [] }: UseWordsProps) => {
@@ -97,7 +95,7 @@ export const useWords = ({ words = [] }: UseWordsProps) => {
   const handleSubmitUpdate = async (
     word: WordForm,
     wordID?: number
-  ): Promise<Word[] | null> => {
+  ): Promise<WordApi[] | null> => {
     if (!wordID) {
       return null;
     }
@@ -130,7 +128,7 @@ export const useWords = ({ words = [] }: UseWordsProps) => {
     return response;
   };
 
-  const handleClickDelete = async (word: string): Promise<Word[] | null> => {
+  const handleClickDelete = async (word: string): Promise<WordApi[] | null> => {
     const response = await deleteLibraryWords(userID, word);
 
     if (!response) {
@@ -150,7 +148,7 @@ export const useWords = ({ words = [] }: UseWordsProps) => {
       </span>
     );
 
-    return response as Word[];
+    return response as WordApi[];
   };
 
   return {

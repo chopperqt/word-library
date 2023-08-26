@@ -4,15 +4,15 @@ import { Button } from "antd";
 import { ConfirmationModal } from "common/confirmation-modal";
 import { useModal } from "helpers/useModal";
 
-import type { Word } from "models/Library.models";
+import type { WordApi } from "models/Library.models";
 
-const CONFIRMATION_TEXT = 'Are you sure?'
-const ACCEPT_TEXT = 'Delete'
-const CANCEL_TEXT = 'Cancel'
+const CONFIRMATION_TEXT = "Are you sure?";
+const ACCEPT_TEXT = "Delete";
+const CANCEL_TEXT = "Cancel";
 
 interface DeleteProps {
   isLoading?: boolean;
-  onClick: () => Promise<Word[] | null>;
+  onClick: () => Promise<WordApi[] | null>;
 }
 const Delete = ({ isLoading = false, onClick }: DeleteProps) => {
   const { handleClose, handleOpen, isOpened } = useModal();

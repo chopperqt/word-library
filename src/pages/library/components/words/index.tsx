@@ -7,7 +7,7 @@ import { useWords } from "pages/library/hooks/useWords";
 import { WordsLayout } from "pages/library/partials/WordsLayout";
 import { getAmountOfWords, getWords } from "services/library/Library.store";
 
-import type { Word } from "models/Library.models";
+import type { WordApi } from "models/Library.models";
 
 const { Title } = Typography;
 
@@ -39,28 +39,30 @@ const Words = () => {
         {title}
       </Title>
       <WordsLayout>
-        {normalizedWords.map(([key, words]: [key: string, words: Word[]]) => {
-          const amountOfWords = words.length;
+        {normalizedWords.map(
+          ([key, words]: [key: string, words: WordApi[]]) => {
+            const amountOfWords = words.length;
 
-          if (!amountOfWords) {
-            return null;
+            if (!amountOfWords) {
+              return null;
+            }
+
+            return (
+              <WordsContainer
+                onSubmitUpdate={handleSubmitUpdate}
+                onClickDelete={handleClickDelete}
+                onClickPin={handleClickPin}
+                key={key}
+                amountOfWords={amountOfWords}
+                letter={key}
+                isLoadingUpdate={!!isLoadingUpdate}
+                words={words}
+                isDisabledPin={isDisabledPin}
+                isLoadingDelete={!!isLoadingDelete}
+              />
+            );
           }
-
-          return (
-            <WordsContainer
-              onSubmitUpdate={handleSubmitUpdate}
-              onClickDelete={handleClickDelete}
-              onClickPin={handleClickPin}
-              key={key}
-              amountOfWords={amountOfWords}
-              letter={key}
-              isLoadingUpdate={!!isLoadingUpdate}
-              words={words}
-              isDisabledPin={isDisabledPin}
-              isLoadingDelete={!!isLoadingDelete}
-            />
-          );
-        })}
+        )}
       </WordsLayout>
     </div>
   );

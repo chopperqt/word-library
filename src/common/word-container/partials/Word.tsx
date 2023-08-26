@@ -3,7 +3,7 @@ import Pined from "./Pined";
 import Delete from "./Delete";
 import ExtraWords from "./ExtraWords";
 
-import type { Word as IWord, WordForm, WordID } from "models/Library.models";
+import type { WordApi, WordForm, WordID } from "models/Library.models";
 
 interface WordProps {
   onClickPined: () => void;
@@ -13,8 +13,8 @@ interface WordProps {
   word: string;
   translate: string[];
   isLoading?: boolean;
-  onSubmit: (word: WordForm, wordID?: number) => Promise<IWord[]>;
-  onClickDelete: () => Promise<IWord[] | null>;
+  onSubmit: (word: WordForm, wordID?: number) => Promise<WordApi[]>;
+  onClickDelete: () => Promise<WordApi[] | null>;
   isLoadingDelete?: boolean;
 }
 

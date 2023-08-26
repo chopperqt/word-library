@@ -1,9 +1,9 @@
 import { getLibraryPinWords, updatePin } from "api/library.api";
-import { Word } from "models/Library.models";
+import { WordApi } from "models/Library.models";
 import { useState } from "react";
 
 interface UsePinedWords {
-  words: Word[];
+  words: WordApi[];
   userId: string;
 }
 

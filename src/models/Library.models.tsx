@@ -1,27 +1,27 @@
-import { array, boolean, date, number, object, Output, string } from "valibot";
+import { array, boolean, number, object, Output, string } from "valibot";
 import type { UserID } from "./Auth.models";
 
-const WordSchema = object({
+export const WordSchema = object({
   id: number(),
   userID: string(),
   word: string(),
   translate: array(string()),
   pined: boolean(),
-  createdAt: date(),
+  createdAt: string(),
 });
 
-export type Word = Output<typeof WordSchema>;
-export type WordID = Word["id"];
+export type WordApi = Output<typeof WordSchema>;
+export type WordID = WordApi["id"];
 
 export interface WordForm {
-  word: Word["word"];
+  word: WordApi["word"];
   translate: string[];
-  pined: Word["pined"];
+  pined: WordApi["pined"];
 }
 
 export interface CreateWord extends Pick<WordForm, "pined" | "word"> {
   userID: UserID;
-  translate: Word["translate"];
+  translate: WordApi["translate"];
 }
 
 export interface UpdateWord extends CreateWord {

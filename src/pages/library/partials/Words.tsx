@@ -1,8 +1,8 @@
 import React from "react";
 
-import type { Word } from "models/Library.models";
+import type { WordApi } from "models/Library.models";
 interface WordsProps {
-  wordsSearched?: Word[];
+  wordsSearched?: WordApi[];
   isNothingFound: boolean;
 }
 const Words = ({ wordsSearched = [], isNothingFound = false }: WordsProps) => (

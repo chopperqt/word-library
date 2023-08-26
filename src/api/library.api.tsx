@@ -1,7 +1,12 @@
 import { debounce } from "lodash-es";
 
 import supabase from "./client";
-import type { CreateWord, UpdateWord, Word } from "models/Library.models";
+import {
+  CreateWord,
+  UpdateWord,
+  WordApi,
+  WordSchema,
+} from "models/Library.models";
 import type { UserID } from "models/Auth.models";
 import { store } from "services/stores";
 import {
@@ -13,6 +18,7 @@ import {
 import { loadingController } from "helpers/loadingController";
 import { setAmountOfPages } from "services/pagination/Pagination.store";
 import { setSearchWords } from "services/search/Search.store";
+import { parse } from "valibot";
 
 const LIBRARY_TABLE = "library";
 
@@ -29,7 +35,7 @@ export type LibraryRequests =
 
 export const createLibraryWord = async (
   wordData: CreateWord
-): Promise<Word[] | null> => {
+): Promise<WordApi[] | null> => {
   const { handleSetError, handleSetPending, handleSetSuccess } =
     loadingController("createLibraryWord");
 
@@ -50,7 +56,7 @@ export const createLibraryWord = async (
 
 export const updateLibraryWord = async (
   wordData: UpdateWord
-): Promise<Word[] | null> => {
+): Promise<WordApi[] | null> => {
   const { handleSetError, handleSetPending, handleSetSuccess } =
     loadingController("updateLibraryWord");
 
@@ -89,7 +95,11 @@ interface GetWords {
 
 export const getWords =
   (controller: LibraryRequests) =>
-  async ({ userID, from = 0, to = 70 }: GetWords): Promise<Word[] | null> => {
+  async ({
+    userID,
+    from = 0,
+    to = 70,
+  }: GetWords): Promise<WordApi[] | null> => {
     const { handleSetError, handleSetPending, handleSetSuccess } =
       loadingController(controller);
 
@@ -108,25 +118,31 @@ export const getWords =
       return null;
     }
 
-    const amountOfPages = Math.round(count / 70);
+    try {
+      const normalizedData = data.map((item) => parse(WordSchema, item));
 
-    if (from === 0) {
-      store.dispatch(setWords(data));
-    } else {
-      store.dispatch(updateWords(data));
+      const amountOfPages = Math.round(count / 70);
+
+      if (from === 0) {
+        store.dispatch(setWords(normalizedData));
+      } else {
+        store.dispatch(updateWords(normalizedData));
+      }
+
+      store.dispatch(setAmountOfWords(count));
+      store.dispatch(setAmountOfPages(amountOfPages));
+
+      handleSetSuccess();
+
+      return normalizedData;
+    } catch (e) {
+      return null;
     }
-
-    store.dispatch(setAmountOfWords(count));
-    store.dispatch(setAmountOfPages(amountOfPages));
-
-    handleSetSuccess();
-
-    return data;
   };
 
 export const getLibraryPinWords = async (
   userID: UserID
-): Promise<Word[] | null> => {
+): Promise<WordApi[] | null> => {
   const { handleSetError, handleSetPending, handleSetSuccess } =
     loadingController("getLibraryPinWords");
 
@@ -181,7 +197,7 @@ export const updatePin = async (
   userID: UserID,
   pined: boolean,
   word: string
-): Promise<Word[] | null> => {
+): Promise<WordApi[] | null> => {
   const { handleSetError, handleSetPending, handleSetSuccess } =
     loadingController("updatePin");
 
@@ -209,7 +225,7 @@ export const updatePin = async (
 };
 
 export const searchWord = debounce(
-  async (userID: UserID, word: string): Promise<Word[] | null> => {
+  async (userID: UserID, word: string): Promise<WordApi[] | null> => {
     const { handleSetError, handleSetPending, handleSetSuccess } =
       loadingController("searchWord");
 

@@ -3,7 +3,6 @@ import { useSelector } from "react-redux";
 import {
   createLibraryWord,
   getLibraryPinWords,
-  getLibraryWords,
   getLibraryWordsWithoutLoading,
 } from "api/library.api";
 import { getNormalizeWord } from "common/word-modal/helpers/getNormalizeWord";
@@ -13,7 +12,7 @@ import { getOnlyWords, getPinWords } from "services/library/Library.store";
 import { usePagination } from "helpers/usePagination";
 import { getAmountOfPages } from "services/pagination/Pagination.store";
 
-import type { Word, WordForm } from "models/Library.models";
+import type { WordApi, WordForm } from "models/Library.models";
 import { useMemo } from "react";
 import { message } from "antd";
 import { useLocation } from "react-router-dom";
@@ -64,7 +63,7 @@ const useCreateWord = () => {
     });
   };
 
-  const onSubmit = async (data: WordForm): Promise<Word[] | null> => {
+  const onSubmit = async (data: WordForm): Promise<WordApi[] | null> => {
     if (!userID) {
       return null;
     }

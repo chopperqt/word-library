@@ -1,5 +1,5 @@
-import { Word } from "./Library.models";
+import { WordApi } from "./Library.models";
 
 export interface Search {
-	searchWords: Word[]
+  searchWords: WordApi[];
 }

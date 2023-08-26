@@ -8,17 +8,20 @@ import Pined from "./partials/Pined";
 import Delete from "./partials/Delete";
 import ExtraWords from "./partials/ExtraWords";
 
-import type { Word, WordForm } from "models/Library.models";
+import type { WordApi, WordForm } from "models/Library.models";
 
 const { Text } = Typography;
 interface WordsContainerProps {
   amountOfWords: number;
-  words: Word[];
+  words: WordApi[];
   letter: string;
   color?: string;
   onClickPin: (word: string, isPined: boolean) => void;
-  onSubmitUpdate: (word: WordForm, wordID?: number) => Promise<Word[] | null>;
-  onClickDelete: (word: string) => Promise<Word[] | null>;
+  onSubmitUpdate: (
+    word: WordForm,
+    wordID?: number
+  ) => Promise<WordApi[] | null>;
+  onClickDelete: (word: string) => Promise<WordApi[] | null>;
   isLoadingUpdate: boolean;
   isLoadingDelete: boolean;
   isDisabledPin: boolean;

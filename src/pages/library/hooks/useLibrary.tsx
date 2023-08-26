@@ -1,6 +1,7 @@
 import { useState, useEffect, ChangeEvent, useMemo } from "react";
 import { useSelector } from "react-redux";
 
+import { bc } from "App";
 import {
   getLibraryPinWords,
   getLibraryWords,
@@ -12,12 +13,11 @@ import { getPaginationRange } from "helpers/getPaginationRange";
 import { ParamsController } from "helpers/paramsController";
 
 import type { UserID } from "models/Auth.models";
-import type { Word } from "models/Library.models";
-import { bc } from "App";
+import type { WordApi } from "models/Library.models";
 
 interface UseLibraryProps {
   userID: UserID;
-  words: Word[];
+  words: WordApi[];
   isFetched?: boolean;
   isLoading?: boolean;
 }
