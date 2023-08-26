@@ -1,4 +1,4 @@
-import { updatePin } from "api/library.api";
+import { getLibraryPinWords, updatePin } from "api/library.api";
 import { Word } from "models/Library.models";
 import { useState } from "react";
 
@@ -21,9 +21,11 @@ export const usePinedWords = ({ words = [], userId }: UsePinedWords) => {
       await Promise.all(deletedWords);
     } catch (e) {
       setLoading(false);
-    } finally {
-      setLoading(false);
     }
+
+    await getLibraryPinWords(userId);
+
+    setLoading(false);
   };
 
   return {
