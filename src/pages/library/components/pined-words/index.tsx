@@ -1,7 +1,7 @@
 import React from "react";
 import { DeleteOutlined } from "@ant-design/icons";
 import { useSelector } from "react-redux";
-import { Button, Typography } from "antd";
+import { Button, Typography, message } from "antd";
 
 import WordsContainer from "common/word-container/WordsContainer";
 import { useWords } from "pages/library/hooks/useWords";
@@ -11,13 +11,16 @@ import { usePinedWords } from "pages/library/hooks/usePinedWords";
 
 const { Title } = Typography;
 
-const WordsPined = () => {
+const PinedWords = () => {
+  const [messageApi, contextHolder] = message.useMessage();
+
   const userId = useSelector(getUserID);
   const words = useSelector(getPinWords);
 
   const { handleUnpendWords, isLoading } = usePinedWords({
     words,
     userId,
+    messageApi,
   });
 
   const {
@@ -28,7 +31,6 @@ const WordsPined = () => {
     isLoadingDelete,
     isLoadingUpdate,
     isDisabledPin,
-    contextHolder,
   } = useWords({
     words,
   });
@@ -88,4 +90,4 @@ const WordsPined = () => {
   );
 };
 
-export default WordsPined;
+export default PinedWords;

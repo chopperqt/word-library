@@ -1,29 +1,65 @@
-import { getLibraryPinWords, updatePin } from "api/library.api";
-import { WordApi } from "models/Library.models";
 import { useState } from "react";
+import { MessageInstance } from "antd/es/message/interface";
+
+import {
+  getLibraryPinWords,
+  getLibraryWords,
+  updatePin,
+} from "api/library.api";
+import { WordApi } from "models/Library.models";
+import { ParamsController } from "helpers/paramsController";
+import { getPaginationRange } from "helpers/getPaginationRange";
 
 interface UsePinedWords {
   words: WordApi[];
   userId: string;
+  messageApi: MessageInstance;
 }
 
-export const usePinedWords = ({ words = [], userId }: UsePinedWords) => {
+export const usePinedWords = ({
+  words = [],
+  userId,
+  messageApi,
+}: UsePinedWords) => {
+  const { getParam } = ParamsController();
+
   const [isLoading, setLoading] = useState(false);
 
+  const pageParam = getParam("page");
+  const currentPage = pageParam ? +pageParam : 1;
+
   const handleUnpendWords = async () => {
+    const { from, to } = getPaginationRange(currentPage);
+
     const deletedWords = words.map(({ word }) => {
       return updatePin(userId, false, word);
     });
 
     setLoading(true);
 
-    try {
-      await Promise.all(deletedWords);
-    } catch (e) {
-      setLoading(false);
-    }
+    await messageApi
+      .open({
+        type: "loading",
+        content: "Unpinning ...",
+      })
+      .then(async () => {
+        try {
+          await Promise.all(deletedWords);
+        } catch (e) {
+          setLoading(false);
+        }
 
-    await getLibraryPinWords(userId);
+        await getLibraryPinWords(userId);
+        await getLibraryWords({
+          userID: userId,
+          from,
+          to,
+          shouldControlPending: false,
+        });
+      })
+      .then(() => {
+        messageApi.success("All words were unpinned!");
+      });
 
     setLoading(false);
   };

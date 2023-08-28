@@ -90,6 +90,7 @@ interface GetWords {
   userID: string;
   from?: number;
   to?: number;
+  shouldControlPending?: boolean;
 }
 
 export const getWords =
@@ -98,11 +99,14 @@ export const getWords =
     userID,
     from = 0,
     to = 70,
+    shouldControlPending = true,
   }: GetWords): Promise<WordApi[] | null> => {
     const { handleSetError, handleSetPending, handleSetSuccess } =
       loadingController(controller);
 
-    handleSetPending();
+    if (shouldControlPending) {
+      handleSetPending();
+    }
 
     const { data, error, count } = await supabase
       .from(LIBRARY_TABLE)

@@ -12,10 +12,10 @@ import { getWords } from "services/library/Library.store";
 import Words from "./components/words";
 import ErrorContent from "./partials/ErrorContent";
 import Preloader from "./partials/Preloader";
-import WordsPined from "./components/wordsPined";
 
 const Search = lazy(() => import("./components/search"));
 const CreateWord = lazy(() => import("./components/createWord/CreateWord"));
+const PinedWords = lazy(() => import("./components/pined-words"));
 
 const BUTTON_TEXT = "More...";
 
@@ -68,7 +68,9 @@ const Library = () => {
             <CreateWord />
           </Suspense>
         </div>
-        <WordsPined />
+        <Suspense fallback={null}>
+          <PinedWords />
+        </Suspense>
         <Words />
       </div>
       {!isLastPage && (
