@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { MessageInstance } from "antd/es/message/interface";
+import { message } from "antd";
 
 import {
   getLibraryPinWords,
@@ -37,7 +38,7 @@ export const usePinedWords = ({
 
     setLoading(true);
 
-    await messageApi
+    messageApi
       .open({
         type: "loading",
         content: "Unpinning ...",
@@ -58,7 +59,7 @@ export const usePinedWords = ({
         });
       })
       .then(() => {
-        messageApi.success("All words were unpinned!");
+        message.success("All words were unpin.");
       });
 
     setLoading(false);
