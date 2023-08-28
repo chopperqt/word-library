@@ -1,21 +1,19 @@
+import { useMemo } from "react";
+import { message } from "antd";
+import { useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
 
 import {
   createLibraryWord,
   getLibraryPinWords,
-  getLibraryWordsWithoutLoading,
+  getWords,
 } from "api/library.api";
 import { getNormalizeWord } from "common/word-modal/helpers/getNormalizeWord";
 import { getUserID } from "services/user/User.store";
 import { getLoading } from "services/loading/Loading.store";
 import { getOnlyWords, getPinWords } from "services/library/Library.store";
-import { usePagination } from "helpers/usePagination";
-import { getAmountOfPages } from "services/pagination/Pagination.store";
 
 import type { WordApi, WordForm } from "models/Library.models";
-import { useMemo } from "react";
-import { message } from "antd";
-import { useLocation } from "react-router-dom";
 
 const useCreateWord = () => {
   const { search } = useLocation();
@@ -25,17 +23,11 @@ const useCreateWord = () => {
   const userID = useSelector(getUserID);
   const isLoading = useSelector(getLoading).createLibraryWord?.isLoading;
   const words = useSelector(getOnlyWords);
-  const amountOfPages = useSelector(getAmountOfPages);
   const pinedWords = useSelector(getPinWords);
 
   const page = currentPage ? +currentPage : 1;
 
   const [messageApi, contextHolder] = message.useMessage();
-
-  const { to } = usePagination({
-    page,
-    amountOfPages,
-  });
 
   const isDisabledPin = useMemo(() => {
     if (pinedWords.length >= 15) {
@@ -82,10 +74,10 @@ const useCreateWord = () => {
     }
 
     getLibraryPinWords(userID);
-    getLibraryWordsWithoutLoading({
+    getWords({
       userID,
-      from: 0,
-      to,
+      page,
+      shouldControlPending: false,
     });
 
     handleSuccessMessage(normalizedWord.word);

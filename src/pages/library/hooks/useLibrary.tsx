@@ -4,8 +4,8 @@ import { useSelector } from "react-redux";
 import { bc } from "App";
 import {
   getLibraryPinWords,
-  getLibraryWords,
-  getLibraryWordsByPagination,
+  getWords,
+  getWordsByPagination,
 } from "api/library.api";
 import { usePagination } from "helpers/usePagination";
 import { getAmountOfPages } from "services/pagination/Pagination.store";
@@ -25,36 +25,19 @@ const useLibrary = ({ userID, words, isFetched }: UseLibraryProps) => {
 
   const pageParam = getParam("page");
 
-  const page = pageParam || 1;
+  const currentPage = pageParam ? +pageParam : 1;
   const amountOfPages = useSelector(getAmountOfPages);
 
   const [value, setValue] = useState<string>("");
 
-  const { from, to, isLastPage } = usePagination({
-    page: +page,
+  const { isLastPage } = usePagination({
+    page: currentPage,
     amountOfPages,
   });
 
   useEffect(() => {
     getLibraryPinWords(userID);
-  }, []);
-
-  useEffect(() => {
-    if (!words.length) {
-      getLibraryWords({
-        userID,
-        from: 0,
-        to,
-      });
-
-      return;
-    }
-
-    getLibraryWords({
-      userID,
-      from,
-      to,
-    });
+    getWords({ userID, page: currentPage });
   }, []);
 
   const wordsSearched = useMemo(() => {
@@ -83,9 +66,7 @@ const useLibrary = ({ userID, words, isFetched }: UseLibraryProps) => {
   };
 
   const handleGetMoreWords = () => {
-    const nextPage = +page + 1;
-
-    const { from, to } = getPaginationRange(nextPage);
+    const nextPage = currentPage + 1;
 
     bc.postMessage({
       page: nextPage,
@@ -93,10 +74,9 @@ const useLibrary = ({ userID, words, isFetched }: UseLibraryProps) => {
 
     setParam("page", nextPage.toString());
 
-    getLibraryWordsByPagination({
+    getWordsByPagination({
       userID,
-      from,
-      to,
+      page: nextPage,
     });
   };
 

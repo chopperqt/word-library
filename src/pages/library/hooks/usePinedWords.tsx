@@ -2,11 +2,7 @@ import { useState } from "react";
 import { MessageInstance } from "antd/es/message/interface";
 import { message } from "antd";
 
-import {
-  getLibraryPinWords,
-  getLibraryWords,
-  updatePin,
-} from "api/library.api";
+import { getLibraryPinWords, getWords, updatePin } from "api/library.api";
 import { WordApi } from "models/Library.models";
 import { ParamsController } from "helpers/paramsController";
 import { getPaginationRange } from "helpers/getPaginationRange";
@@ -30,8 +26,6 @@ export const usePinedWords = ({
   const currentPage = pageParam ? +pageParam : 1;
 
   const handleUnpendWords = async () => {
-    const { from, to } = getPaginationRange(currentPage);
-
     const deletedWords = words.map(({ word }) => {
       return updatePin(userId, false, word);
     });
@@ -51,10 +45,9 @@ export const usePinedWords = ({
         }
 
         await getLibraryPinWords(userId);
-        await getLibraryWords({
+        await getWords({
           userID: userId,
-          from,
-          to,
+          page: currentPage,
           shouldControlPending: false,
         });
       })

@@ -1,6 +1,6 @@
 import { debounce } from "lodash-es";
 
-import supabase from "./client";
+import supabase, { ReturnApiType } from "./client";
 import {
   WordCreateApi,
   WordUpdateApi,
@@ -18,6 +18,8 @@ import { loadingController } from "helpers/loadingController";
 import { setAmountOfPages } from "services/pagination/Pagination.store";
 import { setSearchWords } from "services/search/Search.store";
 import { parse } from "valibot";
+import { getOffset } from "helpers/getOffest";
+import { getPaginationRange } from "helpers/getPaginationRange";
 
 const LIBRARY_TABLE = "library";
 
@@ -88,60 +90,103 @@ export const updateLibraryWord = async (
 
 interface GetWords {
   userID: string;
-  from?: number;
-  to?: number;
+  page?: number;
   shouldControlPending?: boolean;
 }
 
-export const getWords =
-  (controller: LibraryRequests) =>
-  async ({
-    userID,
-    from = 0,
-    to = 70,
-    shouldControlPending = true,
-  }: GetWords): Promise<WordApi[] | null> => {
-    const { handleSetError, handleSetPending, handleSetSuccess } =
-      loadingController(controller);
+export const getWords = async ({
+  userID,
+  page = 1,
+  shouldControlPending = true,
+}: GetWords): Promise<ReturnApiType<WordApi[]> | null> => {
+  const offset = getOffset(page);
 
-    if (shouldControlPending) {
-      handleSetPending();
-    }
+  const { handleSetError, handleSetPending, handleSetSuccess } =
+    loadingController("getLibraryWords");
 
-    const { data, error, count } = await supabase
-      .from(LIBRARY_TABLE)
-      .select("*", { count: "exact" })
-      .match({ userID })
-      .order("word")
-      .range(from, to);
+  if (shouldControlPending) {
+    handleSetPending();
+  }
 
-    if (error || !data || !count) {
-      handleSetError();
+  const { data, error, count } = await supabase
+    .from(LIBRARY_TABLE)
+    .select("*", { count: "exact" })
+    .match({ userID })
+    .order("word")
+    .range(0, 69 * page);
 
-      return null;
-    }
+  if (error || !data || !count) {
+    handleSetError();
 
-    try {
-      const normalizedData = data.map((item) => parse(WordSchema, item));
+    return null;
+  }
 
-      const amountOfPages = Math.round(count / 70);
+  try {
+    const normalizedData = data.map((item) => parse(WordSchema, item));
 
-      if (from === 0) {
-        store.dispatch(setWords(normalizedData));
-      } else {
-        store.dispatch(updateWords(normalizedData));
-      }
+    const amountOfPages = Math.round(count / 70);
 
-      store.dispatch(setAmountOfWords(count));
-      store.dispatch(setAmountOfPages(amountOfPages));
+    store.dispatch(setWords(normalizedData));
+    store.dispatch(setAmountOfWords(count));
+    store.dispatch(setAmountOfPages(amountOfPages));
 
-      handleSetSuccess();
+    handleSetSuccess();
 
-      return normalizedData;
-    } catch (e) {
-      return null;
-    }
-  };
+    return {
+      data: normalizedData,
+      count,
+    };
+  } catch (e) {
+    return null;
+  }
+};
+
+export const getWordsByPagination = async ({
+  userID,
+  page = 1,
+  shouldControlPending = true,
+}: GetWords): Promise<ReturnApiType<WordApi[]> | null> => {
+  const { handleSetError, handleSetPending, handleSetSuccess } =
+    loadingController("getLibraryWordsByPagination");
+
+  const { from, to } = getPaginationRange(page);
+
+  if (shouldControlPending) {
+    handleSetPending();
+  }
+
+  const { data, error, count } = await supabase
+    .from(LIBRARY_TABLE)
+    .select("*", { count: "exact" })
+    .match({ userID })
+    .order("word")
+    .range(from, to);
+
+  if (error || !data || !count) {
+    handleSetError();
+
+    return null;
+  }
+
+  try {
+    const normalizedData = data.map((item) => parse(WordSchema, item));
+
+    const amountOfPages = Math.round(count / 70);
+
+    store.dispatch(updateWords(normalizedData));
+    store.dispatch(setAmountOfWords(count));
+    store.dispatch(setAmountOfPages(amountOfPages));
+
+    handleSetSuccess();
+
+    return {
+      data: normalizedData,
+      count,
+    };
+  } catch (e) {
+    return null;
+  }
+};
 
 export const getLibraryPinWords = async (
   userID: string
@@ -253,14 +298,4 @@ export const searchWord = debounce(
     return data;
   },
   600
-);
-
-export const getLibraryWords = getWords("getLibraryWords");
-
-export const getLibraryWordsByPagination = getWords(
-  "getLibraryWordsByPagination"
-);
-
-export const getLibraryWordsWithoutLoading = getWords(
-  "getLibraryWordsWithoutLoading"
 );

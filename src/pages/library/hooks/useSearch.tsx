@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   deleteLibraryWords,
   getLibraryPinWords,
-  getLibraryWords,
+  getWords,
   searchWord,
   updateLibraryWord,
   updatePin,
@@ -13,11 +13,7 @@ import { getUserID } from "services/user/User.store";
 import { getLoading } from "services/loading/Loading.store";
 import { clearSearch } from "services/search/Search.store";
 import { getNormalizeWord } from "common/word-modal/helpers/getNormalizeWord";
-import {
-  getAmountOfPages,
-  getPage,
-} from "services/pagination/Pagination.store";
-import { usePagination } from "helpers/usePagination";
+import { getPage } from "services/pagination/Pagination.store";
 
 import type { WordApi, WordForm } from "models/Library.models";
 
@@ -32,14 +28,8 @@ const useSearch = ({ searchWords }: UseSearch) => {
   const isLoadingUpdate = useSelector(getLoading).updateLibraryWord?.isLoading;
   const isLoadingDelete = useSelector(getLoading).deleteLibraryWords?.isLoading;
   const page = useSelector(getPage);
-  const amountOfPages = useSelector(getAmountOfPages);
 
   const [value, setValue] = useState("");
-
-  const { to } = usePagination({
-    page,
-    amountOfPages,
-  });
 
   const handleChangeValue = (value: string) => {
     setValue(value);
@@ -71,7 +61,7 @@ const useSearch = ({ searchWords }: UseSearch) => {
     }
 
     getLibraryPinWords(userID);
-    getLibraryWords({ userID });
+    getWords({ userID });
     setValue("");
   };
 
@@ -96,7 +86,7 @@ const useSearch = ({ searchWords }: UseSearch) => {
     }
 
     getLibraryPinWords(userID);
-    getLibraryWords({ userID });
+    getWords({ userID });
     setValue("");
 
     return response;
@@ -110,10 +100,9 @@ const useSearch = ({ searchWords }: UseSearch) => {
     }
 
     getLibraryPinWords(userID);
-    getLibraryWords({
+    getWords({
       userID,
-      from: 0,
-      to,
+      page,
     });
     setValue("");
 
