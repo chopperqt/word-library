@@ -5,7 +5,6 @@ import { message } from "antd";
 import { getLibraryPinWords, getWords, updatePin } from "api/library.api";
 import { WordApi } from "models/Library.models";
 import { ParamsController } from "helpers/paramsController";
-import { getPaginationRange } from "helpers/getPaginationRange";
 
 interface UsePinedWords {
   words: WordApi[];
@@ -26,7 +25,7 @@ export const usePinedWords = ({
   const currentPage = pageParam ? +pageParam : 1;
 
   const handleUnpendWords = async () => {
-    const deletedWords = words.map(({ word }) => {
+    const unpintedWords = words.map(({ word }) => {
       return updatePin(userId, false, word);
     });
 
@@ -39,7 +38,7 @@ export const usePinedWords = ({
       })
       .then(async () => {
         try {
-          await Promise.all(deletedWords);
+          await Promise.all(unpintedWords);
         } catch (e) {
           setLoading(false);
         }
@@ -53,9 +52,9 @@ export const usePinedWords = ({
       })
       .then(() => {
         message.success("All words were unpin.");
-      });
 
-    setLoading(false);
+        setLoading(false);
+      });
   };
 
   return {
