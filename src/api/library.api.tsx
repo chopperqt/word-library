@@ -99,8 +99,6 @@ export const getWords = async ({
   page = 1,
   shouldControlPending = true,
 }: GetWords): Promise<ReturnApiType<WordApi[]> | null> => {
-  const offset = getOffset(page);
-
   const { handleSetError, handleSetPending, handleSetSuccess } =
     loadingController("getLibraryWords");
 
@@ -113,7 +111,7 @@ export const getWords = async ({
     .select("*", { count: "exact" })
     .match({ userID })
     .order("word")
-    .range(0, 69 * page);
+    .range(0, 70 * page);
 
   if (error || !data || !count) {
     handleSetError();

@@ -9,7 +9,6 @@ import {
 } from "api/library.api";
 import { usePagination } from "helpers/usePagination";
 import { getAmountOfPages } from "services/pagination/Pagination.store";
-import { getPaginationRange } from "helpers/getPaginationRange";
 import { ParamsController } from "helpers/paramsController";
 
 import type { WordApi } from "models/Library.models";

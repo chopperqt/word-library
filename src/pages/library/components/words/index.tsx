@@ -30,7 +30,7 @@ const Words = () => {
     return null;
   }
 
-  const title = `Library(${words.length}/${amountOfWords})`;
+  const title = `Library(${words.length - 1}/${amountOfWords})`;
 
   return (
     <div className="p-[15px] rounded-lg bg-slate-100">
