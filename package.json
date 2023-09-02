@@ -1,6 +1,9 @@
 {
   "name": "word-library",
-  "repository": "https://github.com/chopperxx/word-library",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/chopperqt/word-library.git"
+  },
   "version": "0.0.0-development",
   "private": true,
   "homepage": "/library/",
@@ -61,6 +64,8 @@
     ]
   },
   "devDependencies": {
+    "@semantic-release/changelog": "^6.0.3",
+    "@semantic-release/git": "^10.0.1",
     "@types/lodash-es": "^4.17.6",
     "@types/lodash.debounce": "^4.0.7",
     "@types/react-modal": "^3.13.1",
@@ -71,8 +76,27 @@
     "semantic-release": "^21.1.1",
     "tailwindcss": "^3.1.8"
   },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/chopperqt/word-library.git"
+  "plugins": [
+    "@semantic-release/commit-analyzer",
+    "@semantic-release/release-notes-generator",
+    "@semantic-release/changelog",
+    "@semantic-release/github",
+    "@semantic-release/npm",
+    "@semantic-release/git"
+  ],
+  "release": {
+    "prepare": [
+      "@semantic-release/changelog",
+      "@semantic-release/npm",
+      {
+        "path": "@semantic-release/git",
+        "assets": [
+          "package.json",
+          "package-lock.json",
+          "CHANGELOG.md"
+        ],
+        "message": "chore(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"
+      }
+    ]
   }
 }
