@@ -1,0 +1,25 @@
+name: Semantic release
+
+on:
+  push:
+    branches:
+      - master
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+      - name: Install dependencies
+        run: npm install --legacy-peer-deps
+      - name: Install semantic-release/git
+        run: npm i @semantic-release/git --legacy-peer-deps
+      - name: Build app
+        run: npm run build
+      - name: Semantic release
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: npx semantic-release

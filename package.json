@@ -1,6 +1,10 @@
 {
   "name": "word-library",
-  "version": "0.1.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/chopperqt/word-library.git"
+  },
+  "version": "0.0.0-development",
   "private": true,
   "homepage": "/library/",
   "dependencies": {
@@ -34,11 +38,12 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build",
+    "build": "DISABLE_ESLINT_PLUGIN=true react-scripts build",
     "test": "react-scripts test --watch",
     "coverage": "react-scripts test --coverage",
     "watchAll": "react-scripts test --watch --coverage",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "semantic-release": "semantic-release"
   },
   "eslintConfig": {
     "extends": [
@@ -59,6 +64,8 @@
     ]
   },
   "devDependencies": {
+    "@semantic-release/changelog": "^6.0.3",
+    "@semantic-release/git": "^10.0.1",
     "@types/lodash-es": "^4.17.6",
     "@types/lodash.debounce": "^4.0.7",
     "@types/react-modal": "^3.13.1",
@@ -66,6 +73,30 @@
     "@types/react-virtualized": "^9.21.21",
     "autoprefixer": "^10.4.8",
     "postcss": "^8.4.16",
+    "semantic-release": "^21.1.1",
     "tailwindcss": "^3.1.8"
+  },
+  "plugins": [
+    "@semantic-release/commit-analyzer",
+    "@semantic-release/release-notes-generator",
+    "@semantic-release/changelog",
+    "@semantic-release/github",
+    "@semantic-release/npm",
+    "@semantic-release/git"
+  ],
+  "release": {
+    "prepare": [
+      "@semantic-release/changelog",
+      "@semantic-release/npm",
+      {
+        "path": "@semantic-release/git",
+        "assets": [
+          "package.json",
+          "package-lock.json",
+          "CHANGELOG.md"
+        ],
+        "message": "chore(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"
+      }
+    ]
   }
 }
