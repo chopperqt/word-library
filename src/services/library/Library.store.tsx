@@ -3,11 +3,11 @@ import { createSlice, createSelector } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 
 import type { RootState } from "services/stores";
-import type { Word } from "models/Library.models";
+import type { WordApi } from "models/Library.models";
 
 export interface Library {
-  words: Word[];
-  pinedWords: Word[];
+  words: WordApi[];
+  pinedWords: WordApi[];
   amountOfWords: number;
 }
 
@@ -21,16 +21,16 @@ const LibraryStore = createSlice({
   name: "LibraryStore",
   initialState,
   reducers: {
-    setWords: (state, action: PayloadAction<Word[]>) => {
+    setWords: (state, action: PayloadAction<WordApi[]>) => {
       state.words = action.payload;
     },
-    setPinedWords: (state, action: PayloadAction<Word[]>) => {
+    setPinedWords: (state, action: PayloadAction<WordApi[]>) => {
       state.pinedWords = action.payload;
     },
     setAmountOfWords: (state, action: PayloadAction<number>) => {
       state.amountOfWords = action.payload;
     },
-    updateWords: (state, action: PayloadAction<Word[]>) => {
+    updateWords: (state, action: PayloadAction<WordApi[]>) => {
       state.words = [...state.words, ...action.payload];
     },
   },

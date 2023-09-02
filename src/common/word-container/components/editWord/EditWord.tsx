@@ -1,14 +1,13 @@
 import { Button } from "antd";
-import { useForm } from "react-hook-form";
 import { EditOutlined } from "@ant-design/icons";
 
 import WordModal, { useModalWord } from "common/word-modal";
-import { Word, WordForm, WordID } from "models/Library.models";
+import { WordApi, WordForm, WordID } from "models/Library.models";
 
-interface EditProps extends Pick<Word, "word" | "translate" | "pined"> {
+interface EditProps extends Pick<WordApi, "word" | "translate" | "pined"> {
   wordID: WordID;
   isLoading: boolean;
-  onSubmit: (word: WordForm, wordID?: number) => Promise<Word[] | null>;
+  onSubmit: (word: WordForm, wordID?: number) => Promise<WordApi[] | null>;
   shouldCloseAfterSubmit?: boolean;
 }
 

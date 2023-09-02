@@ -1,6 +1,5 @@
 import { ApiError } from "@supabase/supabase-js";
 import { loadingController } from "helpers/loadingController";
-import { User } from "models/Auth.models";
 import supabase from "./client";
 
 export type AuthRequests =
@@ -21,35 +20,10 @@ export interface LoginData {
   password: string;
 }
 
-// // FIXED добавить какие данные будут в дате при регистрации
-// export interface SignUpData extends LoginData {
-//   data: any
-// }
-
-// export const signInWithGoogle = async () => {
-//   const {
-//     handleFailure,
-//     handlePending,
-//     handleSuccess,
-//   } = loadingStatuses('loginWithGoogle')
-
-//   handlePending()
-
-//   const { error } = await supabase.auth.signIn({
-//     provider: 'google',
-//   })
-
-//   if (error) {
-//     handleFailure(error.message)
-//   }
-
-//   handleSuccess()
-// }
-
 export const signIn = async ({
   login,
   password,
-}: LoginData): Promise<User | null> => {
+}: LoginData): Promise<{ id: string; role: string; email: string } | null> => {
   const { handleSetError, handleSetPending, handleSetSuccess } =
     loadingController("signIn");
 
@@ -66,7 +40,7 @@ export const signIn = async ({
     return null;
   }
 
-  const { id, role, email, user_metadata } = user;
+  const { id, role, email } = user;
 
   handleSetSuccess();
 
@@ -74,7 +48,6 @@ export const signIn = async ({
     id,
     role,
     email,
-    avatarUrl: user_metadata?.avatar_url || "",
   };
 };
 
@@ -87,105 +60,3 @@ export const logOut = async (): Promise<ApiError | null> => {
 
   return null;
 };
-
-// export const signUp = async ({
-//   email,
-//   password,
-//   data,
-// }: SignUpData): Promise<boolean> => {
-//   const {
-//     handleFailure,
-//     handlePending,
-//     handleSuccess
-//   } = loadingStatuses('signUp')
-
-//   handlePending()
-
-//   const { error } = await supabase.auth.signUp({
-//     email,
-//     password,
-//   }, {
-//     data,
-//   })
-
-//   if (error) {
-//     handleFailure(error.message)
-
-//     return false
-//   }
-
-//   handleSuccess(signUpSuccess)
-
-//   return true
-// }
-
-// export const deleteUser = async (id: UserID) => {
-//   const {
-//     handleFailure,
-//     handlePending,
-//     handleSuccess,
-//   } = loadingStatuses('deleteUser')
-
-//   handlePending()
-
-//   const {
-//     data: user,
-//     error,
-//   } = await supabase.auth.api.deleteUser(id)
-
-//   if (error) {
-//     handleFailure(error.message)
-//   }
-
-//   console.log(user)
-
-//   handleSuccess()
-// }
-
-// export const validateEmail = debounce(async (email: UserEmail): Promise<any[]> => {
-//   const {
-//     handleFailure,
-//     handlePending,
-//     handleSuccess,
-//   } = loadingStatuses('validateEmail')
-
-//   handlePending()
-
-//   const { data, error } = await supabase
-//     .from(Tables.users)
-//     .select('email')
-//     .like('email', email)
-
-//   if (error) {
-//     handleFailure(error.message)
-
-//     return []
-//   }
-
-//   handleSuccess()
-
-//   return data
-// })
-
-// export const getUser = async (token: string) => {
-//   const {
-//     handleFailure,
-//     handlePending,
-//     handleSuccess,
-//   } = loadingStatuses('getUser')
-
-//   handlePending()
-
-//   const {
-//     user,
-//     error,
-//   } = await supabase.auth.api.getUser(token)
-
-//   if (error) {
-//     handleFailure(error.message)
-
-//     return
-//   }
-
-//   handleSuccess()
-// }

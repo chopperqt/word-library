@@ -1,24 +1,29 @@
 import { Input, Spin } from "antd";
 
 import useSearch from "pages/library/hooks/useSearch";
+import { useSelector } from "react-redux";
+import { getSearchWords } from "services/search/Search.store";
 import { Word } from "./partials/Word";
 
 const SEARCH_STYLES = "w-full absolute top-[45px] rounded-sm bg-white p-1";
 const SEARCH_TEXT = "Search...";
 
 const Search = () => {
+  const searchWords = useSelector(getSearchWords);
+
   const {
     handleChangeValue,
     value,
     isLoading,
     isShowSearchedWord,
-    searchWords,
     handleClickPin,
     handleSubmitUpdate,
     handleClickDelete,
     isLoadingDelete,
     isLoadingUpdate,
-  } = useSearch();
+  } = useSearch({
+    searchWords,
+  });
 
   const formattedPrex = isLoading ? <Spin className="flex" /> : "🔍";
 

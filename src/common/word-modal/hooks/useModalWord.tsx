@@ -1,13 +1,12 @@
 import { useEffect, useState } from "react";
 
-import type { Word, WordForm, WordID } from "models/Library.models";
-import type { UserID } from "models/Auth.models";
+import type { WordApi, WordForm, WordID } from "models/Library.models";
 
 interface UseModalWordProps {
   wordID?: WordID;
-  userID?: UserID;
+  userID?: string;
   reset?: () => void;
-  onSubmit: (word: WordForm, wordID?: number) => Promise<Word[] | null>;
+  onSubmit: (word: WordForm, wordID?: number) => Promise<WordApi[] | null>;
   shouldCloseAfterSubmit?: boolean;
 }
 const useModalWord = ({

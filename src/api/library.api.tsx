@@ -1,8 +1,12 @@
 import { debounce } from "lodash-es";
 
-import supabase from "./client";
-import type { CreateWord, UpdateWord, Word } from "models/Library.models";
-import type { UserID } from "models/Auth.models";
+import supabase, { ReturnApiType } from "./client";
+import {
+  WordCreateApi,
+  WordUpdateApi,
+  WordApi,
+  WordSchema,
+} from "models/Library.models";
 import { store } from "services/stores";
 import {
   setAmountOfWords,
@@ -13,6 +17,9 @@ import {
 import { loadingController } from "helpers/loadingController";
 import { setAmountOfPages } from "services/pagination/Pagination.store";
 import { setSearchWords } from "services/search/Search.store";
+import { parse } from "valibot";
+import { getOffset } from "helpers/getOffest";
+import { getPaginationRange } from "helpers/getPaginationRange";
 
 const LIBRARY_TABLE = "library";
 
@@ -28,8 +35,8 @@ export type LibraryRequests =
   | "getLibraryWordsWithoutLoading";
 
 export const createLibraryWord = async (
-  wordData: CreateWord
-): Promise<Word[] | null> => {
+  wordData: WordCreateApi
+): Promise<WordApi[] | null> => {
   const { handleSetError, handleSetPending, handleSetSuccess } =
     loadingController("createLibraryWord");
 
@@ -49,8 +56,8 @@ export const createLibraryWord = async (
 };
 
 export const updateLibraryWord = async (
-  wordData: UpdateWord
-): Promise<Word[] | null> => {
+  wordData: WordUpdateApi
+): Promise<WordApi[] | null> => {
   const { handleSetError, handleSetPending, handleSetSuccess } =
     loadingController("updateLibraryWord");
 
@@ -82,51 +89,106 @@ export const updateLibraryWord = async (
 };
 
 interface GetWords {
-  userID: UserID;
-  from?: number;
-  to?: number;
+  userID: string;
+  page?: number;
+  shouldControlPending?: boolean;
 }
 
-export const getWords =
-  (controller: LibraryRequests) =>
-  async ({ userID, from = 0, to = 70 }: GetWords): Promise<Word[] | null> => {
-    const { handleSetError, handleSetPending, handleSetSuccess } =
-      loadingController(controller);
+export const getWords = async ({
+  userID,
+  page = 1,
+  shouldControlPending = true,
+}: GetWords): Promise<ReturnApiType<WordApi[]> | null> => {
+  const { handleSetError, handleSetPending, handleSetSuccess } =
+    loadingController("getLibraryWords");
 
+  if (shouldControlPending) {
     handleSetPending();
+  }
 
-    const { data, error, count } = await supabase
-      .from(LIBRARY_TABLE)
-      .select("*", { count: "exact" })
-      .match({ userID })
-      .order("word")
-      .range(from, to);
+  const { data, error, count } = await supabase
+    .from(LIBRARY_TABLE)
+    .select("*", { count: "exact" })
+    .match({ userID })
+    .order("word")
+    .range(0, 70 * page);
 
-    if (error || !data || !count) {
-      handleSetError();
+  if (error || !data || !count) {
+    handleSetError();
 
-      return null;
-    }
+    return null;
+  }
+
+  try {
+    const normalizedData = data.map((item) => parse(WordSchema, item));
 
     const amountOfPages = Math.round(count / 70);
 
-    if (from === 0) {
-      store.dispatch(setWords(data));
-    } else {
-      store.dispatch(updateWords(data));
-    }
-
+    store.dispatch(setWords(normalizedData));
     store.dispatch(setAmountOfWords(count));
     store.dispatch(setAmountOfPages(amountOfPages));
 
     handleSetSuccess();
 
-    return data;
-  };
+    return {
+      data: normalizedData,
+      count,
+    };
+  } catch (e) {
+    return null;
+  }
+};
+
+export const getWordsByPagination = async ({
+  userID,
+  page = 1,
+  shouldControlPending = true,
+}: GetWords): Promise<ReturnApiType<WordApi[]> | null> => {
+  const { handleSetError, handleSetPending, handleSetSuccess } =
+    loadingController("getLibraryWordsByPagination");
+
+  const { from, to } = getPaginationRange(page);
+
+  if (shouldControlPending) {
+    handleSetPending();
+  }
+
+  const { data, error, count } = await supabase
+    .from(LIBRARY_TABLE)
+    .select("*", { count: "exact" })
+    .match({ userID })
+    .order("word")
+    .range(from, to);
+
+  if (error || !data || !count) {
+    handleSetError();
+
+    return null;
+  }
+
+  try {
+    const normalizedData = data.map((item) => parse(WordSchema, item));
+
+    const amountOfPages = Math.round(count / 70);
+
+    store.dispatch(updateWords(normalizedData));
+    store.dispatch(setAmountOfWords(count));
+    store.dispatch(setAmountOfPages(amountOfPages));
+
+    handleSetSuccess();
+
+    return {
+      data: normalizedData,
+      count,
+    };
+  } catch (e) {
+    return null;
+  }
+};
 
 export const getLibraryPinWords = async (
-  userID: UserID
-): Promise<Word[] | null> => {
+  userID: string
+): Promise<WordApi[] | null> => {
   const { handleSetError, handleSetPending, handleSetSuccess } =
     loadingController("getLibraryPinWords");
 
@@ -154,7 +216,7 @@ export const getLibraryPinWords = async (
   return data;
 };
 
-export const deleteLibraryWords = async (userID: UserID, word: string) => {
+export const deleteLibraryWords = async (userID: string, word: string) => {
   const { handleSetError, handleSetPending, handleSetSuccess } =
     loadingController("deleteLibraryWords");
 
@@ -178,10 +240,10 @@ export const deleteLibraryWords = async (userID: UserID, word: string) => {
 };
 
 export const updatePin = async (
-  userID: UserID,
+  userID: string,
   pined: boolean,
   word: string
-): Promise<Word[] | null> => {
+): Promise<WordApi[] | null> => {
   const { handleSetError, handleSetPending, handleSetSuccess } =
     loadingController("updatePin");
 
@@ -209,7 +271,7 @@ export const updatePin = async (
 };
 
 export const searchWord = debounce(
-  async (userID: UserID, word: string): Promise<Word[] | null> => {
+  async (userID: string, word: string): Promise<WordApi[] | null> => {
     const { handleSetError, handleSetPending, handleSetSuccess } =
       loadingController("searchWord");
 
@@ -234,14 +296,4 @@ export const searchWord = debounce(
     return data;
   },
   600
-);
-
-export const getLibraryWords = getWords("getLibraryWords");
-
-export const getLibraryWordsByPagination = getWords(
-  "getLibraryWordsByPagination"
-);
-
-export const getLibraryWordsWithoutLoading = getWords(
-  "getLibraryWordsWithoutLoading"
 );
