@@ -1,4 +1,4 @@
-import { array, boolean, number, object, Output, string } from "valibot";
+import { array, boolean, email, number, object, Output, string } from "valibot";
 
 export const WordSchema = object({
   id: number(),
