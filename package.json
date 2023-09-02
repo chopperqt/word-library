@@ -1,6 +1,7 @@
 {
   "name": "word-library",
-  "version": "0.1.0",
+  "repository": "https://github.com/chopperxx/word-library",
+  "version": "0.0.0-development",
   "private": true,
   "homepage": "/library/",
   "dependencies": {
@@ -38,7 +39,8 @@
     "test": "react-scripts test --watch",
     "coverage": "react-scripts test --coverage",
     "watchAll": "react-scripts test --watch --coverage",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "semantic-release": "semantic-release"
   },
   "eslintConfig": {
     "extends": [
@@ -68,5 +70,9 @@
     "postcss": "^8.4.16",
     "semantic-release": "^21.1.1",
     "tailwindcss": "^3.1.8"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/chopperqt/word-library.git"
   }
 }
