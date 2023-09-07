@@ -43,7 +43,8 @@
     "coverage": "react-scripts test --coverage",
     "watchAll": "react-scripts test --watch --coverage",
     "eject": "react-scripts eject",
-    "semantic-release": "semantic-release"
+    "semantic-release": "semantic-release",
+    "commit": "cz"
   },
   "eslintConfig": {
     "extends": [
