@@ -1,3 +1,10 @@
+# [1.1.0](https://github.com/chopperqt/word-library/compare/v1.0.0...v1.1.0) (2023-09-07)
+
+
+### Features
+
+* **something changes:** добавляет правильное введние коммитов ([a6c4414](https://github.com/chopperqt/word-library/commit/a6c44149392af46c4a4286b9186521f3e9d23ca9))
+
 # 1.0.0 (2023-09-02)
 
 
