@@ -33,7 +33,7 @@ const Library = () => {
     useSelector(getLoading).getLibraryWordsByPagination?.isLoading;
   const hasWords = !!words.length;
 
-  const { isLastPage, handleGetMoreWords } = useLibrary({
+  const { isLastPage, handleClickLoadWords } = useLibrary({
     userID,
     words,
     isFetched,
@@ -76,7 +76,7 @@ const Library = () => {
       {!isLastPage && (
         <div className="w-full h-[100px] flex items-center justify-center">
           <Button
-            onClick={handleGetMoreWords}
+            onClick={handleClickLoadWords}
             loading={isLoadingMoreWords}
             size="large"
             type="primary"

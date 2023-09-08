@@ -12,6 +12,7 @@ import { getAmountOfPages } from "services/pagination/Pagination.store";
 import { ParamsController } from "helpers/paramsController";
 
 import type { WordApi } from "models/Library.models";
+import { useLocation } from "react-router-dom";
 
 interface UseLibraryProps {
   userID: string;
@@ -20,6 +21,7 @@ interface UseLibraryProps {
   isLoading?: boolean;
 }
 const useLibrary = ({ userID, words, isFetched }: UseLibraryProps) => {
+  const { pathname } = useLocation();
   const { setParam, getParam } = ParamsController();
 
   const pageParam = getParam("page");
@@ -64,11 +66,12 @@ const useLibrary = ({ userID, words, isFetched }: UseLibraryProps) => {
     setValue(e.target.value);
   };
 
-  const handleGetMoreWords = () => {
+  const handleClickLoadWords = () => {
     const nextPage = currentPage + 1;
 
     bc.postMessage({
       page: nextPage,
+      pathname: "/app-library",
     });
 
     setParam("page", nextPage.toString());
@@ -84,7 +87,7 @@ const useLibrary = ({ userID, words, isFetched }: UseLibraryProps) => {
     handleChangeValue,
     wordsSearched,
     isNothingFound,
-    handleGetMoreWords,
+    handleClickLoadWords,
     isLastPage,
   };
 };
